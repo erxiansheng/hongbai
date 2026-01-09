@@ -341,23 +341,53 @@ export class RoomManager {
     }
 
     async handleOffer(fromPlayer, offer) {
-        await this.setupPeerConnection(fromPlayer);
-        const pc = this.peerConnections[fromPlayer];
+        // 检查是否已有连接
+        let pc = this.peerConnections[fromPlayer];
         
-        await pc.setRemoteDescription(new RTCSessionDescription(offer));
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
+        if (pc) {
+            // 如果连接已存在且不是 stable 状态，可能是重复的 offer
+            if (pc.signalingState !== 'stable') {
+                console.warn(`P${fromPlayer} 连接状态: ${pc.signalingState}，忽略重复offer`);
+                return;
+            }
+        } else {
+            await this.setupPeerConnection(fromPlayer);
+            pc = this.peerConnections[fromPlayer];
+        }
         
-        await this.sendSignaling(fromPlayer, {
-            type: 'answer',
-            answer: answer
-        });
+        try {
+            await pc.setRemoteDescription(new RTCSessionDescription(offer));
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+            
+            await this.sendSignaling(fromPlayer, {
+                type: 'answer',
+                answer: answer
+            });
+            console.log(`已回复P${fromPlayer}的offer`);
+        } catch (e) {
+            console.error(`处理P${fromPlayer}的offer失败:`, e);
+        }
     }
 
     async handleAnswer(fromPlayer, answer) {
         const pc = this.peerConnections[fromPlayer];
-        if (pc) {
+        if (!pc) {
+            console.warn(`收到P${fromPlayer}的answer但没有对应的连接`);
+            return;
+        }
+        
+        // 检查连接状态，只有在 have-local-offer 状态才能设置 remote answer
+        if (pc.signalingState !== 'have-local-offer') {
+            console.warn(`P${fromPlayer} 连接状态不正确: ${pc.signalingState}，忽略answer`);
+            return;
+        }
+        
+        try {
             await pc.setRemoteDescription(new RTCSessionDescription(answer));
+            console.log(`P${fromPlayer} answer已设置`);
+        } catch (e) {
+            console.error(`设置P${fromPlayer}的answer失败:`, e);
         }
     }
 
