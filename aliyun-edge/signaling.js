@@ -35,24 +35,36 @@ async function handleRequest(request) {
             });
         }
         
-        // 调试KV - 列出所有key
+        // 调试KV - 测试获取
         if (path === '/api/debug-kv') {
             try {
                 const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
-                const list = await kv.list({ prefix: '' });
-                // 尝试获取魂斗罗
-                let testGet = null;
-                let testGet2 = null;
+                const testKey = 'roms/魂斗罗.zip';
+                
+                // 尝试不同方式获取
+                let result1 = null, result2 = null, result3 = null;
+                let err1 = null, err2 = null, err3 = null;
+                
                 try {
-                    testGet = await kv.get('roms/魂斗罗.zip');
-                    testGet2 = await kv.get('roms/魂斗罗.zip', { type: 'text' });
-                } catch (e) {
-                    testGet = 'error: ' + e.message;
-                }
+                    result1 = await kv.get(testKey);
+                    result1 = result1 ? `got data, type=${typeof result1}, len=${result1.length || 'N/A'}` : 'null';
+                } catch (e) { err1 = e.message; }
+                
+                try {
+                    result2 = await kv.get(testKey, { type: 'text' });
+                    result2 = result2 ? `got text, len=${result2.length}` : 'null';
+                } catch (e) { err2 = e.message; }
+                
+                try {
+                    result3 = await kv.get(testKey, { type: 'string' });
+                    result3 = result3 ? `got string, len=${result3.length}` : 'null';
+                } catch (e) { err3 = e.message; }
+                
                 return jsonResponse({ 
-                    keys: list.keys || list,
-                    testGetDefault: testGet ? (typeof testGet + ', length:' + (testGet.length || 'N/A')) : 'null',
-                    testGetText: testGet2 ? (typeof testGet2 + ', length:' + (testGet2.length || 'N/A')) : 'null'
+                    testKey,
+                    defaultGet: result1 || err1,
+                    textGet: result2 || err2,
+                    stringGet: result3 || err3
                 });
             } catch (e) {
                 return jsonResponse({ error: e.message }, 500);
