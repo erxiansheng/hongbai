@@ -35,46 +35,42 @@ async function handleRequest(request) {
             });
         }
         
-        // 调试KV - 测试获取
+        // 调试KV - 测试不同命名空间
         if (path === '/api/debug-kv') {
-            // 测试不同编码方式
-            const rawKey = 'roms/超级手球.zip';
-            const encodedKey = encodeURIComponent('roms/超级手球.zip');
-            const partEncodedKey = 'roms/' + encodeURIComponent('超级手球') + '.zip';
+            const testKey = 'roms/6in1.zip';
+            const results = {};
             
+            // 测试 roms 命名空间
             try {
-                const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
-                
-                const results = {};
-                
-                // 测试原始key
-                try {
-                    const r = await kv.get(rawKey, { type: 'text' });
-                    results.rawKey = r ? `found, len=${r.length}` : 'null';
-                } catch (e) { results.rawKey = 'error: ' + e.message; }
-                
-                // 测试完全编码的key
-                try {
-                    const r = await kv.get(encodedKey, { type: 'text' });
-                    results.encodedKey = r ? `found, len=${r.length}` : 'null';
-                } catch (e) { results.encodedKey = 'error: ' + e.message; }
-                
-                // 测试部分编码的key
-                try {
-                    const r = await kv.get(partEncodedKey, { type: 'text' });
-                    results.partEncodedKey = r ? `found, len=${r.length}` : 'null';
-                } catch (e) { results.partEncodedKey = 'error: ' + e.message; }
-                
-                return jsonResponse({ 
-                    namespace: ROMS_NAMESPACE,
-                    rawKey,
-                    encodedKey,
-                    partEncodedKey,
-                    results
-                });
-            } catch (e) {
-                return jsonResponse({ error: e.message }, 500);
+                const kv1 = new EdgeKV({ namespace: 'roms' });
+                const r1 = await kv1.get(testKey, { type: 'text' });
+                results.namespace_roms = r1 ? `found, len=${r1.length}` : 'null';
+            } catch (e) { 
+                results.namespace_roms = 'error: ' + e.message; 
             }
+            
+            // 测试用空间ID
+            try {
+                const kv2 = new EdgeKV({ namespace: '948092421479190528' });
+                const r2 = await kv2.get(testKey, { type: 'text' });
+                results.namespace_id = r2 ? `found, len=${r2.length}` : 'null';
+            } catch (e) { 
+                results.namespace_id = 'error: ' + e.message; 
+            }
+            
+            // 测试截图中的ID: 94809242147919905
+            try {
+                const kv3 = new EdgeKV({ namespace: '94809242147919905' });
+                const r3 = await kv3.get(testKey, { type: 'text' });
+                results.namespace_id2 = r3 ? `found, len=${r3.length}` : 'null';
+            } catch (e) { 
+                results.namespace_id2 = 'error: ' + e.message; 
+            }
+            
+            return jsonResponse({ 
+                testKey,
+                results
+            });
         }
         
         // 健康检查
