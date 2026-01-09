@@ -361,51 +361,68 @@ class GameApp {
 
     // ========== 游戏选择 ==========
     async loadGameList() {
-        // 游戏ID必须与roms目录中的文件名（不含.zip）完全匹配
-        this.allGames = [
-            { id: '魂斗罗', name: '魂斗罗', icon: '🔫', players: 2 },
-            { id: '超级魂斗罗', name: '超级魂斗罗', icon: '🔫', players: 2 },
-            { id: '超级玛莉', name: '超级玛丽', icon: '🍄', players: 1 },
-            { id: '超级玛莉3', name: '超级玛丽3', icon: '🍄', players: 2 },
-            { id: '坦克大战(打坦克，Battle City)', name: '坦克大战', icon: '🎖️', players: 2 },
-            { id: '雪人兄弟', name: '雪人兄弟', icon: '⛄', players: 2 },
-            { id: '双截龙', name: '双截龙', icon: '🐉', players: 2 },
-            { id: '双截龙2', name: '双截龙2', icon: '🐉', players: 2 },
-            { id: '敲冰块(艾斯基摩人)', name: '敲冰块', icon: '🧊', players: 2 },
-            { id: '赤色要塞', name: '赤色要塞', icon: '🚁', players: 2 },
-            { id: '忍者神龟', name: '忍者神龟', icon: '🐢', players: 1 },
-            { id: '忍者神龟2', name: '忍者神龟2', icon: '🐢', players: 2 },
-            { id: '热血物语', name: '热血物语', icon: '👊', players: 2 },
-            { id: '松鼠大战1', name: '松鼠大战', icon: '🐿️', players: 2 },
-            { id: '松鼠大战2', name: '松鼠大战2', icon: '🐿️', players: 2 },
-            { id: '冒险岛1', name: '冒险岛', icon: '🏝️', players: 1 },
-            { id: '冒险岛2', name: '冒险岛2', icon: '🏝️', players: 1 },
-            { id: '马戏团', name: '马戏团', icon: '🎪', players: 2 },
-            { id: '炸弹人', name: '炸弹人', icon: '💣', players: 2 },
-            { id: '俄罗斯方块', name: '俄罗斯方块', icon: '🧱', players: 2 },
-            { id: '泡泡龙', name: '泡泡龙', icon: '🫧', players: 2 },
-            { id: '洛克人', name: '洛克人', icon: '🤖', players: 1 },
-            { id: '洛克人2', name: '洛克人2', icon: '🤖', players: 1 },
-            { id: '忍者龙剑传', name: '忍者龙剑传', icon: '🥷', players: 1 },
-            { id: '恶魔城', name: '恶魔城', icon: '🏰', players: 1 },
-            { id: '热血高校躲避球', name: '热血躲避球', icon: '🏐', players: 2 },
-            { id: '热血足球2(热血联盟足球)', name: '热血足球', icon: '⚽', players: 2 },
-            { id: '三国志2-霸王的大陆', name: '霸王的大陆', icon: '⚔️', players: 1 },
-            { id: '吞食天地2-诸葛孔明传', name: '吞食天地2', icon: '📜', players: 1 },
-            { id: '勇者斗恶龙', name: '勇者斗恶龙', icon: '🐲', players: 1 },
-            { id: '最终幻想(太空战士)', name: '最终幻想', icon: '✨', players: 1 },
-            { id: '超级马里奥', name: '超级马里奥', icon: '🍄', players: 1 },
-            { id: '超级马里奥3', name: '超级马里奥3', icon: '🍄', players: 2 },
-            { id: '忍者蛙(战斗蛙)', name: '忍者蛙', icon: '🐸', players: 2 },
-            { id: '功夫(功夫大师，功夫小子)', name: '功夫', icon: '🥋', players: 1 },
-            { id: '大金刚', name: '大金刚', icon: '🦍', players: 1 },
-            { id: '沙罗曼蛇', name: '沙罗曼蛇', icon: '🐍', players: 2 },
-            { id: '兵蜂', name: '兵蜂', icon: '🐝', players: 2 },
-            { id: '绿色兵团', name: '绿色兵团', icon: '🪖', players: 2 },
-            { id: '赤影战士(水上魂斗罗)', name: '赤影战士', icon: '💧', players: 2 },
-        ];
+        // 尝试从 manifest 加载完整游戏列表
+        try {
+            const response = await fetch('/roms-manifest.json');
+            if (response.ok) {
+                const manifest = await response.json();
+                this.allGames = manifest.files.map(f => {
+                    const name = f.name.replace('.zip', '').replace('.nes', '');
+                    return {
+                        id: name,
+                        name: name,
+                        icon: this.getGameIcon(name),
+                        players: this.guessPlayers(name),
+                        size: f.size
+                    };
+                });
+                console.log(`从manifest加载了 ${this.allGames.length} 个游戏`);
+            } else {
+                throw new Error('manifest not found');
+            }
+        } catch (e) {
+            console.log('使用预设游戏列表');
+            // 回退到预设列表
+            this.allGames = [
+                { id: '魂斗罗', name: '魂斗罗', icon: '🔫', players: 2 },
+                { id: '超级魂斗罗', name: '超级魂斗罗', icon: '🔫', players: 2 },
+                { id: '超级玛莉', name: '超级玛丽', icon: '🍄', players: 1 },
+                { id: '坦克大战(打坦克，Battle City)', name: '坦克大战', icon: '🎖️', players: 2 },
+                { id: '雪人兄弟', name: '雪人兄弟', icon: '⛄', players: 2 },
+                { id: '双截龙', name: '双截龙', icon: '🐉', players: 2 },
+                { id: '赤色要塞', name: '赤色要塞', icon: '🚁', players: 2 },
+                { id: '忍者神龟2', name: '忍者神龟2', icon: '🐢', players: 2 },
+                { id: '热血物语', name: '热血物语', icon: '👊', players: 2 },
+                { id: '松鼠大战2', name: '松鼠大战2', icon: '🐿️', players: 2 },
+            ];
+        }
         
-        this.renderGameResults(this.allGames.slice(0, 8));
+        this.renderGameResults(this.allGames.slice(0, 12));
+    }
+    
+    getGameIcon(name) {
+        // 根据游戏名猜测图标
+        const iconMap = {
+            '魂斗罗': '🔫', '坦克': '🎖️', '马里奥': '🍄', '玛莉': '🍄', '玛丽': '🍄',
+            '雪人': '⛄', '双截龙': '🐉', '忍者': '🥷', '热血': '👊', '松鼠': '🐿️',
+            '冒险岛': '🏝️', '炸弹': '💣', '泡泡': '🫧', '洛克人': '🤖', '恶魔城': '🏰',
+            '足球': '⚽', '篮球': '🏀', '棒球': '⚾', '赛车': '🏎️', '飞机': '✈️',
+            '三国': '⚔️', '龙珠': '🐲', '高达': '🤖', '街霸': '👊', '拳': '🥊',
+            '麻将': '🀄', '象棋': '♟️', '围棋': '⚫', '扑克': '🃏',
+        };
+        for (const [key, icon] of Object.entries(iconMap)) {
+            if (name.includes(key)) return icon;
+        }
+        return '🎮';
+    }
+    
+    guessPlayers(name) {
+        // 根据游戏名猜测支持人数
+        const twoPlayerKeywords = ['魂斗罗', '坦克', '雪人', '双截龙', '热血', '松鼠', '炸弹', '泡泡', '兵蜂', '赤色', '绿色兵团'];
+        for (const kw of twoPlayerKeywords) {
+            if (name.includes(kw)) return 2;
+        }
+        return 1;
     }
 
     searchGames(query) {

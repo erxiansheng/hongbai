@@ -235,9 +235,11 @@ async function handleSignaling(request, url, path) {
         
         const roomKey = `room:${roomCode}`;
         
+        // 检查房间是否存在
         try {
-            const existing = await kv.get(roomKey, { type: 'json' });
-            if (existing !== undefined) {
+            const existing = await kv.get(roomKey, { type: 'text' });
+            // 存在且有效才报错
+            if (existing && existing !== 'null') {
                 return jsonResponse({ error: '房间已存在' }, 400);
             }
         } catch (e) {
@@ -271,12 +273,16 @@ async function handleSignaling(request, url, path) {
         
         let room;
         try {
-            room = await kv.get(roomKey, { type: 'json' });
+            const roomStr = await kv.get(roomKey, { type: 'text' });
+            if (!roomStr) {
+                return jsonResponse({ error: '房间不存在' }, 404);
+            }
+            room = JSON.parse(roomStr);
         } catch (e) {
             return jsonResponse({ error: '房间不存在' }, 404);
         }
         
-        if (room === undefined) {
+        if (!room || !room.players) {
             return jsonResponse({ error: '房间不存在' }, 404);
         }
         
@@ -341,7 +347,7 @@ async function handleSignaling(request, url, path) {
         return jsonResponse({ messages });
     }
     
-    // 离开房间
+    // 离开房间 - 自动删除/清理
     if (endpoint === 'leave') {
         const roomCode = url.searchParams.get('room');
         const playerNum = parseInt(url.searchParams.get('player'));
@@ -350,30 +356,43 @@ async function handleSignaling(request, url, path) {
             const roomKey = `room:${roomCode}`;
             
             try {
-                const room = await kv.get(roomKey, { type: 'json' });
-                
-                if (room !== undefined) {
-                    if (playerNum === 1) {
-                        await kv.delete(roomKey);
-                        for (const p of room.players) {
-                            if (p !== 1) {
-                                await pushMessage(kv, roomCode, p, {
-                                    type: 'error',
-                                    message: '房主已离开'
-                                });
+                const roomStr = await kv.get(roomKey, { type: 'text' });
+                if (roomStr) {
+                    const room = JSON.parse(roomStr);
+                    
+                    if (room && room.players) {
+                        if (playerNum === 1) {
+                            // 房主离开，删除房间
+                            await kv.delete(roomKey);
+                            // 通知其他玩家
+                            for (const p of room.players) {
+                                if (p !== 1) {
+                                    await pushMessage(kv, roomCode, p, {
+                                        type: 'room-closed',
+                                        message: '房主已离开，房间已关闭'
+                                    });
+                                    // 清理该玩家的消息队列
+                                    await kv.delete(`msg:${roomCode}:${p}`);
+                                }
                             }
+                            // 清理房主的消息队列
+                            await kv.delete(`msg:${roomCode}:1`);
+                        } else {
+                            // 玩家离开
+                            room.players = room.players.filter(p => p !== playerNum);
+                            await kv.put(roomKey, JSON.stringify(room));
+                            // 通知房主
+                            await pushMessage(kv, roomCode, 1, {
+                                type: 'player-left',
+                                playerNum
+                            });
+                            // 清理该玩家的消息队列
+                            await kv.delete(`msg:${roomCode}:${playerNum}`);
                         }
-                    } else {
-                        room.players = room.players.filter(p => p !== playerNum);
-                        await kv.put(roomKey, JSON.stringify(room));
-                        await pushMessage(kv, roomCode, 1, {
-                            type: 'player-left',
-                            playerNum
-                        });
                     }
                 }
             } catch (e) {
-                // 忽略
+                // 忽略错误
             }
         }
         
@@ -389,11 +408,15 @@ async function pushMessage(kv, roomCode, toPlayer, message) {
     let messages = [];
     
     try {
-        const existing = await kv.get(queueKey, { type: 'json' });
-        if (existing !== undefined) {
-            messages = existing;
+        const existing = await kv.get(queueKey, { type: 'text' });
+        if (existing) {
+            messages = JSON.parse(existing);
         }
     } catch (e) {}
+    
+    if (!Array.isArray(messages)) {
+        messages = [];
+    }
     
     messages.push(message);
     if (messages.length > 50) messages.shift();
@@ -406,11 +429,12 @@ async function popMessages(kv, roomCode, playerNum) {
     const queueKey = `msg:${roomCode}:${playerNum}`;
     
     try {
-        const existing = await kv.get(queueKey, { type: 'json' });
-        if (existing === undefined) return [];
+        const existing = await kv.get(queueKey, { type: 'text' });
+        if (!existing) return [];
         
+        const messages = JSON.parse(existing);
         await kv.delete(queueKey);
-        return existing;
+        return Array.isArray(messages) ? messages : [];
     } catch (e) {
         return [];
     }
