@@ -1,0 +1,20 @@
+# 阿里云ESA边缘函数配置
+# 注意：阿里云ESA的配置格式可能与此不同，请参考官方文档
+
+name = "nes-multiplayer"
+main = "signaling.js"
+compatibility_date = "2026-01-01"
+
+# KV命名空间绑定
+[[kv_namespaces]]
+binding = "KV"
+id = "948092421479190528"
+
+# 环境变量
+[vars]
+ENVIRONMENT = "production"
+
+# 路由配置
+[[routes]]
+pattern = "your-domain.com/api/*"
+zone_name = "your-domain.com"
