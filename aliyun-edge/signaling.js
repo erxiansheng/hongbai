@@ -71,9 +71,29 @@ async function handleRequest(request) {
                         results.status = 'found';
                         results.valueType = typeof value;
                         results.valueLength = value.length;
-                        results.valuePreview = value.substring(0, 100);
+                        // 前200字符
+                        results.valueStart = value.substring(0, 200);
+                        // 后50字符
+                        results.valueEnd = value.substring(value.length - 50);
                         // 检查是否像 base64
-                        results.looksLikeBase64 = /^[A-Za-z0-9+/]+=*$/.test(value.substring(0, 100));
+                        const sample = value.replace(/\s/g, '').substring(0, 100);
+                        results.looksLikeBase64 = /^[A-Za-z0-9+/]+=*$/.test(sample);
+                        // 检查是否有换行符或空格
+                        results.hasNewlines = value.includes('\n');
+                        results.hasSpaces = value.includes(' ');
+                        results.hasCarriageReturn = value.includes('\r');
+                        
+                        // 尝试解码前几个字节看看
+                        try {
+                            const cleanBase64 = value.replace(/[\r\n\s]/g, '');
+                            const testDecode = atob(cleanBase64.substring(0, 100));
+                            results.decodeTestLength = testDecode.length;
+                            results.decodeTestHex = Array.from(testDecode.substring(0, 10))
+                                .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
+                                .join(' ');
+                        } catch (e) {
+                            results.decodeError = e.message;
+                        }
                     }
                 }
             } catch (e) {
