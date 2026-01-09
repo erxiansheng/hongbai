@@ -171,35 +171,47 @@ async function handleRomRequest(url, path) {
     const gameId = decodeURIComponent(path.split('/api/rom/')[1]);
     
     const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
-    const mode = url.searchParams.get('mode') || 'binary'; // 默认用binary
     
     try {
         const kv = new EdgeKV({ namespace });
         // 注意：EdgeKV 的 key 不能包含 /，用 : 代替
         const key = `roms:${gameId}.zip`;
         
-        let bytes;
+        // ROM 是以 Base64 编码存储的，始终以 text 方式读取后解码
+        const base64Data = await kv.get(key, { type: 'text' });
+        if (base64Data === undefined || base64Data === null) {
+            return jsonResponse({ error: 'ROM not found', key, namespace }, 404);
+        }
         
-        if (mode === 'text') {
-            // 获取 base64 文本后解码
-            const base64Data = await kv.get(key, { type: 'text' });
-            if (base64Data === undefined || base64Data === null) {
-                return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
-            }
-            
-            // 使用 atob 解码
+        // 检查是否是有效的 Base64 数据
+        if (typeof base64Data !== 'string' || base64Data.length === 0) {
+            return jsonResponse({ error: 'Invalid ROM data', key, dataType: typeof base64Data }, 500);
+        }
+        
+        // 使用 atob 解码 Base64
+        let bytes;
+        try {
             const binaryString = atob(base64Data);
             bytes = new Uint8Array(binaryString.length);
             for (let i = 0; i < binaryString.length; i++) {
                 bytes[i] = binaryString.charCodeAt(i);
             }
-        } else {
-            // 直接用 arrayBuffer 获取（如果存储时已解码）
-            const buffer = await kv.get(key, { type: 'arrayBuffer' });
-            if (buffer === undefined || buffer === null) {
-                return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
-            }
-            bytes = new Uint8Array(buffer);
+        } catch (decodeErr) {
+            return jsonResponse({ 
+                error: 'Base64 decode failed', 
+                key, 
+                message: decodeErr.message,
+                dataPreview: base64Data.substring(0, 100)
+            }, 500);
+        }
+        
+        // 验证是否是 ZIP 文件 (PK..)
+        if (bytes.length < 4 || bytes[0] !== 0x50 || bytes[1] !== 0x4b) {
+            return jsonResponse({ 
+                error: 'Not a valid ZIP file', 
+                key,
+                firstBytes: Array.from(bytes.slice(0, 10)).map(b => b.toString(16)).join(' ')
+            }, 500);
         }
         
         return new Response(bytes.buffer, {
@@ -215,8 +227,7 @@ async function handleRomRequest(url, path) {
             error: e.message,
             errorString: String(e),
             key: `roms:${gameId}.zip`,
-            namespace,
-            mode
+            namespace
         }, 500);
     }
 }
