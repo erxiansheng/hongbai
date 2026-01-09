@@ -22,10 +22,22 @@ export class NESEmulator {
         // 帧数据压缩用
         this.lastFrameBuffer = null;
         
+        // 固定帧率控制 - NES运行在60.0988 FPS (NTSC)
+        this.targetFPS = 60.0988;
+        this.frameInterval = 1000 / this.targetFPS; // ~16.64ms
+        this.lastFrameTime = 0;
+        this.accumulator = 0;
+        
         this.init();
     }
 
     init() {
+        // 检查jsnes是否已加载
+        if (typeof jsnes === 'undefined') {
+            console.error('jsnes库未加载！');
+            return;
+        }
+        
         this.nes = new jsnes.NES({
             onFrame: (frameBuffer) => {
                 this.renderFrame(frameBuffer);
@@ -190,7 +202,9 @@ export class NESEmulator {
 
     loadRom(romData) {
         try {
-            this.nes.loadROM(this.arrayToString(romData));
+            // 检查ROM格式并转换
+            const processedRom = this.preprocessRom(romData);
+            this.nes.loadROM(this.arrayToString(processedRom));
             this.lastFrameBuffer = null; // 重置帧缓存
             console.log('ROM加载成功');
             return true;
@@ -198,6 +212,107 @@ export class NESEmulator {
             console.error('ROM加载失败:', e);
             return false;
         }
+    }
+
+    // 预处理ROM - 支持UNF/UNIF格式转换
+    preprocessRom(romData) {
+        // 检查是否是UNIF格式 (以"UNIF"开头)
+        if (romData.length >= 4 && 
+            romData[0] === 0x55 && romData[1] === 0x4E && 
+            romData[2] === 0x49 && romData[3] === 0x46) {
+            console.log('检测到UNIF格式ROM，尝试转换...');
+            return this.convertUnifToNes(romData);
+        }
+        
+        // 检查是否是标准NES格式 (以"NES\x1A"开头)
+        if (romData.length >= 4 && 
+            romData[0] === 0x4E && romData[1] === 0x45 && 
+            romData[2] === 0x53 && romData[3] === 0x1A) {
+            console.log('标准NES格式ROM');
+            return romData;
+        }
+        
+        // 尝试作为原始ROM数据处理
+        console.log('未知ROM格式，尝试直接加载');
+        return romData;
+    }
+
+    // 简单的UNIF到NES转换（基本支持）
+    convertUnifToNes(unifData) {
+        // UNIF格式解析
+        // Header: "UNIF" + 4字节版本 + 24字节保留
+        // 然后是多个chunk，每个chunk: 4字节ID + 4字节长度 + 数据
+        
+        let prgData = null;
+        let chrData = null;
+        let mapper = 0;
+        let mirroring = 0;
+        
+        let offset = 32; // 跳过header
+        
+        while (offset < unifData.length - 8) {
+            const chunkId = String.fromCharCode(unifData[offset], unifData[offset+1], unifData[offset+2], unifData[offset+3]);
+            const chunkLen = unifData[offset+4] | (unifData[offset+5] << 8) | (unifData[offset+6] << 16) | (unifData[offset+7] << 24);
+            offset += 8;
+            
+            if (offset + chunkLen > unifData.length) break;
+            
+            const chunkData = unifData.slice(offset, offset + chunkLen);
+            
+            if (chunkId.startsWith('PRG')) {
+                prgData = prgData ? this.concatArrays(prgData, chunkData) : chunkData;
+            } else if (chunkId.startsWith('CHR')) {
+                chrData = chrData ? this.concatArrays(chrData, chunkData) : chunkData;
+            } else if (chunkId === 'MAPR') {
+                // Mapper名称，尝试解析
+                const mapperName = String.fromCharCode(...chunkData).replace(/\0/g, '');
+                console.log('UNIF Mapper:', mapperName);
+            } else if (chunkId === 'MIRR') {
+                mirroring = chunkData[0];
+            }
+            
+            offset += chunkLen;
+        }
+        
+        if (!prgData) {
+            console.warn('UNIF转换失败：未找到PRG数据');
+            return unifData; // 返回原始数据让jsnes尝试
+        }
+        
+        // 构建iNES格式
+        const prgSize = prgData.length;
+        const chrSize = chrData ? chrData.length : 0;
+        const prgBanks = Math.ceil(prgSize / 16384);
+        const chrBanks = Math.ceil(chrSize / 8192);
+        
+        const nesHeader = new Uint8Array(16);
+        nesHeader[0] = 0x4E; // N
+        nesHeader[1] = 0x45; // E
+        nesHeader[2] = 0x53; // S
+        nesHeader[3] = 0x1A; // EOF
+        nesHeader[4] = prgBanks;
+        nesHeader[5] = chrBanks;
+        nesHeader[6] = (mapper & 0x0F) << 4 | (mirroring & 1);
+        nesHeader[7] = mapper & 0xF0;
+        
+        // 组合最终ROM
+        const totalSize = 16 + prgSize + chrSize;
+        const nesRom = new Uint8Array(totalSize);
+        nesRom.set(nesHeader, 0);
+        nesRom.set(prgData, 16);
+        if (chrData) {
+            nesRom.set(chrData, 16 + prgSize);
+        }
+        
+        console.log(`UNIF转换完成: PRG=${prgSize}, CHR=${chrSize}`);
+        return nesRom;
+    }
+
+    concatArrays(a, b) {
+        const result = new Uint8Array(a.length + b.length);
+        result.set(a, 0);
+        result.set(b, a.length);
+        return result;
     }
 
     arrayToString(array) {
@@ -211,27 +326,49 @@ export class NESEmulator {
     start() {
         if (this.isRunning) return;
         
+        // 确保NES已初始化
+        if (!this.nes) {
+            console.error('NES模拟器未初始化');
+            this.init();
+            if (!this.nes) return;
+        }
+        
         this.isRunning = true;
         this.isPaused = false;
+        this.lastFrameTime = performance.now();
+        this.accumulator = 0;
         
         // 只有主机需要音频和游戏循环
         if (this.isHost) {
             this.initAudio();
-            this.gameLoop();
+            this.gameLoop(performance.now());
             console.log('主机模拟器已启动');
         } else {
             console.log('客户端模拟器已启动（仅接收帧）');
         }
     }
 
-    gameLoop() {
+    gameLoop(currentTime) {
         if (!this.isRunning || !this.isHost) return;
         
+        // 计算时间差
+        const deltaTime = currentTime - this.lastFrameTime;
+        this.lastFrameTime = currentTime;
+        
+        // 防止时间跳跃（如切换标签页后）
+        const clampedDelta = Math.min(deltaTime, 100);
+        
         if (!this.isPaused) {
-            this.nes.frame();
+            this.accumulator += clampedDelta;
+            
+            // 固定时间步长更新 - 确保帧率一致
+            while (this.accumulator >= this.frameInterval) {
+                this.nes.frame();
+                this.accumulator -= this.frameInterval;
+            }
         }
         
-        this.frameId = requestAnimationFrame(() => this.gameLoop());
+        this.frameId = requestAnimationFrame((time) => this.gameLoop(time));
     }
 
     stop() {
@@ -260,13 +397,21 @@ export class NESEmulator {
 
     buttonDown(player, button) {
         if (this.isHost && this.nes) {
-            this.nes.buttonDown(player, button);
+            try {
+                this.nes.buttonDown(player, button);
+            } catch (e) {
+                console.warn('buttonDown错误:', e);
+            }
         }
     }
 
     buttonUp(player, button) {
         if (this.isHost && this.nes) {
-            this.nes.buttonUp(player, button);
+            try {
+                this.nes.buttonUp(player, button);
+            } catch (e) {
+                console.warn('buttonUp错误:', e);
+            }
         }
     }
 
@@ -280,14 +425,14 @@ export class NESEmulator {
     }
 }
 
-// NES按键常量
+// NES按键常量 - 延迟初始化以确保jsnes已加载
 export const NES_BUTTONS = {
-    A: jsnes.Controller.BUTTON_A,
-    B: jsnes.Controller.BUTTON_B,
-    SELECT: jsnes.Controller.BUTTON_SELECT,
-    START: jsnes.Controller.BUTTON_START,
-    UP: jsnes.Controller.BUTTON_UP,
-    DOWN: jsnes.Controller.BUTTON_DOWN,
-    LEFT: jsnes.Controller.BUTTON_LEFT,
-    RIGHT: jsnes.Controller.BUTTON_RIGHT
+    get A() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_A : 0; },
+    get B() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_B : 1; },
+    get SELECT() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_SELECT : 2; },
+    get START() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_START : 3; },
+    get UP() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_UP : 4; },
+    get DOWN() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_DOWN : 5; },
+    get LEFT() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_LEFT : 6; },
+    get RIGHT() { return typeof jsnes !== 'undefined' ? jsnes.Controller.BUTTON_RIGHT : 7; }
 };

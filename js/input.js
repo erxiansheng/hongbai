@@ -16,13 +16,16 @@ export class InputManager {
         this.isGameRunning = false;
         
         // 默认键盘映射
+        // NES只有A/B两个动作键，X/Y映射为A/B的备用键
         this.defaultKeyMap = {
             'KeyW': 'UP',
             'KeyS': 'DOWN',
             'KeyA': 'LEFT',
             'KeyD': 'RIGHT',
-            'KeyJ': 'A',
-            'KeyK': 'B',
+            'KeyJ': 'A',      // A键
+            'KeyK': 'B',      // B键
+            'KeyH': 'X',      // X键 -> 映射到A
+            'KeyG': 'Y',      // Y键 -> 映射到B
             'KeyU': 'SELECT',
             'KeyI': 'START'
         };
@@ -250,13 +253,21 @@ export class InputManager {
     }
 
     processInput(button, pressed) {
-        const nesButton = NES_BUTTONS[button];
-        if (nesButton === undefined) return;
+        // X/Y 映射到 A/B (NES只有A/B两个动作键)
+        let nesButtonName = button;
+        if (button === 'X') nesButtonName = 'A';
+        if (button === 'Y') nesButtonName = 'B';
+        
+        const nesButton = NES_BUTTONS[nesButtonName];
+        if (nesButton === undefined) {
+            console.warn('未知按键:', nesButtonName);
+            return;
+        }
 
         const playerIndex = this.localPlayer - 1;
         
         // 主机直接处理输入
-        if (this.emulator.isHost) {
+        if (this.emulator && this.emulator.isHost && this.emulator.nes) {
             if (pressed) {
                 this.emulator.buttonDown(playerIndex, nesButton);
             } else {
@@ -265,17 +276,17 @@ export class InputManager {
         }
 
         // 非主机发送输入给主机
-        if (!this.emulator.isHost && this.onInputCallback) {
+        if (this.emulator && !this.emulator.isHost && this.onInputCallback) {
             this.onInputCallback({
                 player: this.localPlayer,
-                button: button,
+                button: nesButtonName,
                 pressed: pressed
             });
         }
         
         // 广播按键状态给其他玩家显示
         if (this.onInputBroadcast) {
-            this.onInputBroadcast(button, pressed);
+            this.onInputBroadcast(nesButtonName, pressed);
         }
     }
 
@@ -285,10 +296,12 @@ export class InputManager {
         if (nesButton === undefined) return;
 
         const playerIndex = player - 1;
-        if (pressed) {
-            this.emulator.buttonDown(playerIndex, nesButton);
-        } else {
-            this.emulator.buttonUp(playerIndex, nesButton);
+        if (this.emulator && this.emulator.nes) {
+            if (pressed) {
+                this.emulator.buttonDown(playerIndex, nesButton);
+            } else {
+                this.emulator.buttonUp(playerIndex, nesButton);
+            }
         }
     }
 

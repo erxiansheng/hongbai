@@ -190,6 +190,11 @@ class GameApp {
 
     onPlayerJoined(data) {
         const { playerNum, name } = data;
+        // 防止重复处理同一玩家加入事件
+        if (this.players[playerNum] && this.players[playerNum].connected) {
+            console.log(`P${playerNum} 已在房间中，忽略重复加入事件`);
+            return;
+        }
         this.players[playerNum] = { name: name || `玩家${playerNum}`, connected: true };
         this.updateSeats();
         this.ui.showToast(`P${playerNum} 加入了房间`);
@@ -218,8 +223,10 @@ class GameApp {
     }
 
     onGameStart(data) {
+        console.log('收到game-start事件:', data, '当前模式:', this.mode);
         if (this.mode === 'client') {
             this.selectedGameName = data.gameName || '游戏';
+            console.log('客户端开始游戏:', this.selectedGameName);
             this.startGameAsClient();
         }
     }
@@ -489,8 +496,9 @@ class GameApp {
         const file = event.target.files[0];
         if (!file) return;
 
-        if (!file.name.toLowerCase().endsWith('.nes')) {
-            this.ui.showToast('请上传.nes格式文件');
+        const ext = file.name.toLowerCase();
+        if (!ext.endsWith('.nes') && !ext.endsWith('.unf') && !ext.endsWith('.unif')) {
+            this.ui.showToast('请上传.nes/.unf格式文件');
             return;
         }
 
@@ -498,7 +506,7 @@ class GameApp {
         reader.onload = (e) => {
             this.customRom = new Uint8Array(e.target.result);
             this.selectedGame = null;
-            this.selectedGameName = file.name.replace('.nes', '');
+            this.selectedGameName = file.name.replace(/\.(nes|unf|unif)$/i, '');
             document.getElementById('upload-filename').textContent = `✓ ${file.name}`;
             document.querySelectorAll('.game-result-item').forEach(el => el.classList.remove('selected'));
             

@@ -75,6 +75,8 @@ export class RoomManager {
         if (this.pollInterval) return;
         
         this.isPolling = true;
+        this.processedMessages = new Set(); // 防止重复处理消息
+        
         this.pollInterval = setInterval(async () => {
             if (!this.isPolling || !this.roomCode || !this.myPlayerNum) return;
             
@@ -86,6 +88,19 @@ export class RoomManager {
                 
                 if (result.messages && result.messages.length > 0) {
                     for (const msg of result.messages) {
+                        // 生成消息唯一标识，防止重复处理
+                        const msgId = `${msg.type}-${msg.playerNum || msg.fromPlayer}-${JSON.stringify(msg).length}`;
+                        if (this.processedMessages.has(msgId)) {
+                            console.log('跳过重复消息:', msgId);
+                            continue;
+                        }
+                        this.processedMessages.add(msgId);
+                        // 限制缓存大小
+                        if (this.processedMessages.size > 100) {
+                            const first = this.processedMessages.values().next().value;
+                            this.processedMessages.delete(first);
+                        }
+                        
                         await this.handleSignalingMessage(msg);
                     }
                 }
@@ -429,12 +444,14 @@ export class RoomManager {
 
     // ========== 消息处理 ==========
     handleGameMessage(data) {
+        console.log('收到游戏消息:', data.type, data);
         switch (data.type) {
             case 'input':
                 this.updateInputState(data.player || data.fromPlayer, data.button, data.pressed);
                 this.emit('input', data);
                 break;
             case 'game-start':
+                console.log('处理game-start消息');
                 this.emit('game-start', data);
                 break;
             case 'frame':
