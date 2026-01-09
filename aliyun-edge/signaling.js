@@ -35,6 +35,30 @@ async function handleRequest(request) {
             });
         }
         
+        // 调试KV - 列出所有key
+        if (path === '/api/debug-kv') {
+            try {
+                const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
+                const list = await kv.list({ prefix: '' });
+                // 尝试获取魂斗罗
+                let testGet = null;
+                let testGet2 = null;
+                try {
+                    testGet = await kv.get('roms/魂斗罗.zip');
+                    testGet2 = await kv.get('roms/魂斗罗.zip', { type: 'text' });
+                } catch (e) {
+                    testGet = 'error: ' + e.message;
+                }
+                return jsonResponse({ 
+                    keys: list.keys || list,
+                    testGetDefault: testGet ? (typeof testGet + ', length:' + (testGet.length || 'N/A')) : 'null',
+                    testGetText: testGet2 ? (typeof testGet2 + ', length:' + (testGet2.length || 'N/A')) : 'null'
+                });
+            } catch (e) {
+                return jsonResponse({ error: e.message }, 500);
+            }
+        }
+        
         // 健康检查
         if (path === '/api/health') {
             return jsonResponse({ status: 'ok', time: Date.now() });
@@ -274,6 +298,7 @@ async function handleRomRequest(path) {
     const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
     
     try {
+        // KV中的key格式: roms/游戏名.zip
         const key = `roms/${gameId}.zip`;
         const base64Data = await kv.get(key, { type: 'text' });
         
@@ -305,6 +330,7 @@ async function handleListRoms() {
     const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
     
     try {
+        // 列出所有 roms/ 前缀的文件
         const list = await kv.list({ prefix: 'roms/' });
         const roms = (list.keys || []).map(k => ({
             key: k.name,
