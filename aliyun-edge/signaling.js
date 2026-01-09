@@ -1,213 +1,181 @@
 /**
- * 阿里云边缘函数 - WebRTC信令服务 + ROM服务
+ * 阿里云 ESA 边缘函数 - WebRTC信令服务 + ROM服务
  * 使用 HTTP 轮询方式（阿里云ESA不支持WebSocket）
- * 
- * 部署说明：
- * 1. 在ESA控制台创建边缘函数
- * 2. 绑定KV命名空间，变量名设为: KV 或 ROMS
- * 3. 上传此代码
  */
 
-export default {
-    async fetch(request, env) {
-        const url = new URL(request.url);
-        
-        // CORS预检
-        if (request.method === 'OPTIONS') {
-            return corsResponse(null);
-        }
-        
-        // 调试：查看env中有哪些绑定
-        if (url.pathname === '/api/debug') {
-            return jsonResponse({
-                envKeys: Object.keys(env || {}),
-                hasKV: !!getKV(env),
-                env: env ? JSON.stringify(env).substring(0, 500) : 'null'
+// KV 命名空间名称
+const SIGNAL_NAMESPACE = 'nes-signal';  // 信令用
+const ROMS_NAMESPACE = 'roms';          // ROM存储用
+
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+};
+
+async function handleRequest(request) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+    const method = request.method;
+    
+    // CORS 预检
+    if (method === 'OPTIONS') {
+        return new Response(null, { headers: corsHeaders });
+    }
+    
+    try {
+        // 调试接口
+        if (path === '/api/debug') {
+            return jsonResponse({ 
+                status: 'ok',
+                time: Date.now(),
+                signalNamespace: SIGNAL_NAMESPACE,
+                romsNamespace: ROMS_NAMESPACE
             });
         }
         
-        try {
-            // 信令服务 - HTTP轮询
-            if (url.pathname.startsWith('/api/signaling/')) {
-                return await handleSignaling(request, env, url);
-            }
-            
-            // ROM文件获取
-            if (url.pathname.startsWith('/api/rom/')) {
-                return await handleRomRequest(url, env);
-            }
-            
-            // 列出所有ROM
-            if (url.pathname === '/api/list-roms') {
-                return await handleListRoms(env);
-            }
-            
-            // 健康检查
-            if (url.pathname === '/api/health') {
-                return jsonResponse({ 
-                    status: 'ok', 
-                    time: Date.now(),
-                    kvConfigured: !!getKV(env)
-                });
-            }
-            
-            return new Response('Not Found', { status: 404 });
-        } catch (e) {
-            return jsonResponse({ error: e.message, stack: e.stack }, 500);
+        // 健康检查
+        if (path === '/api/health') {
+            return jsonResponse({ status: 'ok', time: Date.now() });
         }
+        
+        // 信令服务
+        if (path.startsWith('/api/signaling/')) {
+            return await handleSignaling(request, url, path);
+        }
+        
+        // ROM服务
+        if (path.startsWith('/api/rom/')) {
+            return await handleRomRequest(path);
+        }
+        
+        if (path === '/api/list-roms') {
+            return await handleListRoms();
+        }
+        
+        return new Response('Not Found', { status: 404 });
+    } catch (e) {
+        return jsonResponse({ error: e.message, stack: e.stack }, 500);
     }
-};
-
-// CORS响应
-function corsResponse(body, status = 200) {
-    return new Response(body, {
-        status,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        }
-    });
 }
 
-// JSON响应
 function jsonResponse(data, status = 200) {
     return new Response(JSON.stringify(data), {
         status,
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        }
+        headers: corsHeaders
     });
 }
 
-// 获取KV绑定 - 尝试多种可能的绑定名称
-function getKV(env) {
-    if (!env) return null;
-    // 阿里云ESA可能的KV绑定名称
-    return env.KV || env.kv || env.ROMS || env.roms || env.store || env.STORE || null;
-}
-
-// ========== 信令服务 (HTTP轮询) ==========
-async function handleSignaling(request, env, url) {
-    const kv = getKV(env);
-    const path = url.pathname.replace('/api/signaling/', '');
+// ========== 信令服务 ==========
+async function handleSignaling(request, url, path) {
+    const endpoint = path.replace('/api/signaling/', '');
+    const kv = new EdgeKV({ namespace: SIGNAL_NAMESPACE });
     
-    // 如果KV未配置，返回详细错误
-    if (!kv) {
-        return jsonResponse({ 
-            error: 'KV not configured',
-            hint: '请在ESA控制台绑定KV命名空间，变量名设为 KV',
-            envKeys: Object.keys(env || {})
-        }, 500);
-    }
-    
-    // 创建房间: GET /api/signaling/create?room=XXXX
-    if (path === 'create') {
+    // 创建房间
+    if (endpoint === 'create') {
         const roomCode = url.searchParams.get('room');
         if (!roomCode) {
             return jsonResponse({ error: '缺少房间号' }, 400);
         }
         
-        const roomKey = `signal:room:${roomCode}`;
+        const roomKey = `room:${roomCode}`;
         
         try {
-            const existing = await kv.get(roomKey);
+            const existing = await kv.get(roomKey, { type: 'json' });
             if (existing) {
                 return jsonResponse({ error: '房间已存在' }, 400);
             }
-            
-            const room = {
-                hostId: generateId(),
-                players: [1],
-                created: Date.now()
-            };
-            await kv.put(roomKey, JSON.stringify(room), { expirationTtl: 3600 });
-            
-            return jsonResponse({ 
-                success: true, 
-                roomCode, 
-                peerId: room.hostId,
-                playerNum: 1 
-            });
         } catch (e) {
-            return jsonResponse({ error: 'KV操作失败: ' + e.message }, 500);
+            // key不存在，继续创建
         }
+        
+        const room = {
+            hostId: generateId(),
+            players: [1],
+            created: Date.now()
+        };
+        
+        await kv.put(roomKey, JSON.stringify(room), { expiration: 3600 });
+        
+        return jsonResponse({ 
+            success: true, 
+            roomCode, 
+            peerId: room.hostId,
+            playerNum: 1 
+        });
     }
     
-    // 加入房间: GET /api/signaling/join?room=XXXX
-    if (path === 'join') {
+    // 加入房间
+    if (endpoint === 'join') {
         const roomCode = url.searchParams.get('room');
         if (!roomCode) {
             return jsonResponse({ error: '缺少房间号' }, 400);
         }
         
-        const roomKey = `signal:room:${roomCode}`;
+        const roomKey = `room:${roomCode}`;
         
+        let room;
         try {
-            const roomStr = await kv.get(roomKey);
-            if (!roomStr) {
-                return jsonResponse({ error: '房间不存在' }, 404);
-            }
-            
-            const room = JSON.parse(roomStr);
-            
-            // 分配玩家编号
-            let playerNum = 2;
-            while (room.players.includes(playerNum) && playerNum <= 4) {
-                playerNum++;
-            }
-            if (playerNum > 4) {
-                return jsonResponse({ error: '房间已满' }, 400);
-            }
-            
-            const peerId = generateId();
-            room.players.push(playerNum);
-            room[`player${playerNum}Id`] = peerId;
-            await kv.put(roomKey, JSON.stringify(room), { expirationTtl: 3600 });
-            
-            // 通知房主有新玩家加入
-            await pushMessage(kv, roomCode, 1, {
-                type: 'player-joined',
-                playerNum,
-                name: `玩家${playerNum}`
-            });
-            
-            return jsonResponse({ 
-                success: true, 
-                roomCode, 
-                peerId,
-                playerNum,
-                players: room.players
-            });
+            room = await kv.get(roomKey, { type: 'json' });
         } catch (e) {
-            return jsonResponse({ error: 'KV操作失败: ' + e.message }, 500);
+            return jsonResponse({ error: '房间不存在' }, 404);
         }
+        
+        if (!room) {
+            return jsonResponse({ error: '房间不存在' }, 404);
+        }
+        
+        // 分配玩家编号
+        let playerNum = 2;
+        while (room.players.includes(playerNum) && playerNum <= 4) {
+            playerNum++;
+        }
+        if (playerNum > 4) {
+            return jsonResponse({ error: '房间已满' }, 400);
+        }
+        
+        const peerId = generateId();
+        room.players.push(playerNum);
+        room[`player${playerNum}Id`] = peerId;
+        
+        await kv.put(roomKey, JSON.stringify(room), { expiration: 3600 });
+        
+        // 通知房主
+        await pushMessage(kv, roomCode, 1, {
+            type: 'player-joined',
+            playerNum,
+            name: `玩家${playerNum}`
+        });
+        
+        return jsonResponse({ 
+            success: true, 
+            roomCode, 
+            peerId,
+            playerNum,
+            players: room.players
+        });
     }
     
-    // 发送消息: POST /api/signaling/send
-    if (path === 'send' && request.method === 'POST') {
-        try {
-            const data = await request.json();
-            const { roomCode, fromPlayer, toPlayer, message } = data;
-            
-            if (!roomCode || !message) {
-                return jsonResponse({ error: '参数不完整' }, 400);
-            }
-            
-            await pushMessage(kv, roomCode, toPlayer, {
-                ...message,
-                fromPlayer
-            });
-            
-            return jsonResponse({ success: true });
-        } catch (e) {
-            return jsonResponse({ error: e.message }, 500);
+    // 发送消息
+    if (endpoint === 'send' && request.method === 'POST') {
+        const data = await request.json();
+        const { roomCode, fromPlayer, toPlayer, message } = data;
+        
+        if (!roomCode || !message) {
+            return jsonResponse({ error: '参数不完整' }, 400);
         }
+        
+        await pushMessage(kv, roomCode, toPlayer, {
+            ...message,
+            fromPlayer
+        });
+        
+        return jsonResponse({ success: true });
     }
     
-    // 轮询消息: GET /api/signaling/poll?room=XXXX&player=N
-    if (path === 'poll') {
+    // 轮询消息
+    if (endpoint === 'poll') {
         const roomCode = url.searchParams.get('room');
         const playerNum = parseInt(url.searchParams.get('player'));
         
@@ -215,28 +183,24 @@ async function handleSignaling(request, env, url) {
             return jsonResponse({ error: '参数不完整' }, 400);
         }
         
-        try {
-            const messages = await popMessages(kv, roomCode, playerNum);
-            return jsonResponse({ messages });
-        } catch (e) {
-            return jsonResponse({ messages: [] });
-        }
+        const messages = await popMessages(kv, roomCode, playerNum);
+        return jsonResponse({ messages });
     }
     
-    // 离开房间: GET /api/signaling/leave?room=XXXX&player=N
-    if (path === 'leave') {
+    // 离开房间
+    if (endpoint === 'leave') {
         const roomCode = url.searchParams.get('room');
         const playerNum = parseInt(url.searchParams.get('player'));
         
         if (roomCode && playerNum) {
+            const roomKey = `room:${roomCode}`;
+            
             try {
-                const roomKey = `signal:room:${roomCode}`;
-                const roomStr = await kv.get(roomKey);
+                const room = await kv.get(roomKey, { type: 'json' });
                 
-                if (roomStr) {
-                    const room = JSON.parse(roomStr);
-                    
+                if (room) {
                     if (playerNum === 1) {
+                        // 房主离开，删除房间
                         await kv.delete(roomKey);
                         for (const p of room.players) {
                             if (p !== 1) {
@@ -247,8 +211,9 @@ async function handleSignaling(request, env, url) {
                             }
                         }
                     } else {
+                        // 玩家离开
                         room.players = room.players.filter(p => p !== playerNum);
-                        await kv.put(roomKey, JSON.stringify(room), { expirationTtl: 3600 });
+                        await kv.put(roomKey, JSON.stringify(room), { expiration: 3600 });
                         await pushMessage(kv, roomCode, 1, {
                             type: 'player-left',
                             playerNum
@@ -256,7 +221,7 @@ async function handleSignaling(request, env, url) {
                     }
                 }
             } catch (e) {
-                // 忽略错误
+                // 忽略
             }
         }
         
@@ -266,34 +231,34 @@ async function handleSignaling(request, env, url) {
     return jsonResponse({ error: '未知接口' }, 404);
 }
 
-// 推送消息到队列
+// 推送消息
 async function pushMessage(kv, roomCode, toPlayer, message) {
-    const queueKey = `signal:msg:${roomCode}:${toPlayer}`;
+    const queueKey = `msg:${roomCode}:${toPlayer}`;
     let messages = [];
     
     try {
-        const existing = await kv.get(queueKey);
+        const existing = await kv.get(queueKey, { type: 'json' });
         if (existing) {
-            messages = JSON.parse(existing);
+            messages = existing;
         }
     } catch (e) {}
     
     messages.push(message);
     if (messages.length > 50) messages.shift();
     
-    await kv.put(queueKey, JSON.stringify(messages), { expirationTtl: 300 });
+    await kv.put(queueKey, JSON.stringify(messages), { expiration: 300 });
 }
 
-// 获取并清空消息队列
+// 获取消息
 async function popMessages(kv, roomCode, playerNum) {
-    const queueKey = `signal:msg:${roomCode}:${playerNum}`;
+    const queueKey = `msg:${roomCode}:${playerNum}`;
     
     try {
-        const existing = await kv.get(queueKey);
+        const existing = await kv.get(queueKey, { type: 'json' });
         if (!existing) return [];
         
         await kv.delete(queueKey);
-        return JSON.parse(existing);
+        return existing;
     } catch (e) {
         return [];
     }
@@ -304,16 +269,9 @@ function generateId() {
 }
 
 // ========== ROM服务 ==========
-async function handleRomRequest(url, env) {
-    const gameId = decodeURIComponent(url.pathname.split('/api/rom/')[1]);
-    const kv = getKV(env);
-    
-    if (!kv) {
-        return jsonResponse({ 
-            error: 'KV not configured',
-            envKeys: Object.keys(env || {})
-        }, 500);
-    }
+async function handleRomRequest(path) {
+    const gameId = decodeURIComponent(path.split('/api/rom/')[1]);
+    const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
     
     try {
         const key = `roms/${gameId}.zip`;
@@ -323,6 +281,7 @@ async function handleRomRequest(url, env) {
             return jsonResponse({ error: 'ROM not found', key }, 404);
         }
         
+        // 解码 base64
         const binaryString = atob(base64Data);
         const bytes = new Uint8Array(binaryString.length);
         for (let i = 0; i < binaryString.length; i++) {
@@ -342,14 +301,8 @@ async function handleRomRequest(url, env) {
     }
 }
 
-async function handleListRoms(env) {
-    const kv = getKV(env);
-    if (!kv) {
-        return jsonResponse({ 
-            error: 'KV not configured',
-            envKeys: Object.keys(env || {})
-        }, 500);
-    }
+async function handleListRoms() {
+    const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
     
     try {
         const list = await kv.list({ prefix: 'roms/' });
@@ -362,3 +315,7 @@ async function handleListRoms(env) {
         return jsonResponse({ error: e.message }, 500);
     }
 }
+
+export default {
+    fetch: handleRequest
+};
