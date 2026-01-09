@@ -738,16 +738,29 @@ class GameApp {
         try {
             // JSZip是通过CDN加载的全局变量
             const zip = await window.JSZip.loadAsync(zipData);
-            const files = Object.keys(zip.files);
+            const files = Object.keys(zip.files).filter(f => !zip.files[f].dir);
             console.log(`ZIP包含文件: ${files.join(', ')}`);
             
-            for (const filename of files) {
-                if (filename.toLowerCase().endsWith('.nes')) {
-                    console.log(`提取NES文件: ${filename}`);
-                    return await zip.files[filename].async('uint8array');
+            // 支持的ROM格式，按优先级排序
+            const romExtensions = ['.nes', '.unf', '.unif', '.fds', '.nsf'];
+            
+            for (const ext of romExtensions) {
+                for (const filename of files) {
+                    if (filename.toLowerCase().endsWith(ext)) {
+                        console.log(`提取ROM文件: ${filename}`);
+                        return await zip.files[filename].async('uint8array');
+                    }
                 }
             }
-            throw new Error('ZIP中未找到.nes文件');
+            
+            // 如果没有找到已知格式，尝试提取第一个非目录文件
+            if (files.length > 0) {
+                const firstFile = files[0];
+                console.log(`未找到标准ROM格式，尝试提取: ${firstFile}`);
+                return await zip.files[firstFile].async('uint8array');
+            }
+            
+            throw new Error('ZIP中未找到ROM文件');
         } catch (e) {
             console.error('ZIP解压失败:', e);
             throw new Error(`ZIP解压失败: ${e.message}`);
