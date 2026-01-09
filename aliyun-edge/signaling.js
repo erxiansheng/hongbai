@@ -29,11 +29,6 @@ export async function handleRequest(request, context) {
         return await getRom(gameName, context);
     }
 
-    // ROM 列表 API: /api/roms
-    if (path === '/api/roms') {
-        return await listRoms(context);
-    }
-
     return new Response('Not Found', { status: 404 });
 }
 
@@ -59,7 +54,6 @@ async function getRom(gameName, context) {
         ];
         
         let romData = null;
-        let matchedKey = null;
         
         for (const key of keysToTry) {
             try {
@@ -68,7 +62,6 @@ async function getRom(gameName, context) {
                 if (value) {
                     // 解码 base64
                     romData = Uint8Array.from(atob(value), c => c.charCodeAt(0));
-                    matchedKey = key;
                     break;
                 }
             } catch {}
@@ -106,37 +99,6 @@ async function getRom(gameName, context) {
     } catch (error) {
         console.error('获取ROM失败:', error);
         return jsonResponse({ error: '获取ROM失败', message: error.message }, 500);
-    }
-}
-
-/**
- * 列出所有 ROM
- */
-async function listRoms(context) {
-    try {
-        // 列出所有以 roms: 开头的 key
-        const list = await context.env.KV.list({ prefix: 'roms:' });
-        
-        const roms = list.keys.map(item => {
-            // 移除前缀和扩展名得到游戏名
-            let name = item.name.replace('roms:', '');
-            name = name.replace(/\.(zip|nes)$/i, '');
-            return {
-                id: name,
-                name: name,
-                key: item.name,
-                size: item.metadata?.size || 0
-            };
-        });
-
-        return jsonResponse({ 
-            count: roms.length,
-            roms: roms 
-        });
-
-    } catch (error) {
-        console.error('列出ROM失败:', error);
-        return jsonResponse({ error: '列出ROM失败', message: error.message }, 500);
     }
 }
 

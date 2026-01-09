@@ -323,43 +323,17 @@ class GameApp {
     // ========== 游戏选择 ==========
     async loadGameList() {
         try {
-            // 优先从边缘函数 API 获取游戏列表
-            let loaded = false;
-            
-            try {
-                const apiRes = await fetch('/api/roms');
-                if (apiRes.ok) {
-                    const data = await apiRes.json();
-                    if (data.roms && data.roms.length > 0) {
-                        this.allGames = data.roms.map(r => ({
-                            id: r.id,
-                            name: r.name,
-                            icon: this.getGameIcon(r.name),
-                            players: this.guessPlayers(r.name)
-                        }));
-                        loaded = true;
-                        console.log(`📦 从 KV 加载了 ${data.count} 个游戏`);
-                    }
-                }
-            } catch {}
-
-            // 回退到本地 manifest
-            if (!loaded) {
-                const response = await fetch('/roms-manifest.json');
-                if (response.ok) {
-                    const manifest = await response.json();
-                    this.allGames = manifest.files.map(f => {
-                        const name = f.name.replace('.zip', '').replace('.nes', '');
-                        return { id: name, name, icon: this.getGameIcon(name), players: this.guessPlayers(name) };
-                    });
-                    loaded = true;
-                    console.log(`📁 从本地加载了 ${this.allGames.length} 个游戏`);
-                }
+            const response = await fetch('/roms-manifest.json');
+            if (response.ok) {
+                const manifest = await response.json();
+                this.allGames = manifest.files.map(f => {
+                    const name = f.name.replace('.zip', '').replace('.nes', '');
+                    return { id: name, name, icon: this.getGameIcon(name), players: this.guessPlayers(name) };
+                });
+            } else {
+                throw new Error();
             }
-
-            if (!loaded) throw new Error('无法加载游戏列表');
         } catch {
-            // 最终回退到硬编码列表
             this.allGames = [
                 { id: '魂斗罗', name: '魂斗罗', icon: '🔫', players: 2 },
                 { id: '超级魂斗罗', name: '超级魂斗罗', icon: '🔫', players: 2 },

@@ -35,7 +35,13 @@ export class NESEmulator {
         // 检查jsnes是否已加载
         if (typeof jsnes === 'undefined') {
             console.error('jsnes库未加载！请确保页面已加载jsnes.min.js');
+            this.nes = null;
             return false;
+        }
+        
+        // 如果已经初始化过，直接返回
+        if (this.nes && typeof this.nes.buttonDown === 'function') {
+            return true;
         }
         
         try {
@@ -58,8 +64,16 @@ export class NESEmulator {
                     }
                 }
             });
-            console.log('NES模拟器初始化完成，nes对象:', this.nes ? '已创建' : '创建失败');
-            return true;
+            
+            // 验证 nes 对象创建成功
+            if (this.nes && typeof this.nes.buttonDown === 'function') {
+                console.log('NES模拟器初始化完成');
+                return true;
+            } else {
+                console.error('NES模拟器创建失败：对象无效');
+                this.nes = null;
+                return false;
+            }
         } catch (e) {
             console.error('NES模拟器初始化失败:', e);
             this.nes = null;
@@ -208,6 +222,15 @@ export class NESEmulator {
     }
 
     loadRom(romData) {
+        // 确保 NES 已初始化
+        if (!this.nes) {
+            console.warn('loadRom: NES未初始化，尝试初始化...');
+            if (!this.init()) {
+                console.error('loadRom: NES初始化失败');
+                return false;
+            }
+        }
+        
         try {
             // 检查ROM格式并转换
             const processedRom = this.preprocessRom(romData);
@@ -405,13 +428,16 @@ export class NESEmulator {
     }
 
     buttonDown(player, button) {
-        // 确保 nes 已初始化
+        // 确保 nes 已初始化且正常
         if (!this.nes) {
             console.warn('buttonDown: NES未初始化，尝试重新初始化');
-            this.init();
+            if (!this.init()) {
+                console.error('buttonDown: NES初始化失败');
+                return;
+            }
         }
         
-        if (this.isHost && this.nes) {
+        if (this.isHost && this.nes && typeof this.nes.buttonDown === 'function') {
             try {
                 this.nes.buttonDown(player, button);
             } catch (e) {
@@ -421,13 +447,16 @@ export class NESEmulator {
     }
 
     buttonUp(player, button) {
-        // 确保 nes 已初始化
+        // 确保 nes 已初始化且正常
         if (!this.nes) {
             console.warn('buttonUp: NES未初始化，尝试重新初始化');
-            this.init();
+            if (!this.init()) {
+                console.error('buttonUp: NES初始化失败');
+                return;
+            }
         }
         
-        if (this.isHost && this.nes) {
+        if (this.isHost && this.nes && typeof this.nes.buttonUp === 'function') {
             try {
                 this.nes.buttonUp(player, button);
             } catch (e) {

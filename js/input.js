@@ -268,20 +268,28 @@ export class InputManager {
         
         // 主机直接处理输入
         if (this.emulator && this.emulator.isHost) {
-            // 确保 nes 对象存在
+            // 确保模拟器和 nes 对象都存在
             if (!this.emulator.nes) {
                 console.warn('processInput: emulator.nes 未初始化，尝试初始化...');
-                this.emulator.init();
+                if (!this.emulator.init()) {
+                    console.error('processInput: 无法初始化 NES 模拟器');
+                    return;
+                }
             }
             
-            if (this.emulator.nes) {
-                if (pressed) {
-                    this.emulator.buttonDown(playerIndex, nesButton);
-                } else {
-                    this.emulator.buttonUp(playerIndex, nesButton);
+            // 再次检查 nes 对象
+            if (this.emulator.nes && typeof this.emulator.nes.buttonDown === 'function') {
+                try {
+                    if (pressed) {
+                        this.emulator.nes.buttonDown(playerIndex, nesButton);
+                    } else {
+                        this.emulator.nes.buttonUp(playerIndex, nesButton);
+                    }
+                } catch (e) {
+                    console.error('processInput 按键处理错误:', e);
                 }
             } else {
-                console.error('processInput: 无法初始化 NES 模拟器');
+                console.error('processInput: nes 对象无效');
             }
         }
 
