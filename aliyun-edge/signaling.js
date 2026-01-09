@@ -37,34 +37,43 @@ async function handleRequest(request) {
         
         // 调试KV - 测试获取
         if (path === '/api/debug-kv') {
+            // 使用实际存在的key测试
+            const testKey = url.searchParams.get('key') || 'roms/超级手球.zip';
+            
             try {
                 const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
-                const testKey = 'roms/魂斗罗.zip';
                 
-                // 尝试不同方式获取
-                let result1 = null, result2 = null, result3 = null;
-                let err1 = null, err2 = null, err3 = null;
+                let result = null;
                 
                 try {
-                    result1 = await kv.get(testKey);
-                    result1 = result1 ? `got data, type=${typeof result1}, len=${result1.length || 'N/A'}` : 'null';
-                } catch (e) { err1 = e.message; }
+                    const rawResult = await kv.get(testKey);
+                    if (rawResult) {
+                        result = `got data, type=${typeof rawResult}, len=${rawResult.length || 'N/A'}`;
+                    } else {
+                        result = 'null (key not found)';
+                    }
+                } catch (e) { 
+                    result = 'error: ' + e.message; 
+                }
                 
+                // 尝试 text 类型
+                let textResult = null;
                 try {
-                    result2 = await kv.get(testKey, { type: 'text' });
-                    result2 = result2 ? `got text, len=${result2.length}` : 'null';
-                } catch (e) { err2 = e.message; }
-                
-                try {
-                    result3 = await kv.get(testKey, { type: 'string' });
-                    result3 = result3 ? `got string, len=${result3.length}` : 'null';
-                } catch (e) { err3 = e.message; }
+                    const textData = await kv.get(testKey, { type: 'text' });
+                    if (textData) {
+                        textResult = `got text, len=${textData.length}, starts=${textData.substring(0, 30)}`;
+                    } else {
+                        textResult = 'null';
+                    }
+                } catch (e) {
+                    textResult = 'error: ' + e.message;
+                }
                 
                 return jsonResponse({ 
+                    namespace: ROMS_NAMESPACE,
                     testKey,
-                    defaultGet: result1 || err1,
-                    textGet: result2 || err2,
-                    stringGet: result3 || err3
+                    defaultGet: result,
+                    textGet: textResult
                 });
             } catch (e) {
                 return jsonResponse({ error: e.message }, 500);
