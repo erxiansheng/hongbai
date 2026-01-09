@@ -37,43 +37,40 @@ async function handleRequest(request) {
         
         // 调试KV - 测试获取
         if (path === '/api/debug-kv') {
-            // 使用实际存在的key测试
-            const testKey = url.searchParams.get('key') || 'roms/超级手球.zip';
+            // 测试不同编码方式
+            const rawKey = 'roms/超级手球.zip';
+            const encodedKey = encodeURIComponent('roms/超级手球.zip');
+            const partEncodedKey = 'roms/' + encodeURIComponent('超级手球') + '.zip';
             
             try {
                 const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
                 
-                let result = null;
+                const results = {};
                 
+                // 测试原始key
                 try {
-                    const rawResult = await kv.get(testKey);
-                    if (rawResult) {
-                        result = `got data, type=${typeof rawResult}, len=${rawResult.length || 'N/A'}`;
-                    } else {
-                        result = 'null (key not found)';
-                    }
-                } catch (e) { 
-                    result = 'error: ' + e.message; 
-                }
+                    const r = await kv.get(rawKey, { type: 'text' });
+                    results.rawKey = r ? `found, len=${r.length}` : 'null';
+                } catch (e) { results.rawKey = 'error: ' + e.message; }
                 
-                // 尝试 text 类型
-                let textResult = null;
+                // 测试完全编码的key
                 try {
-                    const textData = await kv.get(testKey, { type: 'text' });
-                    if (textData) {
-                        textResult = `got text, len=${textData.length}, starts=${textData.substring(0, 30)}`;
-                    } else {
-                        textResult = 'null';
-                    }
-                } catch (e) {
-                    textResult = 'error: ' + e.message;
-                }
+                    const r = await kv.get(encodedKey, { type: 'text' });
+                    results.encodedKey = r ? `found, len=${r.length}` : 'null';
+                } catch (e) { results.encodedKey = 'error: ' + e.message; }
+                
+                // 测试部分编码的key
+                try {
+                    const r = await kv.get(partEncodedKey, { type: 'text' });
+                    results.partEncodedKey = r ? `found, len=${r.length}` : 'null';
+                } catch (e) { results.partEncodedKey = 'error: ' + e.message; }
                 
                 return jsonResponse({ 
                     namespace: ROMS_NAMESPACE,
-                    testKey,
-                    defaultGet: result,
-                    textGet: textResult
+                    rawKey,
+                    encodedKey,
+                    partEncodedKey,
+                    results
                 });
             } catch (e) {
                 return jsonResponse({ error: e.message }, 500);
