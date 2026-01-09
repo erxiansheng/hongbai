@@ -35,42 +35,88 @@ async function handleRequest(request) {
             });
         }
         
-        // 调试KV - 测试不同命名空间
+        // 调试KV - 详细测试
         if (path === '/api/debug-kv') {
-            const testKey = 'roms/6in1.zip';
-            const results = {};
-            
-            // 测试 roms 命名空间
-            try {
-                const kv1 = new EdgeKV({ namespace: 'roms' });
-                const r1 = await kv1.get(testKey, { type: 'text' });
-                results.namespace_roms = r1 ? `found, len=${r1.length}` : 'null';
-            } catch (e) { 
-                results.namespace_roms = 'error: ' + e.message; 
-            }
-            
-            // 测试用空间ID
-            try {
-                const kv2 = new EdgeKV({ namespace: '948092421479190528' });
-                const r2 = await kv2.get(testKey, { type: 'text' });
-                results.namespace_id = r2 ? `found, len=${r2.length}` : 'null';
-            } catch (e) { 
-                results.namespace_id = 'error: ' + e.message; 
-            }
-            
-            // 测试截图中的ID: 94809242147919905
-            try {
-                const kv3 = new EdgeKV({ namespace: '94809242147919905' });
-                const r3 = await kv3.get(testKey, { type: 'text' });
-                results.namespace_id2 = r3 ? `found, len=${r3.length}` : 'null';
-            } catch (e) { 
-                results.namespace_id2 = 'error: ' + e.message; 
-            }
-            
-            return jsonResponse({ 
+            const testKey = url.searchParams.get('key') || 'roms/6in1.zip';
+            const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
+            const type = url.searchParams.get('type') || 'text'; // text, arrayBuffer, stream
+            const results = {
+                namespace,
                 testKey,
-                results
-            });
+                readType: type,
+                timestamp: Date.now()
+            };
+            
+            try {
+                const kv = new EdgeKV({ namespace });
+                
+                if (type === 'arrayBuffer') {
+                    const buffer = await kv.get(testKey, { type: 'arrayBuffer' });
+                    if (buffer === undefined) {
+                        results.status = 'key_not_found';
+                    } else {
+                        results.status = 'found';
+                        results.valueType = 'ArrayBuffer';
+                        results.byteLength = buffer.byteLength;
+                        // 显示前20字节的hex
+                        const arr = new Uint8Array(buffer.slice(0, 20));
+                        results.hexPreview = Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join(' ');
+                    }
+                } else {
+                    const value = await kv.get(testKey, { type: 'text' });
+                    if (value === undefined) {
+                        results.status = 'key_not_found';
+                        results.hint = 'key不存在';
+                    } else {
+                        results.status = 'found';
+                        results.valueType = typeof value;
+                        results.valueLength = value.length;
+                        results.valuePreview = value.substring(0, 100);
+                        // 检查是否像 base64
+                        results.looksLikeBase64 = /^[A-Za-z0-9+/]+=*$/.test(value.substring(0, 100));
+                    }
+                }
+            } catch (e) {
+                results.status = 'error';
+                results.errorMessage = e.message;
+                results.errorString = String(e);
+                if (e.cause) {
+                    results.errorCause = String(e.cause);
+                }
+            }
+            
+            return jsonResponse(results);
+        }
+        
+        // 测试写入和读取
+        if (path === '/api/debug-write') {
+            const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
+            const testKey = 'test/debug-' + Date.now();
+            const testValue = 'hello-' + Date.now();
+            const results = { namespace, testKey, testValue };
+            
+            try {
+                const kv = new EdgeKV({ namespace });
+                
+                // 写入
+                const putResult = await kv.put(testKey, testValue);
+                results.putResult = putResult === undefined ? 'success' : putResult;
+                
+                // 读取验证
+                const getValue = await kv.get(testKey, { type: 'text' });
+                results.getValue = getValue;
+                results.match = getValue === testValue;
+                
+                // 删除测试key
+                await kv.delete(testKey);
+                results.deleted = true;
+                
+            } catch (e) {
+                results.error = e.message;
+                results.errorString = String(e);
+            }
+            
+            return jsonResponse(results);
         }
         
         // 健康检查
@@ -85,11 +131,7 @@ async function handleRequest(request) {
         
         // ROM服务
         if (path.startsWith('/api/rom/')) {
-            return await handleRomRequest(path);
-        }
-        
-        if (path === '/api/list-roms') {
-            return await handleListRoms();
+            return await handleRomRequest(url, path);
         }
         
         return new Response('Not Found', { status: 404 });
@@ -103,6 +145,72 @@ function jsonResponse(data, status = 200) {
         status,
         headers: corsHeaders
     });
+}
+
+// ========== ROM服务 ==========
+async function handleRomRequest(url, path) {
+    const gameId = decodeURIComponent(path.split('/api/rom/')[1]);
+    
+    // 支持通过query参数指定命名空间和解码模式
+    const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
+    // 解码模式: native(使用内置base64_dec), atob(使用atob), binary(直接二进制)
+    const mode = url.searchParams.get('mode') || 'native';
+    
+    try {
+        const kv = new EdgeKV({ namespace });
+        const key = `roms/${gameId}.zip`;
+        
+        let bytes;
+        
+        if (mode === 'binary') {
+            // 方式1: 直接用 arrayBuffer 获取
+            const buffer = await kv.get(key, { type: 'arrayBuffer' });
+            if (buffer === undefined) {
+                return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
+            }
+            bytes = new Uint8Array(buffer);
+        } else {
+            // 获取 base64 文本
+            const base64Data = await kv.get(key, { type: 'text' });
+            if (base64Data === undefined) {
+                return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
+            }
+            
+            if (mode === 'native') {
+                // 方式2: 使用边缘函数内置的 base64_dec 解码
+                const decoded = base64_dec(base64Data);
+                // base64_dec 返回字符串，需要转换为 Uint8Array
+                bytes = new Uint8Array(decoded.length);
+                for (let i = 0; i < decoded.length; i++) {
+                    bytes[i] = decoded.charCodeAt(i);
+                }
+            } else {
+                // 方式3: 使用 atob 解码
+                const binaryString = atob(base64Data);
+                bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+            }
+        }
+        
+        return new Response(bytes.buffer, {
+            headers: {
+                'Content-Type': 'application/zip',
+                'Content-Disposition': `attachment; filename="${encodeURIComponent(gameId)}.zip"`,
+                'Cache-Control': 'public, max-age=86400',
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    } catch (e) {
+        return jsonResponse({ 
+            error: e.message,
+            errorString: String(e),
+            key: `roms/${gameId}.zip`,
+            namespace,
+            mode
+        }, 500);
+    }
 }
 
 // ========== 信令服务 ==========
@@ -121,11 +229,11 @@ async function handleSignaling(request, url, path) {
         
         try {
             const existing = await kv.get(roomKey, { type: 'json' });
-            if (existing) {
+            if (existing !== undefined) {
                 return jsonResponse({ error: '房间已存在' }, 400);
             }
         } catch (e) {
-            // key不存在，继续创建
+            // 出错继续创建
         }
         
         const room = {
@@ -134,7 +242,7 @@ async function handleSignaling(request, url, path) {
             created: Date.now()
         };
         
-        await kv.put(roomKey, JSON.stringify(room), { expiration: 3600 });
+        await kv.put(roomKey, JSON.stringify(room));
         
         return jsonResponse({ 
             success: true, 
@@ -160,7 +268,7 @@ async function handleSignaling(request, url, path) {
             return jsonResponse({ error: '房间不存在' }, 404);
         }
         
-        if (!room) {
+        if (room === undefined) {
             return jsonResponse({ error: '房间不存在' }, 404);
         }
         
@@ -177,7 +285,7 @@ async function handleSignaling(request, url, path) {
         room.players.push(playerNum);
         room[`player${playerNum}Id`] = peerId;
         
-        await kv.put(roomKey, JSON.stringify(room), { expiration: 3600 });
+        await kv.put(roomKey, JSON.stringify(room));
         
         // 通知房主
         await pushMessage(kv, roomCode, 1, {
@@ -236,9 +344,8 @@ async function handleSignaling(request, url, path) {
             try {
                 const room = await kv.get(roomKey, { type: 'json' });
                 
-                if (room) {
+                if (room !== undefined) {
                     if (playerNum === 1) {
-                        // 房主离开，删除房间
                         await kv.delete(roomKey);
                         for (const p of room.players) {
                             if (p !== 1) {
@@ -249,9 +356,8 @@ async function handleSignaling(request, url, path) {
                             }
                         }
                     } else {
-                        // 玩家离开
                         room.players = room.players.filter(p => p !== playerNum);
-                        await kv.put(roomKey, JSON.stringify(room), { expiration: 3600 });
+                        await kv.put(roomKey, JSON.stringify(room));
                         await pushMessage(kv, roomCode, 1, {
                             type: 'player-left',
                             playerNum
@@ -276,7 +382,7 @@ async function pushMessage(kv, roomCode, toPlayer, message) {
     
     try {
         const existing = await kv.get(queueKey, { type: 'json' });
-        if (existing) {
+        if (existing !== undefined) {
             messages = existing;
         }
     } catch (e) {}
@@ -284,7 +390,7 @@ async function pushMessage(kv, roomCode, toPlayer, message) {
     messages.push(message);
     if (messages.length > 50) messages.shift();
     
-    await kv.put(queueKey, JSON.stringify(messages), { expiration: 300 });
+    await kv.put(queueKey, JSON.stringify(messages));
 }
 
 // 获取消息
@@ -293,7 +399,7 @@ async function popMessages(kv, roomCode, playerNum) {
     
     try {
         const existing = await kv.get(queueKey, { type: 'json' });
-        if (!existing) return [];
+        if (existing === undefined) return [];
         
         await kv.delete(queueKey);
         return existing;
@@ -304,56 +410,6 @@ async function popMessages(kv, roomCode, playerNum) {
 
 function generateId() {
     return Math.random().toString(36).substring(2, 15);
-}
-
-// ========== ROM服务 ==========
-async function handleRomRequest(path) {
-    const gameId = decodeURIComponent(path.split('/api/rom/')[1]);
-    const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
-    
-    try {
-        // KV中的key格式: roms/游戏名.zip
-        const key = `roms/${gameId}.zip`;
-        const base64Data = await kv.get(key, { type: 'text' });
-        
-        if (!base64Data) {
-            return jsonResponse({ error: 'ROM not found', key }, 404);
-        }
-        
-        // 解码 base64
-        const binaryString = atob(base64Data);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        
-        return new Response(bytes.buffer, {
-            headers: {
-                'Content-Type': 'application/zip',
-                'Content-Disposition': `attachment; filename="${encodeURIComponent(gameId)}.zip"`,
-                'Cache-Control': 'public, max-age=86400',
-                'Access-Control-Allow-Origin': '*'
-            }
-        });
-    } catch (e) {
-        return jsonResponse({ error: e.message }, 500);
-    }
-}
-
-async function handleListRoms() {
-    const kv = new EdgeKV({ namespace: ROMS_NAMESPACE });
-    
-    try {
-        // 列出所有 roms/ 前缀的文件
-        const list = await kv.list({ prefix: 'roms/' });
-        const roms = (list.keys || []).map(k => ({
-            key: k.name,
-            name: k.name.replace('roms/', '').replace('.zip', '')
-        }));
-        return jsonResponse({ count: roms.length, roms });
-    } catch (e) {
-        return jsonResponse({ error: e.message }, 500);
-    }
 }
 
 export default {
