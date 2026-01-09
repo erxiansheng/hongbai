@@ -307,24 +307,33 @@ async function handleSignaling(request, url, path) {
         }
         
         const peerId = generateId();
+        const existingPlayers = [...room.players]; // 记录现有玩家
         room.players.push(playerNum);
         room[`player${playerNum}Id`] = peerId;
         
         await kv.put(roomKey, JSON.stringify(room));
         
-        // 通知房主
-        await pushMessage(kv, roomCode, 1, {
-            type: 'player-joined',
-            playerNum,
-            name: `玩家${playerNum}`
-        });
+        // 通知所有现有玩家（包括房主）有新玩家加入
+        for (const existingPlayer of existingPlayers) {
+            await pushMessage(kv, roomCode, existingPlayer, {
+                type: 'player-joined',
+                playerNum,
+                name: `玩家${playerNum}`
+            });
+        }
+        
+        // 构建玩家信息对象返回给新加入的玩家
+        const playersInfo = {};
+        for (const p of room.players) {
+            playersInfo[p] = { name: p === 1 ? '房主' : `玩家${p}`, connected: true };
+        }
         
         return jsonResponse({ 
             success: true, 
             roomCode, 
             peerId,
             playerNum,
-            players: room.players
+            players: playersInfo
         });
     }
     

@@ -157,7 +157,10 @@ class GameApp {
         try {
             const result = await this.roomManager.joinRoom(roomCode);
             this.myPlayerNum = result.playerNum;
+            
+            // 服务器返回的players已经是正确格式 {1: {name, connected}, 2: {...}}
             this.players = result.players || {};
+            // 确保自己的信息正确
             this.players[this.myPlayerNum] = { name: `玩家${this.myPlayerNum}`, connected: true };
             
             this.ui.setConnectionStatus('connected', '已连接');
@@ -166,6 +169,8 @@ class GameApp {
             this.updateSeats();
             this.updateStartButton();
             this.ui.showToast(`你是 P${this.myPlayerNum}`);
+            
+            console.log('加入房间成功，当前玩家:', this.players);
         } catch (error) {
             console.error('加入房间失败:', error);
             this.ui.setConnectionStatus('error', '加入失败');

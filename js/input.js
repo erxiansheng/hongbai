@@ -31,16 +31,23 @@ export class InputManager {
         this.actionToKey = this.buildActionToKey();
 
         this.gamepadMap = {
-            0: 'B',
-            1: 'A',
-            2: 'B',
-            3: 'A',
-            8: 'SELECT',
-            9: 'START',
-            12: 'UP',
-            13: 'DOWN',
-            14: 'LEFT',
-            15: 'RIGHT'
+            // 标准手柄按键映射到NES
+            0: 'B',      // A/Cross -> B (NES的B在左边)
+            1: 'A',      // B/Circle -> A (NES的A在右边)
+            2: 'B',      // X/Square -> B (连发B)
+            3: 'A',      // Y/Triangle -> A (连发A)
+            4: 'SELECT', // LB/L1 -> SELECT
+            5: 'START',  // RB/R1 -> START
+            6: 'SELECT', // LT/L2 -> SELECT
+            7: 'START',  // RT/R2 -> START
+            8: 'SELECT', // Back/Select
+            9: 'START',  // Start
+            10: 'SELECT', // L3 -> SELECT
+            11: 'START',  // R3 -> START
+            12: 'UP',    // D-Pad Up
+            13: 'DOWN',  // D-Pad Down
+            14: 'LEFT',  // D-Pad Left
+            15: 'RIGHT'  // D-Pad Right
         };
 
         // 绑定事件处理器（保持引用以便移除）
@@ -383,12 +390,29 @@ export class InputManager {
         }
 
         if (foundGamepad) {
-            for (const [buttonIndex] of Object.entries(this.gamepadMap)) {
-                const idx = parseInt(buttonIndex);
+            // 更新按钮状态
+            for (let idx = 0; idx < foundGamepad.buttons.length; idx++) {
                 const button = foundGamepad.buttons[idx];
                 if (!button) continue;
                 const gpBtn = document.querySelector(`.gp-btn[data-btn="${idx}"]`);
                 gpBtn?.classList.toggle('active', button.pressed);
+            }
+            
+            // 更新摇杆显示
+            const leftStick = document.getElementById('gp-left-stick');
+            if (leftStick && foundGamepad.axes.length >= 2) {
+                const indicator = leftStick.querySelector('.stick-indicator');
+                if (indicator) {
+                    const x = foundGamepad.axes[0] * 8;
+                    const y = foundGamepad.axes[1] * 8;
+                    indicator.style.transform = `translate(${x}px, ${y}px)`;
+                    
+                    // 如果摇杆有明显偏移，高亮显示
+                    const threshold = 0.3;
+                    const isActive = Math.abs(foundGamepad.axes[0]) > threshold || 
+                                    Math.abs(foundGamepad.axes[1]) > threshold;
+                    leftStick.classList.toggle('active', isActive);
+                }
             }
         }
     }

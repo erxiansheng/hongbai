@@ -409,25 +409,40 @@
                         </div>
                         <div class="gamepad-visual">
                             <div class="gamepad-diagram">
+                                <!-- 左侧摇杆 -->
+                                <div class="gp-stick-area">
+                                    <div class="gp-stick" id="gp-left-stick">
+                                        <div class="stick-indicator"></div>
+                                    </div>
+                                    <span class="stick-label">左摇杆</span>
+                                </div>
+                                <!-- 方向键 -->
                                 <div class="gp-dpad">
                                     <div class="gp-btn up" data-btn="12">↑</div>
                                     <div class="gp-btn left" data-btn="14">←</div>
                                     <div class="gp-btn right" data-btn="15">→</div>
                                     <div class="gp-btn down" data-btn="13">↓</div>
                                 </div>
+                                <!-- 中间功能键 -->
                                 <div class="gp-center">
                                     <div class="gp-btn select" data-btn="8">SEL</div>
                                     <div class="gp-btn start" data-btn="9">STA</div>
                                 </div>
-                                <div class="gp-face">
+                                <!-- 右侧ABXY四键 -->
+                                <div class="gp-face-buttons">
                                     <div class="gp-btn y" data-btn="3">Y</div>
                                     <div class="gp-btn x" data-btn="2">X</div>
                                     <div class="gp-btn b" data-btn="0">B</div>
                                     <div class="gp-btn a" data-btn="1">A</div>
                                 </div>
+                                <!-- 肩键 -->
+                                <div class="gp-shoulders">
+                                    <div class="gp-btn lb" data-btn="4">LB</div>
+                                    <div class="gp-btn rb" data-btn="5">RB</div>
+                                </div>
                             </div>
                         </div>
-                        <p class="gamepad-hint">连接手柄后按任意键激活</p>
+                        <p class="gamepad-hint">连接手柄后按任意键激活<br>摇杆/方向键=方向 | A/B=A/B | X/Y=连发</p>
                     </div>
 
                     <div id="test-tab" class="tab-content">

@@ -259,13 +259,13 @@ export class NESEmulator {
     }
 
     buttonDown(player, button) {
-        if (this.isHost) {
+        if (this.isHost && this.nes) {
             this.nes.buttonDown(player, button);
         }
     }
 
     buttonUp(player, button) {
-        if (this.isHost) {
+        if (this.isHost && this.nes) {
             this.nes.buttonUp(player, button);
         }
     }

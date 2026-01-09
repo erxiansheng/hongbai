@@ -155,9 +155,9 @@ export class RoomManager {
         // 开始轮询
         this.startPolling();
         
-        // 与房主建立WebRTC连接
-        await this.setupPeerConnection(1);
-        await this.createOffer(1);
+        // 客户端等待房主发送offer，不主动创建offer
+        // 房主会在收到player-joined后主动发送offer
+        console.log(`加入房间成功，我是 P${this.myPlayerNum}，等待房主建立连接...`);
         
         return {
             playerNum: this.myPlayerNum,
@@ -167,32 +167,45 @@ export class RoomManager {
 
     // ========== 处理信令消息 ==========
     async handleSignalingMessage(message) {
-        console.log('收到信令:', message.type, message);
+        console.log('收到信令:', message.type, 'from:', message.fromPlayer, message);
         
         switch (message.type) {
             case 'player-joined':
+                console.log(`玩家 P${message.playerNum} 加入房间`);
                 this.emit('player-joined', { playerNum: message.playerNum, name: message.name });
-                // 房主与新玩家建立连接
+                // 房主与新玩家建立连接并发送offer
                 if (this.isHost) {
+                    console.log(`房主开始与 P${message.playerNum} 建立WebRTC连接`);
                     await this.setupPeerConnection(message.playerNum);
+                    // 房主主动发送offer给新玩家
+                    await this.createOffer(message.playerNum);
                 }
                 break;
                 
             case 'player-left':
+                console.log(`玩家 P${message.playerNum} 离开房间`);
                 this.emit('player-left', { playerNum: message.playerNum });
                 this.closePeerConnection(message.playerNum);
                 break;
                 
             case 'offer':
+                console.log(`收到 P${message.fromPlayer} 的offer`);
                 await this.handleOffer(message.fromPlayer, message.offer);
                 break;
                 
             case 'answer':
+                console.log(`收到 P${message.fromPlayer} 的answer`);
                 await this.handleAnswer(message.fromPlayer, message.answer);
                 break;
                 
             case 'ice-candidate':
                 await this.handleIceCandidate(message.fromPlayer, message.candidate);
+                break;
+                
+            case 'room-closed':
+                console.log('房间已关闭:', message.message);
+                this.emit('error', { message: message.message || '房间已关闭' });
+                this.disconnect();
                 break;
                 
             case 'error':
@@ -240,16 +253,17 @@ export class RoomManager {
     }
 
     setupDataChannel(playerNum, channel) {
+        console.log(`设置 P${playerNum} 的数据通道，当前状态: ${channel.readyState}`);
         this.dataChannels[playerNum] = channel;
         
         channel.onopen = () => {
-            console.log(`P${playerNum} 数据通道已打开`);
+            console.log(`✅ P${playerNum} 数据通道已打开，readyState: ${channel.readyState}`);
             this.emit('connected');
             this.startPingMeasurement(playerNum);
         };
 
         channel.onclose = () => {
-            console.log(`P${playerNum} 数据通道已关闭`);
+            console.log(`❌ P${playerNum} 数据通道已关闭`);
             this.stopPingMeasurement(playerNum);
         };
 
@@ -456,12 +470,17 @@ export class RoomManager {
 
     // ========== 发送消息 ==========
     send(data) {
+        console.log('发送消息:', data.type, '我是:', this.isHost ? '房主' : '客户端');
+        
         if (this.isHost) {
             this.broadcast(data);
         } else {
             const channel = this.dataChannels[1];
             if (channel?.readyState === 'open') {
+                console.log('通过数据通道发送给房主');
                 channel.send(JSON.stringify(data));
+            } else {
+                console.warn('数据通道未打开，无法发送消息，状态:', channel?.readyState);
             }
         }
     }
@@ -484,11 +503,19 @@ export class RoomManager {
 
     broadcast(data, excludePlayer = null) {
         const msg = JSON.stringify(data);
-        for (const [playerNum, channel] of Object.entries(this.dataChannels)) {
+        const channels = Object.entries(this.dataChannels);
+        console.log(`广播消息 ${data.type} 到 ${channels.length} 个通道，排除: P${excludePlayer}`);
+        
+        for (const [playerNum, channel] of channels) {
             if (parseInt(playerNum) !== excludePlayer && channel?.readyState === 'open') {
                 try {
                     channel.send(msg);
-                } catch (e) {}
+                    console.log(`  -> 发送到 P${playerNum} 成功`);
+                } catch (e) {
+                    console.warn(`  -> 发送到 P${playerNum} 失败:`, e);
+                }
+            } else {
+                console.log(`  -> 跳过 P${playerNum}，状态: ${channel?.readyState}`);
             }
         }
     }

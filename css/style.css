@@ -470,22 +470,67 @@ body {
 #gamepad-status-text { font-size: 0.5rem; color: var(--fc-gray); }
 .gamepad-status.connected #gamepad-status-text { color: var(--fc-green); }
 .gamepad-visual { display: flex; justify-content: center; margin-bottom: 15px; }
-.gamepad-diagram { display: flex; align-items: center; gap: 40px; padding: 20px 30px; background: #333; border-radius: 30px; }
-.gp-dpad { display: grid; grid-template-columns: repeat(3, 28px); grid-template-rows: repeat(3, 28px); gap: 2px; }
-.gp-btn { display: flex; align-items: center; justify-content: center; background: #555; border-radius: 4px; font-size: 0.45rem; color: #888; transition: all 0.1s; }
+.gamepad-diagram { 
+    display: flex; align-items: center; gap: 20px; padding: 20px 25px; 
+    background: linear-gradient(145deg, #444 0%, #2a2a2a 100%); 
+    border-radius: 30px; position: relative;
+    border: 3px solid #555;
+}
+
+/* 摇杆区域 */
+.gp-stick-area { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.gp-stick {
+    width: 50px; height: 50px; background: #222; border-radius: 50%;
+    border: 3px solid #444; position: relative;
+    display: flex; align-items: center; justify-content: center;
+}
+.stick-indicator {
+    width: 30px; height: 30px; background: linear-gradient(145deg, #666, #444);
+    border-radius: 50%; transition: transform 0.1s;
+}
+.gp-stick.active .stick-indicator { background: var(--fc-green); box-shadow: 0 0 10px var(--fc-green); }
+.stick-label { font-size: 0.35rem; color: #666; }
+
+/* 方向键 */
+.gp-dpad { display: grid; grid-template-columns: repeat(3, 26px); grid-template-rows: repeat(3, 26px); gap: 2px; }
+.gp-btn { display: flex; align-items: center; justify-content: center; background: #333; border-radius: 4px; font-size: 0.4rem; color: #666; transition: all 0.1s; }
 .gp-btn.active { background: var(--fc-green); color: var(--fc-dark); box-shadow: 0 0 10px var(--fc-green); }
 .gp-dpad .up { grid-column: 2; grid-row: 1; }
 .gp-dpad .left { grid-column: 1; grid-row: 2; }
 .gp-dpad .right { grid-column: 3; grid-row: 2; }
 .gp-dpad .down { grid-column: 2; grid-row: 3; }
-.gp-center { display: flex; flex-direction: column; gap: 10px; }
-.gp-center .gp-btn { padding: 8px 12px; border-radius: 10px; }
-.gp-face { display: grid; grid-template-columns: repeat(3, 32px); grid-template-rows: repeat(3, 32px); gap: 2px; }
-.gp-face .y { grid-column: 2; grid-row: 1; border-radius: 50%; }
-.gp-face .x { grid-column: 1; grid-row: 2; border-radius: 50%; }
-.gp-face .b { grid-column: 3; grid-row: 2; border-radius: 50%; }
-.gp-face .a { grid-column: 2; grid-row: 3; border-radius: 50%; }
-.gamepad-hint { text-align: center; font-size: 0.4rem; color: var(--fc-gray); }
+
+/* 中间功能键 */
+.gp-center { display: flex; flex-direction: column; gap: 8px; }
+.gp-center .gp-btn { padding: 6px 10px; border-radius: 10px; font-size: 0.35rem; }
+
+/* 右侧ABXY四键 - 菱形布局 */
+.gp-face-buttons { 
+    display: grid; 
+    grid-template-columns: repeat(3, 28px); 
+    grid-template-rows: repeat(3, 28px); 
+    gap: 2px; 
+}
+.gp-face-buttons .y { grid-column: 2; grid-row: 1; border-radius: 50%; background: #886600; }
+.gp-face-buttons .x { grid-column: 1; grid-row: 2; border-radius: 50%; background: #006688; }
+.gp-face-buttons .b { grid-column: 3; grid-row: 2; border-radius: 50%; background: #880000; }
+.gp-face-buttons .a { grid-column: 2; grid-row: 3; border-radius: 50%; background: #008800; }
+.gp-face-buttons .gp-btn.active { 
+    filter: brightness(1.5); 
+    box-shadow: 0 0 12px currentColor; 
+}
+
+/* 肩键 */
+.gp-shoulders {
+    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 80px;
+}
+.gp-shoulders .gp-btn {
+    padding: 5px 15px; border-radius: 8px 8px 0 0;
+    background: #444; font-size: 0.35rem;
+}
+
+.gamepad-hint { text-align: center; font-size: 0.4rem; color: var(--fc-gray); line-height: 1.6; }
 
 /* 按键测试 */
 .test-display { display: flex; justify-content: center; margin-bottom: 20px; }
