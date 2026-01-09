@@ -96,29 +96,43 @@ async function handleRequest(request) {
         // 测试写入和读取
         if (path === '/api/debug-write') {
             const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
-            const testKey = 'test/debug-' + Date.now();
+            // 使用不同格式的key测试
+            const keyFormat = url.searchParams.get('format') || 'colon'; // colon, slash, simple
+            let testKey;
+            if (keyFormat === 'slash') {
+                testKey = 'test/debug' + Date.now();
+            } else if (keyFormat === 'simple') {
+                testKey = 'testdebug' + Date.now();
+            } else {
+                testKey = 'test:debug:' + Date.now();
+            }
             const testValue = 'hello-' + Date.now();
-            const results = { namespace, testKey, testValue };
+            const results = { namespace, testKey, keyFormat, testValue };
             
             try {
                 const kv = new EdgeKV({ namespace });
                 
                 // 写入
                 const putResult = await kv.put(testKey, testValue);
-                results.putResult = putResult === undefined ? 'success' : putResult;
+                results.putResult = putResult === undefined ? 'success' : String(putResult);
                 
                 // 读取验证
                 const getValue = await kv.get(testKey, { type: 'text' });
                 results.getValue = getValue;
+                results.getType = typeof getValue;
                 results.match = getValue === testValue;
                 
                 // 删除测试key
-                await kv.delete(testKey);
-                results.deleted = true;
+                const delResult = await kv.delete(testKey);
+                results.deleted = delResult;
                 
             } catch (e) {
                 results.error = e.message;
                 results.errorString = String(e);
+                // 尝试获取cause
+                if (e.cause) {
+                    results.cause = String(e.cause);
+                }
             }
             
             return jsonResponse(results);
