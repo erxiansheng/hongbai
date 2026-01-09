@@ -170,47 +170,36 @@ function jsonResponse(data, status = 200) {
 async function handleRomRequest(url, path) {
     const gameId = decodeURIComponent(path.split('/api/rom/')[1]);
     
-    // 支持通过query参数指定命名空间和解码模式
     const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
-    // 解码模式: native(使用内置base64_dec), atob(使用atob), binary(直接二进制)
-    const mode = url.searchParams.get('mode') || 'native';
+    const mode = url.searchParams.get('mode') || 'binary'; // 默认用binary
     
     try {
         const kv = new EdgeKV({ namespace });
-        const key = `roms/${gameId}.zip`;
+        // 注意：EdgeKV 的 key 不能包含 /，用 : 代替
+        const key = `roms:${gameId}.zip`;
         
         let bytes;
         
-        if (mode === 'binary') {
-            // 方式1: 直接用 arrayBuffer 获取
-            const buffer = await kv.get(key, { type: 'arrayBuffer' });
-            if (buffer === undefined) {
-                return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
-            }
-            bytes = new Uint8Array(buffer);
-        } else {
-            // 获取 base64 文本
+        if (mode === 'text') {
+            // 获取 base64 文本后解码
             const base64Data = await kv.get(key, { type: 'text' });
-            if (base64Data === undefined) {
+            if (base64Data === undefined || base64Data === null) {
                 return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
             }
             
-            if (mode === 'native') {
-                // 方式2: 使用边缘函数内置的 base64_dec 解码
-                const decoded = base64_dec(base64Data);
-                // base64_dec 返回字符串，需要转换为 Uint8Array
-                bytes = new Uint8Array(decoded.length);
-                for (let i = 0; i < decoded.length; i++) {
-                    bytes[i] = decoded.charCodeAt(i);
-                }
-            } else {
-                // 方式3: 使用 atob 解码
-                const binaryString = atob(base64Data);
-                bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
+            // 使用 atob 解码
+            const binaryString = atob(base64Data);
+            bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
             }
+        } else {
+            // 直接用 arrayBuffer 获取（如果存储时已解码）
+            const buffer = await kv.get(key, { type: 'arrayBuffer' });
+            if (buffer === undefined || buffer === null) {
+                return jsonResponse({ error: 'ROM not found', key, namespace, mode }, 404);
+            }
+            bytes = new Uint8Array(buffer);
         }
         
         return new Response(bytes.buffer, {
@@ -225,7 +214,7 @@ async function handleRomRequest(url, path) {
         return jsonResponse({ 
             error: e.message,
             errorString: String(e),
-            key: `roms/${gameId}.zip`,
+            key: `roms:${gameId}.zip`,
             namespace,
             mode
         }, 500);
