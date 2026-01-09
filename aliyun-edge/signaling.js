@@ -39,7 +39,7 @@ async function handleRequest(request) {
         if (path === '/api/debug-kv') {
             const testKey = url.searchParams.get('key') || 'roms/6in1.zip';
             const namespace = url.searchParams.get('ns') || ROMS_NAMESPACE;
-            const type = url.searchParams.get('type') || 'text'; // text, arrayBuffer, stream
+            const type = url.searchParams.get('type') || 'arrayBuffer'; // 默认用arrayBuffer
             const results = {
                 namespace,
                 testKey,
@@ -50,59 +50,44 @@ async function handleRequest(request) {
             try {
                 const kv = new EdgeKV({ namespace });
                 
-                if (type === 'arrayBuffer') {
-                    const buffer = await kv.get(testKey, { type: 'arrayBuffer' });
-                    if (buffer === undefined) {
-                        results.status = 'key_not_found';
-                    } else {
+                if (type === 'text') {
+                    const value = await kv.get(testKey, { type: 'text' });
+                    results.rawValue = value;
+                    results.rawType = typeof value;
+                    results.isNull = value === null;
+                    results.isUndefined = value === undefined;
+                    if (value && typeof value === 'string') {
                         results.status = 'found';
-                        results.valueType = 'ArrayBuffer';
+                        results.valueLength = value.length;
+                        results.valueStart = value.substring(0, 200);
+                    } else {
+                        results.status = value === null ? 'null_returned' : 'not_found';
+                    }
+                } else {
+                    // arrayBuffer 模式
+                    const buffer = await kv.get(testKey, { type: 'arrayBuffer' });
+                    results.rawType = typeof buffer;
+                    results.isNull = buffer === null;
+                    results.isUndefined = buffer === undefined;
+                    
+                    if (buffer && buffer.byteLength !== undefined) {
+                        results.status = 'found';
                         results.byteLength = buffer.byteLength;
                         // 显示前20字节的hex
                         const arr = new Uint8Array(buffer.slice(0, 20));
                         results.hexPreview = Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join(' ');
-                    }
-                } else {
-                    const value = await kv.get(testKey, { type: 'text' });
-                    if (value === undefined) {
-                        results.status = 'key_not_found';
-                        results.hint = 'key不存在';
+                        // 检查是否是ZIP文件 (PK..)
+                        results.isZipFile = arr[0] === 0x50 && arr[1] === 0x4b;
+                        // 检查是否像base64文本 (以大写字母开头)
+                        results.looksLikeBase64Text = arr[0] >= 0x41 && arr[0] <= 0x5a;
                     } else {
-                        results.status = 'found';
-                        results.valueType = typeof value;
-                        results.valueLength = value.length;
-                        // 前200字符
-                        results.valueStart = value.substring(0, 200);
-                        // 后50字符
-                        results.valueEnd = value.substring(value.length - 50);
-                        // 检查是否像 base64
-                        const sample = value.replace(/\s/g, '').substring(0, 100);
-                        results.looksLikeBase64 = /^[A-Za-z0-9+/]+=*$/.test(sample);
-                        // 检查是否有换行符或空格
-                        results.hasNewlines = value.includes('\n');
-                        results.hasSpaces = value.includes(' ');
-                        results.hasCarriageReturn = value.includes('\r');
-                        
-                        // 尝试解码前几个字节看看
-                        try {
-                            const cleanBase64 = value.replace(/[\r\n\s]/g, '');
-                            const testDecode = atob(cleanBase64.substring(0, 100));
-                            results.decodeTestLength = testDecode.length;
-                            results.decodeTestHex = Array.from(testDecode.substring(0, 10))
-                                .map(c => c.charCodeAt(0).toString(16).padStart(2, '0'))
-                                .join(' ');
-                        } catch (e) {
-                            results.decodeError = e.message;
-                        }
+                        results.status = buffer === null ? 'null_returned' : 'not_found';
                     }
                 }
             } catch (e) {
                 results.status = 'error';
                 results.errorMessage = e.message;
                 results.errorString = String(e);
-                if (e.cause) {
-                    results.errorCause = String(e.cause);
-                }
             }
             
             return jsonResponse(results);
