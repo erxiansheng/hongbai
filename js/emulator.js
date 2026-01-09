@@ -34,30 +34,37 @@ export class NESEmulator {
     init() {
         // 检查jsnes是否已加载
         if (typeof jsnes === 'undefined') {
-            console.error('jsnes库未加载！');
-            return;
+            console.error('jsnes库未加载！请确保页面已加载jsnes.min.js');
+            return false;
         }
         
-        this.nes = new jsnes.NES({
-            onFrame: (frameBuffer) => {
-                this.renderFrame(frameBuffer);
-                
-                // 如果是主机，发送帧数据给其他玩家
-                if (this.isHost && this.onFrameReady) {
-                    try {
-                        this.onFrameReady(frameBuffer);
-                    } catch (e) {
-                        console.warn('帧回调错误:', e);
+        try {
+            this.nes = new jsnes.NES({
+                onFrame: (frameBuffer) => {
+                    this.renderFrame(frameBuffer);
+                    
+                    // 如果是主机，发送帧数据给其他玩家
+                    if (this.isHost && this.onFrameReady) {
+                        try {
+                            this.onFrameReady(frameBuffer);
+                        } catch (e) {
+                            console.warn('帧回调错误:', e);
+                        }
+                    }
+                },
+                onAudioSample: (left, right) => {
+                    if (this.isHost) {
+                        this.handleAudio(left, right);
                     }
                 }
-            },
-            onAudioSample: (left, right) => {
-                if (this.isHost) {
-                    this.handleAudio(left, right);
-                }
-            }
-        });
-        console.log('NES模拟器初始化完成');
+            });
+            console.log('NES模拟器初始化完成，nes对象:', this.nes ? '已创建' : '创建失败');
+            return true;
+        } catch (e) {
+            console.error('NES模拟器初始化失败:', e);
+            this.nes = null;
+            return false;
+        }
     }
 
     setHost(isHost) {
@@ -328,9 +335,11 @@ export class NESEmulator {
         
         // 确保NES已初始化
         if (!this.nes) {
-            console.error('NES模拟器未初始化');
-            this.init();
-            if (!this.nes) return;
+            console.warn('NES模拟器未初始化，尝试初始化...');
+            if (!this.init()) {
+                console.error('NES模拟器初始化失败，无法启动');
+                return;
+            }
         }
         
         this.isRunning = true;
@@ -342,7 +351,7 @@ export class NESEmulator {
         if (this.isHost) {
             this.initAudio();
             this.gameLoop(performance.now());
-            console.log('主机模拟器已启动');
+            console.log('主机模拟器已启动，nes对象状态:', this.nes ? '正常' : '异常');
         } else {
             console.log('客户端模拟器已启动（仅接收帧）');
         }
@@ -396,6 +405,12 @@ export class NESEmulator {
     }
 
     buttonDown(player, button) {
+        // 确保 nes 已初始化
+        if (!this.nes) {
+            console.warn('buttonDown: NES未初始化，尝试重新初始化');
+            this.init();
+        }
+        
         if (this.isHost && this.nes) {
             try {
                 this.nes.buttonDown(player, button);
@@ -406,6 +421,12 @@ export class NESEmulator {
     }
 
     buttonUp(player, button) {
+        // 确保 nes 已初始化
+        if (!this.nes) {
+            console.warn('buttonUp: NES未初始化，尝试重新初始化');
+            this.init();
+        }
+        
         if (this.isHost && this.nes) {
             try {
                 this.nes.buttonUp(player, button);

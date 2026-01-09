@@ -267,11 +267,21 @@ export class InputManager {
         const playerIndex = this.localPlayer - 1;
         
         // 主机直接处理输入
-        if (this.emulator && this.emulator.isHost && this.emulator.nes) {
-            if (pressed) {
-                this.emulator.buttonDown(playerIndex, nesButton);
+        if (this.emulator && this.emulator.isHost) {
+            // 确保 nes 对象存在
+            if (!this.emulator.nes) {
+                console.warn('processInput: emulator.nes 未初始化，尝试初始化...');
+                this.emulator.init();
+            }
+            
+            if (this.emulator.nes) {
+                if (pressed) {
+                    this.emulator.buttonDown(playerIndex, nesButton);
+                } else {
+                    this.emulator.buttonUp(playerIndex, nesButton);
+                }
             } else {
-                this.emulator.buttonUp(playerIndex, nesButton);
+                console.error('processInput: 无法初始化 NES 模拟器');
             }
         }
 
