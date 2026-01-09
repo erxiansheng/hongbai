@@ -1,34 +1,38 @@
-// 房间管理器 - 支持4人房间
+// 房间管理器 - 支持4人房间 (HTTP轮询版本)
 export class RoomManager {
     constructor() {
         this.roomCode = null;
         this.isHost = false;
         this.myPlayerNum = 0;
+        this.peerId = null;
         this.peerConnections = {}; // {playerNum: RTCPeerConnection}
         this.dataChannels = {}; // {playerNum: RTCDataChannel}
-        this.signalingWs = null;
         this.eventHandlers = {};
         
+        // HTTP轮询
+        this.pollInterval = null;
+        this.isPolling = false;
+        
         // 延迟测量
-        this.latencies = {}; // {playerNum: latency}
-        this.pingTimestamps = {}; // {playerNum: timestamp}
+        this.latencies = {};
+        this.pingTimestamps = {};
         this.pingInterval = null;
         
         // 按键状态
-        this.playerInputStates = {}; // {playerNum: {button: pressed}}
+        this.playerInputStates = {};
         
-        this.signalingUrl = this.getSignalingUrl();
+        this.signalingBaseUrl = this.getSignalingBaseUrl();
         this.iceServers = [
             { urls: 'stun:stun.l.google.com:19302' },
             { urls: 'stun:stun1.l.google.com:19302' }
         ];
     }
 
-    getSignalingUrl() {
+    getSignalingBaseUrl() {
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return 'ws://localhost:3000/ws';
+            return 'http://localhost:3000/api/signaling';
         }
-        return `wss://${window.location.host}/api/signaling`;
+        return `${window.location.origin}/api/signaling`;
     }
 
     on(event, handler) {
@@ -49,19 +53,88 @@ export class RoomManager {
         return code;
     }
 
+    // ========== HTTP信令 ==========
+    async signalingRequest(endpoint, params = {}, method = 'GET', body = null) {
+        let url = `${this.signalingBaseUrl}/${endpoint}`;
+        if (Object.keys(params).length > 0) {
+            url += '?' + new URLSearchParams(params).toString();
+        }
+        
+        const options = { method };
+        if (body) {
+            options.headers = { 'Content-Type': 'application/json' };
+            options.body = JSON.stringify(body);
+        }
+        
+        const response = await fetch(url, options);
+        return await response.json();
+    }
+
+    // 开始轮询
+    startPolling() {
+        if (this.pollInterval) return;
+        
+        this.isPolling = true;
+        this.pollInterval = setInterval(async () => {
+            if (!this.isPolling || !this.roomCode || !this.myPlayerNum) return;
+            
+            try {
+                const result = await this.signalingRequest('poll', {
+                    room: this.roomCode,
+                    player: this.myPlayerNum
+                });
+                
+                if (result.messages && result.messages.length > 0) {
+                    for (const msg of result.messages) {
+                        await this.handleSignalingMessage(msg);
+                    }
+                }
+            } catch (e) {
+                console.warn('轮询失败:', e);
+            }
+        }, 500); // 每500ms轮询一次
+    }
+
+    stopPolling() {
+        this.isPolling = false;
+        if (this.pollInterval) {
+            clearInterval(this.pollInterval);
+            this.pollInterval = null;
+        }
+    }
+
+    // 发送信令消息
+    async sendSignaling(toPlayer, message) {
+        try {
+            await this.signalingRequest('send', {}, 'POST', {
+                roomCode: this.roomCode,
+                fromPlayer: this.myPlayerNum,
+                toPlayer,
+                message
+            });
+        } catch (e) {
+            console.error('发送信令失败:', e);
+        }
+    }
+
     // ========== 创建房间 ==========
     async createRoom() {
         this.isHost = true;
         this.roomCode = this.generateRoomCode();
-        this.myPlayerNum = 1;
         
-        await this.connectSignaling();
+        const result = await this.signalingRequest('create', { room: this.roomCode });
         
-        this.sendSignaling({
-            type: 'create-room',
-            roomCode: this.roomCode
-        });
+        if (result.error) {
+            throw new Error(result.error);
+        }
         
+        this.peerId = result.peerId;
+        this.myPlayerNum = result.playerNum;
+        
+        // 开始轮询
+        this.startPolling();
+        
+        console.log('房间创建成功:', this.roomCode);
         return this.roomCode;
     }
 
@@ -70,84 +143,33 @@ export class RoomManager {
         this.isHost = false;
         this.roomCode = roomCode.toUpperCase();
         
-        await this.connectSignaling();
+        const result = await this.signalingRequest('join', { room: this.roomCode });
         
-        return new Promise((resolve, reject) => {
-            this.joinResolve = resolve;
-            this.joinReject = reject;
-            
-            this.sendSignaling({
-                type: 'join-room',
-                roomCode: this.roomCode
-            });
-            
-            setTimeout(() => {
-                if (this.joinReject) {
-                    this.joinReject(new Error('加入超时'));
-                    this.joinReject = null;
-                }
-            }, 15000);
-        });
-    }
-
-    // ========== 信令连接 ==========
-    connectSignaling() {
-        return new Promise((resolve, reject) => {
-            try {
-                this.signalingWs = new WebSocket(this.signalingUrl);
-                
-                this.signalingWs.onopen = () => {
-                    console.log('信令服务器已连接');
-                    resolve();
-                };
-                
-                this.signalingWs.onmessage = (event) => {
-                    this.handleSignalingMessage(JSON.parse(event.data));
-                };
-                
-                this.signalingWs.onerror = (error) => {
-                    console.error('信令错误:', error);
-                    reject(error);
-                };
-                
-                this.signalingWs.onclose = () => {
-                    console.log('信令断开');
-                    this.emit('disconnected');
-                };
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
-
-    sendSignaling(message) {
-        if (this.signalingWs?.readyState === WebSocket.OPEN) {
-            this.signalingWs.send(JSON.stringify(message));
+        if (result.error) {
+            throw new Error(result.error);
         }
+        
+        this.peerId = result.peerId;
+        this.myPlayerNum = result.playerNum;
+        
+        // 开始轮询
+        this.startPolling();
+        
+        // 与房主建立WebRTC连接
+        await this.setupPeerConnection(1);
+        await this.createOffer(1);
+        
+        return {
+            playerNum: this.myPlayerNum,
+            players: result.players
+        };
     }
 
+    // ========== 处理信令消息 ==========
     async handleSignalingMessage(message) {
-        console.log('收到信令:', message.type);
+        console.log('收到信令:', message.type, message);
         
         switch (message.type) {
-            case 'room-created':
-                console.log('房间创建成功');
-                break;
-                
-            case 'join-success':
-                this.myPlayerNum = message.playerNum;
-                if (this.joinResolve) {
-                    this.joinResolve({
-                        playerNum: message.playerNum,
-                        players: message.players
-                    });
-                    this.joinResolve = null;
-                }
-                // 与房主建立连接
-                await this.setupPeerConnection(1);
-                await this.createOffer(1);
-                break;
-                
             case 'player-joined':
                 this.emit('player-joined', { playerNum: message.playerNum, name: message.name });
                 // 房主与新玩家建立连接
@@ -175,10 +197,7 @@ export class RoomManager {
                 
             case 'error':
                 console.error('信令错误:', message.message);
-                if (this.joinReject) {
-                    this.joinReject(new Error(message.message));
-                    this.joinReject = null;
-                }
+                this.emit('error', { message: message.message });
                 break;
         }
     }
@@ -191,10 +210,8 @@ export class RoomManager {
 
         pc.onicecandidate = (event) => {
             if (event.candidate) {
-                this.sendSignaling({
+                this.sendSignaling(playerNum, {
                     type: 'ice-candidate',
-                    roomCode: this.roomCode,
-                    toPlayer: playerNum,
                     candidate: event.candidate
                 });
             }
@@ -226,9 +243,8 @@ export class RoomManager {
         this.dataChannels[playerNum] = channel;
         
         channel.onopen = () => {
-            console.log(`P${playerNum} 数据通道已打开, readyState: ${channel.readyState}`);
+            console.log(`P${playerNum} 数据通道已打开`);
             this.emit('connected');
-            // 开始延迟测量
             this.startPingMeasurement(playerNum);
         };
 
@@ -254,7 +270,6 @@ export class RoomManager {
     
     // 延迟测量
     startPingMeasurement(playerNum) {
-        // 每2秒发送一次ping
         if (!this.pingInterval) {
             this.pingInterval = setInterval(() => {
                 this.sendPingToAll();
@@ -281,7 +296,6 @@ export class RoomManager {
     }
     
     handlePing(fromPlayer, timestamp) {
-        // 收到ping，回复pong
         const channel = this.dataChannels[fromPlayer] || this.dataChannels[1];
         if (channel?.readyState === 'open') {
             try {
@@ -297,12 +311,10 @@ export class RoomManager {
         this.emit('latency-update', { player: fromPlayer, latency });
     }
     
-    // 获取玩家延迟
     getLatency(playerNum) {
         return this.latencies[playerNum] || null;
     }
     
-    // 更新玩家按键状态
     updateInputState(playerNum, button, pressed) {
         if (!this.playerInputStates[playerNum]) {
             this.playerInputStates[playerNum] = {};
@@ -311,7 +323,6 @@ export class RoomManager {
         this.emit('input-state-update', { player: playerNum, button, pressed });
     }
     
-    // 获取玩家按键状态
     getInputState(playerNum) {
         return this.playerInputStates[playerNum] || {};
     }
@@ -323,10 +334,8 @@ export class RoomManager {
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
         
-        this.sendSignaling({
+        await this.sendSignaling(playerNum, {
             type: 'offer',
-            roomCode: this.roomCode,
-            toPlayer: playerNum,
             offer: offer
         });
     }
@@ -339,10 +348,8 @@ export class RoomManager {
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
         
-        this.sendSignaling({
+        await this.sendSignaling(fromPlayer, {
             type: 'answer',
-            roomCode: this.roomCode,
-            toPlayer: fromPlayer,
             answer: answer
         });
     }
@@ -378,11 +385,8 @@ export class RoomManager {
 
     // ========== 消息处理 ==========
     handleGameMessage(data) {
-        console.log('收到游戏消息:', data.type);
-        
         switch (data.type) {
             case 'input':
-                // 更新按键状态显示
                 this.updateInputState(data.player || data.fromPlayer, data.button, data.pressed);
                 this.emit('input', data);
                 break;
@@ -411,12 +415,10 @@ export class RoomManager {
                 this.handlePong(data.fromPlayer, data.timestamp);
                 break;
             case 'input-broadcast':
-                // 收到其他玩家的按键广播
                 this.updateInputState(data.player, data.button, data.pressed);
                 break;
         }
 
-        // 房主转发消息给其他玩家（帧数据和ping/pong除外）
         if (this.isHost && data.type !== 'frame' && data.type !== 'ping' && data.type !== 'pong') {
             this.broadcast(data, data.fromPlayer);
         }
@@ -425,10 +427,8 @@ export class RoomManager {
     // ========== 发送消息 ==========
     send(data) {
         if (this.isHost) {
-            // 房主发送给所有玩家
             this.broadcast(data);
         } else {
-            // 客户端发送给房主
             const channel = this.dataChannels[1];
             if (channel?.readyState === 'open') {
                 channel.send(JSON.stringify(data));
@@ -440,24 +440,15 @@ export class RoomManager {
         if (!this.isHost) return;
         
         const data = JSON.stringify({ type: 'frame', frameData });
-        let sentCount = 0;
         
         for (const [playerNum, channel] of Object.entries(this.dataChannels)) {
             if (channel?.readyState === 'open') {
                 try {
                     channel.send(data);
-                    sentCount++;
                 } catch (e) {
                     console.warn(`发送帧到P${playerNum}失败:`, e);
                 }
             }
-        }
-        
-        // 调试：每100帧输出一次状态
-        if (!this._frameCount) this._frameCount = 0;
-        this._frameCount++;
-        if (this._frameCount % 100 === 0) {
-            console.log(`已发送${this._frameCount}帧到${sentCount}个玩家`);
         }
     }
 
@@ -467,34 +458,43 @@ export class RoomManager {
             if (parseInt(playerNum) !== excludePlayer && channel?.readyState === 'open') {
                 try {
                     channel.send(msg);
-                } catch (e) {
-                    // 忽略
-                }
+                } catch (e) {}
             }
         }
     }
 
-    disconnect() {
+    async disconnect() {
+        // 通知服务器离开
+        if (this.roomCode && this.myPlayerNum) {
+            try {
+                await this.signalingRequest('leave', {
+                    room: this.roomCode,
+                    player: this.myPlayerNum
+                });
+            } catch (e) {}
+        }
+        
+        // 停止轮询
+        this.stopPolling();
+        
         // 停止ping测量
         if (this.pingInterval) {
             clearInterval(this.pingInterval);
             this.pingInterval = null;
         }
         
+        // 关闭所有连接
         for (const playerNum of Object.keys(this.peerConnections)) {
             this.closePeerConnection(parseInt(playerNum));
         }
-        if (this.signalingWs) {
-            this.signalingWs.close();
-        }
         
-        // 清理状态
         this.latencies = {};
         this.pingTimestamps = {};
         this.playerInputStates = {};
+        this.roomCode = null;
+        this.myPlayerNum = 0;
     }
     
-    // 广播本地玩家的按键状态给其他玩家
     broadcastInput(button, pressed) {
         const data = {
             type: 'input-broadcast',
@@ -503,7 +503,6 @@ export class RoomManager {
             pressed
         };
         this.send(data);
-        // 同时更新本地显示
         this.updateInputState(this.myPlayerNum, button, pressed);
     }
 }
