@@ -8,6 +8,10 @@
 // KV命名空间名称（在ESA控制台配置）
 const KV_NAMESPACE = 'roms';
 
+// 内存中的房间和连接管理（边缘函数实例内）
+const rooms = new Map(); // roomCode -> { hostWs, guests: Map<playerNum, ws>, players: Set }
+const wsToRoom = new Map(); // ws -> { roomCode, playerNum }
+
 export default {
     async fetch(request, env, ctx) {
         const url = new URL(request.url);
@@ -24,6 +28,15 @@ export default {
         }
         
         try {
+            // WebSocket信令服务
+            if (url.pathname === '/api/signaling') {
+                const upgradeHeader = request.headers.get('Upgrade');
+                if (upgradeHeader === 'websocket') {
+                    return handleWebSocket(request, env, ctx);
+                }
+                return jsonResponse({ error: 'WebSocket upgrade required' }, 400);
+            }
+            
             // ROM文件获取 - /api/rom/游戏名
             if (url.pathname.startsWith('/api/rom/')) {
                 return await handleRomRequest(request, env);
@@ -34,14 +47,9 @@ export default {
                 return await handleListRoms(request, env);
             }
             
-            // 信令服务 - HTTP轮询方式
-            if (url.pathname.startsWith('/api/signaling')) {
-                return await handleSignalingAPI(request, env);
-            }
-            
             // 健康检查
             if (url.pathname === '/api/health') {
-                return jsonResponse({ status: 'ok', time: Date.now() });
+                return jsonResponse({ status: 'ok', time: Date.now(), rooms: rooms.size });
             }
             
             // 其他路径返回404
@@ -133,99 +141,182 @@ async function handleListRoms(request, env) {
     }
 }
 
-// 信令API - HTTP轮询方式（替代WebSocket）
-async function handleSignalingAPI(request, env) {
-    const url = new URL(request.url);
-    const kv = getKV(env);
+// WebSocket信令处理
+function handleWebSocket(request, env, ctx) {
+    const [client, server] = Object.values(new WebSocketPair());
     
-    // 创建房间
-    if (url.pathname === '/api/signaling/create') {
-        const roomCode = url.searchParams.get('room') || generateId();
-        const peerId = generateId();
-        
-        if (kv) {
-            const existing = await kv.get(`room:${roomCode}`);
-            if (existing) {
-                return jsonResponse({ error: '房间已存在' }, 400);
-            }
-            
-            await kv.put(`room:${roomCode}`, JSON.stringify({
-                hostId: peerId,
-                guestId: null,
-                created: Date.now()
-            }), { expirationTtl: 3600 });
+    server.accept();
+    
+    server.addEventListener('message', (event) => {
+        try {
+            const message = JSON.parse(event.data);
+            handleSignalingMessage(server, message, env);
+        } catch (e) {
+            server.send(JSON.stringify({ type: 'error', message: e.message }));
         }
-        
-        return jsonResponse({ success: true, roomCode, peerId, isHost: true });
+    });
+    
+    server.addEventListener('close', () => {
+        handleDisconnect(server);
+    });
+    
+    server.addEventListener('error', () => {
+        handleDisconnect(server);
+    });
+    
+    return new Response(null, {
+        status: 101,
+        webSocket: client
+    });
+}
+
+// 处理信令消息
+function handleSignalingMessage(ws, message, env) {
+    console.log('收到信令消息:', message.type);
+    
+    switch (message.type) {
+        case 'create-room':
+            handleCreateRoom(ws, message);
+            break;
+        case 'join-room':
+            handleJoinRoom(ws, message);
+            break;
+        case 'offer':
+        case 'answer':
+        case 'ice-candidate':
+            forwardSignaling(ws, message);
+            break;
+        default:
+            ws.send(JSON.stringify({ type: 'error', message: '未知消息类型' }));
+    }
+}
+
+// 创建房间
+function handleCreateRoom(ws, message) {
+    const roomCode = message.roomCode;
+    
+    if (rooms.has(roomCode)) {
+        ws.send(JSON.stringify({ type: 'error', message: '房间已存在' }));
+        return;
     }
     
-    // 加入房间
-    if (url.pathname === '/api/signaling/join') {
-        const roomCode = url.searchParams.get('room');
-        if (!roomCode) {
-            return jsonResponse({ error: '缺少房间号' }, 400);
-        }
-        
-        const peerId = generateId();
-        
-        if (kv) {
-            const roomStr = await kv.get(`room:${roomCode}`);
-            if (!roomStr) {
-                return jsonResponse({ error: '房间不存在' }, 404);
-            }
-            
-            const room = JSON.parse(roomStr);
-            if (room.guestId) {
-                return jsonResponse({ error: '房间已满' }, 400);
-            }
-            
-            room.guestId = peerId;
-            await kv.put(`room:${roomCode}`, JSON.stringify(room), { expirationTtl: 3600 });
-        }
-        
-        return jsonResponse({ success: true, roomCode, peerId, isHost: false });
+    rooms.set(roomCode, {
+        hostWs: ws,
+        guests: new Map(),
+        players: new Set([1])
+    });
+    
+    wsToRoom.set(ws, { roomCode, playerNum: 1 });
+    
+    ws.send(JSON.stringify({ type: 'room-created', roomCode }));
+    console.log(`房间 ${roomCode} 已创建`);
+}
+
+// 加入房间
+function handleJoinRoom(ws, message) {
+    const roomCode = message.roomCode;
+    const room = rooms.get(roomCode);
+    
+    if (!room) {
+        ws.send(JSON.stringify({ type: 'error', message: '房间不存在' }));
+        return;
     }
     
-    // 发送信令消息
-    if (url.pathname === '/api/signaling/send' && request.method === 'POST') {
-        const data = await request.json();
-        const { roomCode, peerId, message } = data;
-        
-        if (kv && roomCode && peerId) {
-            // 存储消息供对方轮询
-            await kv.put(`msg:${roomCode}:${peerId}`, JSON.stringify(message), { expirationTtl: 60 });
-        }
-        
-        return jsonResponse({ success: true });
+    // 分配玩家编号 (2-4)
+    let playerNum = 2;
+    while (room.players.has(playerNum) && playerNum <= 4) {
+        playerNum++;
     }
     
-    // 轮询消息
-    if (url.pathname === '/api/signaling/poll') {
-        const roomCode = url.searchParams.get('room');
-        const peerId = url.searchParams.get('peer');
+    if (playerNum > 4) {
+        ws.send(JSON.stringify({ type: 'error', message: '房间已满' }));
+        return;
+    }
+    
+    room.guests.set(playerNum, ws);
+    room.players.add(playerNum);
+    wsToRoom.set(ws, { roomCode, playerNum });
+    
+    // 通知新玩家加入成功
+    ws.send(JSON.stringify({
+        type: 'join-success',
+        roomCode,
+        playerNum,
+        players: Array.from(room.players)
+    }));
+    
+    // 通知房主有新玩家加入
+    if (room.hostWs.readyState === 1) {
+        room.hostWs.send(JSON.stringify({
+            type: 'player-joined',
+            playerNum,
+            name: `玩家${playerNum}`
+        }));
+    }
+    
+    console.log(`玩家${playerNum}加入房间 ${roomCode}`);
+}
+
+// 转发信令消息
+function forwardSignaling(ws, message) {
+    const info = wsToRoom.get(ws);
+    if (!info) return;
+    
+    const room = rooms.get(info.roomCode);
+    if (!room) return;
+    
+    const toPlayer = message.toPlayer;
+    let targetWs = null;
+    
+    if (toPlayer === 1) {
+        targetWs = room.hostWs;
+    } else {
+        targetWs = room.guests.get(toPlayer);
+    }
+    
+    if (targetWs && targetWs.readyState === 1) {
+        targetWs.send(JSON.stringify({
+            ...message,
+            fromPlayer: info.playerNum
+        }));
+    }
+}
+
+// 处理断开连接
+function handleDisconnect(ws) {
+    const info = wsToRoom.get(ws);
+    if (!info) return;
+    
+    const { roomCode, playerNum } = info;
+    const room = rooms.get(roomCode);
+    
+    if (room) {
+        room.players.delete(playerNum);
         
-        if (kv && roomCode) {
-            // 获取房间信息
-            const roomStr = await kv.get(`room:${roomCode}`);
-            if (roomStr) {
-                const room = JSON.parse(roomStr);
-                // 获取对方发来的消息
-                const targetId = room.hostId === peerId ? room.guestId : room.hostId;
-                if (targetId) {
-                    const msgKey = `msg:${roomCode}:${targetId}`;
-                    const msg = await kv.get(msgKey);
-                    if (msg) {
-                        await kv.delete(msgKey);
-                        return jsonResponse({ message: JSON.parse(msg) });
-                    }
+        if (playerNum === 1) {
+            // 房主断开，通知所有玩家并关闭房间
+            for (const [num, guestWs] of room.guests) {
+                if (guestWs.readyState === 1) {
+                    guestWs.send(JSON.stringify({ type: 'error', message: '房主已离开' }));
+                    guestWs.close();
                 }
             }
+            rooms.delete(roomCode);
+            console.log(`房间 ${roomCode} 已关闭（房主离开）`);
+        } else {
+            // 玩家断开，通知房主
+            room.guests.delete(playerNum);
+            if (room.hostWs.readyState === 1) {
+                room.hostWs.send(JSON.stringify({
+                    type: 'player-left',
+                    playerNum
+                }));
+            }
+            console.log(`玩家${playerNum}离开房间 ${roomCode}`);
         }
-        
-        return jsonResponse({ message: null });
     }
     
-    return jsonResponse({ error: 'Unknown signaling endpoint' }, 404);
+    wsToRoom.delete(ws);
 }
 
 function generateId() {
