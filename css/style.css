@@ -4162,12 +4162,63 @@ body {
     line-height: 1.8;
 }
 
+.server-tips li strong {
+    color: #e94560;
+}
+
 .server-tips code {
     background: #1a1a2a;
     padding: 2px 6px;
     color: #4ade80;
     font-family: 'Courier New', monospace;
     font-size: 0.65rem;
+}
+
+/* 服务器手册链接区域 */
+.server-guide-link {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guide-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);
+}
+
+.guide-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
+}
+
+.download-server-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+}
+
+.download-server-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
 }
 
 /* 设置入口按钮组 */
