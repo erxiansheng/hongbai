@@ -240,7 +240,7 @@ async function getRom(gameName) {
  * 
  * 策略：
  * 1. 小文件（<25MB）：代理下载，边缘缓存
- * 2. 大文件（>=25MB）：返回签名URL重定向，避免边缘函数超时/内存限制
+ * 2. 大文件（>=25MB）：返回签名URL，让前端直接下载
  */
 async function getArcadeRom(gameName) {
     try {
@@ -259,35 +259,40 @@ async function getArcadeRom(gameName) {
         console.log(`代理街机ROM: ${gameName}`);
         
         // 先发送 HEAD 请求获取文件大小
-        const headResponse = await fetch(signedUrl, {
-            method: 'HEAD',
-            headers: { 'User-Agent': 'Mozilla/5.0 EdgeFunction' }
-        });
-        
-        if (!headResponse.ok) {
-            if (headResponse.status === 404) {
-                return jsonResponse({ error: '街机游戏不存在', game: gameName, key: fileKey }, 404);
+        let contentLength = 0;
+        try {
+            const headResponse = await fetch(signedUrl, {
+                method: 'HEAD',
+                headers: { 'User-Agent': 'Mozilla/5.0 EdgeFunction' }
+            });
+            
+            if (!headResponse.ok) {
+                if (headResponse.status === 404) {
+                    return jsonResponse({ error: '街机游戏不存在', game: gameName, key: fileKey }, 404);
+                }
+                if (headResponse.status === 401 || headResponse.status === 403) {
+                    return jsonResponse({ error: '签名验证失败，请检查 AK/SK 配置', status: headResponse.status }, 403);
+                }
+                // HEAD 请求失败，尝试直接下载
+                console.log('HEAD 请求失败，尝试直接下载');
+            } else {
+                contentLength = parseInt(headResponse.headers.get('content-length') || '0', 10);
             }
-            if (headResponse.status === 401 || headResponse.status === 403) {
-                return jsonResponse({ error: '签名验证失败，请检查 AK/SK 配置', status: headResponse.status }, 403);
-            }
-            return jsonResponse({ error: '获取文件信息失败', status: headResponse.status }, headResponse.status);
+        } catch (e) {
+            console.log('HEAD 请求异常，尝试直接下载:', e.message);
         }
         
-        const contentLength = parseInt(headResponse.headers.get('content-length') || '0', 10);
         const fileSizeMB = contentLength / (1024 * 1024);
         console.log(`文件大小: ${fileSizeMB.toFixed(2)} MB`);
         
-        // 大文件（>=25MB）使用重定向，让客户端直接从七牛云下载
+        // 大文件（>=25MB）返回签名URL，让前端直接下载
         if (contentLength > 25 * 1024 * 1024) {
-            console.log(`大文件，使用重定向: ${gameName}`);
-            return new Response(null, {
-                status: 302,
-                headers: {
-                    'Location': signedUrl,
-                    'Access-Control-Allow-Origin': '*',
-                    'Cache-Control': 'no-cache'
-                }
+            console.log(`大文件，返回签名URL: ${gameName}`);
+            return jsonResponse({
+                redirect: true,
+                url: signedUrl,
+                size: contentLength,
+                game: gameName
             });
         }
         

@@ -1846,75 +1846,110 @@ class GameApp {
         try {
             this.showLoadingProgress(0, '连接服务器...');
             
-            // 使用 redirect: 'follow' 自动跟随重定向（大文件会重定向到七牛云）
+            // 先请求边缘函数，检查是否返回重定向JSON（大文件）
             const res = await fetch(proxyUrl, {
-                redirect: 'follow',
+                redirect: 'manual',  // 不自动跟随，先检查响应
                 mode: 'cors'
             });
             
-            if (!res.ok) {
-                // 检查是否返回了 JSON 错误
-                const contentType = res.headers.get('content-type') || '';
-                if (contentType.includes('application/json')) {
-                    const errorData = await res.json();
-                    throw new Error(errorData.error || `下载失败: ${res.status}`);
+            // 检查是否是 JSON 响应（大文件返回签名URL）
+            const contentType = res.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                const jsonData = await res.json();
+                
+                // 检查是否是错误响应
+                if (jsonData.error) {
+                    throw new Error(jsonData.error);
                 }
+                
+                // 大文件：边缘函数返回签名URL，直接从七牛云下载
+                if (jsonData.redirect && jsonData.url) {
+                    console.log(`大文件模式: ${(jsonData.size / 1024 / 1024).toFixed(2)} MB`);
+                    console.log(`直接下载URL: ${jsonData.url.substring(0, 80)}...`);
+                    return await this.downloadFromUrl(jsonData.url, jsonData.size, englishName);
+                }
+            }
+            
+            if (!res.ok) {
                 throw new Error(`下载失败: ${res.status}`);
             }
             
-            // 获取文件大小用于进度计算
-            const contentLength = res.headers.get('content-length');
-            const total = contentLength ? parseInt(contentLength, 10) : 0;
-            
-            console.log(`文件大小: ${total > 0 ? (total / 1024 / 1024).toFixed(2) + ' MB' : '未知'}`);
-            
-            if (total > 0) {
-                // 使用流式读取显示进度
-                const reader = res.body.getReader();
-                const chunks = [];
-                let received = 0;
-                
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    
-                    chunks.push(value);
-                    received += value.length;
-                    
-                    const percent = Math.round((received / total) * 100);
-                    this.showLoadingProgress(percent, `下载中 ${percent}%`);
-                }
-                
-                // 合并所有块
-                const zipData = new Uint8Array(received);
-                let position = 0;
-                for (const chunk of chunks) {
-                    zipData.set(chunk, position);
-                    position += chunk.length;
-                }
-                
-                // 保存英文ROM名供模拟器使用
-                this.arcadeRomName = englishName;
-                this.currentPlatform = 'arcade';
-                
-                console.log(`街机ROM加载成功: ${zipData.length} bytes`);
-                return zipData;
-            } else {
-                // 无法获取大小，使用普通方式
-                this.showLoadingProgress(50, '下载中...');
-                const zipData = await res.arrayBuffer();
-                const romData = new Uint8Array(zipData);
-                
-                this.arcadeRomName = englishName;
-                this.currentPlatform = 'arcade';
-                
-                console.log(`街机ROM加载成功: ${romData.length} bytes`);
-                return romData;
-            }
+            // 小文件：边缘函数直接返回数据
+            return await this.downloadFromResponse(res, englishName);
             
         } catch (e) {
             console.error('街机ROM加载失败:', e);
             throw new Error(`加载街机游戏失败: ${chineseName}`);
+        }
+    }
+    
+    // 从URL直接下载（大文件，绕过边缘函数）
+    async downloadFromUrl(url, expectedSize, englishName) {
+        this.showLoadingProgress(5, '连接下载服务器...');
+        
+        const res = await fetch(url, {
+            mode: 'cors',
+            credentials: 'omit'
+        });
+        
+        if (!res.ok) {
+            throw new Error(`下载失败: ${res.status}`);
+        }
+        
+        return await this.downloadFromResponse(res, englishName, expectedSize);
+    }
+    
+    // 从 Response 流式下载并显示进度
+    async downloadFromResponse(res, englishName, expectedSize = 0) {
+        const contentLength = res.headers.get('content-length');
+        const total = expectedSize || (contentLength ? parseInt(contentLength, 10) : 0);
+        
+        console.log(`文件大小: ${total > 0 ? (total / 1024 / 1024).toFixed(2) + ' MB' : '未知'}`);
+        
+        if (total > 0 && res.body) {
+            // 使用流式读取显示进度
+            const reader = res.body.getReader();
+            const chunks = [];
+            let received = 0;
+            
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                chunks.push(value);
+                received += value.length;
+                
+                const percent = Math.round((received / total) * 100);
+                const sizeMB = (received / 1024 / 1024).toFixed(1);
+                const totalMB = (total / 1024 / 1024).toFixed(1);
+                this.showLoadingProgress(percent, `下载中 ${sizeMB}/${totalMB} MB`);
+            }
+            
+            // 合并所有块
+            const zipData = new Uint8Array(received);
+            let position = 0;
+            for (const chunk of chunks) {
+                zipData.set(chunk, position);
+                position += chunk.length;
+            }
+            
+            // 保存英文ROM名供模拟器使用
+            this.arcadeRomName = englishName;
+            this.currentPlatform = 'arcade';
+            
+            console.log(`街机ROM加载成功: ${zipData.length} bytes`);
+            return zipData;
+        } else {
+            // 无法获取大小，使用普通方式
+            this.showLoadingProgress(50, '下载中...');
+            const zipData = await res.arrayBuffer();
+            const romData = new Uint8Array(zipData);
+            
+            this.arcadeRomName = englishName;
+            this.currentPlatform = 'arcade';
+            
+            console.log(`街机ROM加载成功: ${romData.length} bytes`);
+            return romData;
         }
     }
 
