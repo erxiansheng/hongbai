@@ -933,6 +933,11 @@ class GameApp {
             this.emulator.arcadeRomName = this.arcadeRomName;
         }
         
+        // 设置 EmulatorJS 加载进度回调
+        this.emulator.onLoadProgress = (percent, text) => {
+            this.showLoadingProgress(percent, text);
+        };
+        
         // 提前设置帧同步回调（EmulatorJS 启动时需要）
         this.emulator.onFrameReady = (frameBuffer) => {
             const compressed = this.emulator.compressFrame(frameBuffer);
@@ -1145,6 +1150,11 @@ class GameApp {
         if (this.arcadeRomName) {
             this.emulator.arcadeRomName = this.arcadeRomName;
         }
+        
+        // 设置 EmulatorJS 加载进度回调
+        this.emulator.onLoadProgress = (percent, text) => {
+            this.showLoadingProgress(percent, text);
+        };
         
         // 提前设置帧同步回调（EmulatorJS 启动时需要）
         if (this.mode === 'host') {
@@ -1670,19 +1680,20 @@ class GameApp {
             container.innerHTML = '';
         }
         
-        // 清理 EmulatorJS 全局变量（包括内部使用的类和存储）
-        const ejsVars = [
+        // 只清理配置变量，不清理类定义（如 EJS_STORAGE, EJS_COMPRESSION 等）
+        const configVars = [
             'EJS_player', 'EJS_core', 'EJS_gameUrl', 'EJS_gameName',
             'EJS_pathtodata', 'EJS_startOnLoaded', 'EJS_color',
             'EJS_backgroundColor', 'EJS_loadStateURL', 'EJS_DEBUG_XX',
             'EJS_biosUrl', 'EJS_onGameStart', 'EJS_onLoadState',
             'EJS_defaultControls', 'EJS_defaultOptions', 'EJS_Buttons',
-            'EJS_emulator', 'EJS_language',
-            // 内部类和存储
-            'EJS_STORAGE', 'EJS_GameManager', 'EJS_MODULES',
-            'EJS_AdHandler', 'EJS_VirtualGamepad', 'EJS_SettingsMenu'
+            'EJS_language', 'EJS_Settings', 'EJS_ready', 'EJS_onReady'
         ];
-        ejsVars.forEach(v => {
+        
+        // 实例变量（可以清理）
+        const instanceVars = ['EJS_emulator', 'EJS_main', 'EJS_LOADED', 'EJS_INIT'];
+        
+        [...configVars, ...instanceVars].forEach(v => {
             try {
                 if (window[v] !== undefined) {
                     delete window[v];
@@ -1690,14 +1701,7 @@ class GameApp {
             } catch (e) {}
         });
         
-        // 移除 EmulatorJS 加载的脚本（包括动态加载的）
-        const ejsScripts = document.querySelectorAll('script[src*="emulator"]');
-        ejsScripts.forEach(script => script.remove());
-        
-        const ejsScript = document.getElementById('emulatorjs-loader');
-        if (ejsScript) {
-            ejsScript.remove();
-        }
+        // 不移除脚本，因为会破坏 EmulatorJS 的类定义
         
         console.log('EmulatorJS 已清理');
     }

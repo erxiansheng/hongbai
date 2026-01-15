@@ -282,11 +282,7 @@ async def main():
     print("  🎮 游戏联机信令服务器 (纯后端)")
     print("=" * 60)
     print(f"  WebSocket: ws://0.0.0.0:{WS_PORT}")
-    print("-" * 60)
-    print("  前端需要单独部署")
-    print("  生产环境: wss://jieji.188np.cn")
-    print("=" * 60)
-    print()
+
 
     # 启动信令服务器
     signaling = SignalingServer()

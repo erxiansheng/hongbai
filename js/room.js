@@ -62,7 +62,7 @@ export class RoomManager {
         }
 
         // 生产环境 - 使用固定的信令服务器
-        return 'wss://jieji.188np.cn';
+        return 'wss://jiejiserver.188np.cn';
     }
     
     // 设置自定义服务器地址

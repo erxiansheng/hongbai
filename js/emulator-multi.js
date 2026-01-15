@@ -320,6 +320,11 @@ export class MultiPlatformEmulator {
         }
 
         try {
+            // 触发加载进度回调
+            if (this.onLoadProgress) {
+                this.onLoadProgress(0, '初始化模拟器...');
+            }
+            
             // 街机游戏需要使用英文ROM名
             const romName = arcadeRomName || filename || 'game';
             const romFileName = platform === 'arcade' ? `${romName}.zip` : romName;
@@ -735,19 +740,21 @@ export class MultiPlatformEmulator {
 
     // 清理 EmulatorJS 全局变量
     cleanupEmulatorJS() {
-        // 完整的 EmulatorJS 全局变量列表
-        const ejsVars = [
+        // 只清理配置变量，不清理类定义（如 EJS_STORAGE, EJS_COMPRESSION 等）
+        // 这些类定义是 EmulatorJS 核心功能，清理后会导致错误
+        const configVars = [
             'EJS_player', 'EJS_core', 'EJS_gameUrl', 'EJS_gameName',
             'EJS_pathtodata', 'EJS_startOnLoaded', 'EJS_color',
             'EJS_backgroundColor', 'EJS_loadStateURL', 'EJS_DEBUG_XX',
             'EJS_biosUrl', 'EJS_onGameStart', 'EJS_onLoadState',
             'EJS_defaultControls', 'EJS_defaultOptions', 'EJS_Buttons',
-            'EJS_language', 'EJS_emulator', 'EJS_STORAGE', 'EJS_main',
-            'EJS_GameManager', 'EJS_MODULES', 'EJS_LOADED', 'EJS_INIT',
-            'EJS_Settings', 'EJS_VirtualGamepad', 'EJS_AdHandler',
-            'EJS_SettingsMenu', 'EJS_ready', 'EJS_onReady'
+            'EJS_language', 'EJS_Settings', 'EJS_ready', 'EJS_onReady'
         ];
-        ejsVars.forEach(v => {
+        
+        // 实例变量（可以清理）
+        const instanceVars = ['EJS_emulator', 'EJS_main', 'EJS_LOADED', 'EJS_INIT'];
+        
+        [...configVars, ...instanceVars].forEach(v => {
             try {
                 if (window[v] !== undefined) {
                     window[v] = undefined;
@@ -756,15 +763,7 @@ export class MultiPlatformEmulator {
             } catch (e) {}
         });
         
-        // 清理所有以 EJS_ 开头的全局变量
-        Object.keys(window).forEach(key => {
-            if (key.startsWith('EJS_')) {
-                try {
-                    window[key] = undefined;
-                    delete window[key];
-                } catch (e) {}
-            }
-        });
+        // 不要清理以 EJS_ 开头的所有变量，因为包含类定义
     }
 
     // 检测本地 EmulatorJS 文件是否存在
@@ -791,47 +790,95 @@ export class MultiPlatformEmulator {
     // 加载 EmulatorJS 脚本
     async loadEmulatorJSScript() {
         const basePath = await this.getEmulatorJSPath();
+        const self = this;
         
         return new Promise((resolve, reject) => {
-            // 检查是否已经加载过 EmulatorJS
+            // 检查是否已经加载过 EmulatorJS loader
             const existingScript = document.getElementById('emulatorjs-loader');
             
-            if (existingScript) {
-                // 移除旧脚本，强制重新加载
-                existingScript.remove();
+            // 如果已经加载过，只需要清理实例变量，不移除脚本
+            if (existingScript && window.EJS_STORAGE) {
+                console.log('EmulatorJS 已加载，复用现有脚本');
+                
+                // 只清理实例变量，保留类定义
+                const instanceVars = ['EJS_emulator', 'EJS_main', 'EJS_LOADED', 'EJS_INIT'];
+                instanceVars.forEach(v => {
+                    try {
+                        if (window[v] !== undefined) {
+                            window[v] = undefined;
+                            delete window[v];
+                        }
+                    } catch (e) {}
+                });
+                
+                // 触发进度回调
+                if (self.onLoadProgress) {
+                    self.onLoadProgress(30, '加载模拟器核心...');
+                }
+                self.monitorEmulatorJSLoading();
+                resolve();
+                return;
             }
             
-            // 移除所有 EmulatorJS 相关脚本（但不清理配置变量）
-            document.querySelectorAll('script[src*="emulator"]').forEach(s => s.remove());
+            // 触发进度回调 - 开始加载脚本
+            if (self.onLoadProgress) {
+                self.onLoadProgress(10, '加载模拟器脚本...');
+            }
             
-            // 只清理 EmulatorJS 内部变量，保留配置变量
-            const internalVars = [
-                'EJS_emulator', 'EJS_STORAGE', 'EJS_main',
-                'EJS_GameManager', 'EJS_MODULES', 'EJS_LOADED', 'EJS_INIT',
-                'EJS_VirtualGamepad', 'EJS_AdHandler', 'EJS_SettingsMenu'
-            ];
-            internalVars.forEach(v => {
-                try {
-                    if (window[v] !== undefined) {
-                        window[v] = undefined;
-                        delete window[v];
-                    }
-                } catch (e) {}
-            });
-            
-            // 短暂延迟确保清理完成
-            setTimeout(() => {
-                const script = document.createElement('script');
-                script.id = 'emulatorjs-loader';
-                script.src = basePath + 'loader.js';
-                script.onload = () => {
-                    console.log(`EmulatorJS loader 加载完成 (${basePath})`);
-                    resolve();
-                };
-                script.onerror = () => reject(new Error('EmulatorJS 加载失败'));
-                document.body.appendChild(script);
-            }, 50);
+            // 首次加载 EmulatorJS
+            const script = document.createElement('script');
+            script.id = 'emulatorjs-loader';
+            script.src = basePath + 'loader.js';
+            script.onload = () => {
+                console.log(`EmulatorJS loader 加载完成 (${basePath})`);
+                // 触发进度回调 - 脚本加载完成，开始加载核心
+                if (self.onLoadProgress) {
+                    self.onLoadProgress(30, '加载模拟器核心...');
+                }
+                
+                // 监听 EmulatorJS 的加载进度
+                self.monitorEmulatorJSLoading();
+                
+                resolve();
+            };
+            script.onerror = () => reject(new Error('EmulatorJS 加载失败'));
+            document.body.appendChild(script);
         });
+    }
+    
+    // 监听 EmulatorJS 加载进度
+    monitorEmulatorJSLoading() {
+        const self = this;
+        let progressInterval = null;
+        let fakeProgress = 30;
+        
+        // 模拟进度（因为 EmulatorJS 没有暴露真实进度）
+        progressInterval = setInterval(() => {
+            if (fakeProgress < 90) {
+                fakeProgress += 5;
+                if (self.onLoadProgress) {
+                    const text = fakeProgress < 50 ? '下载模拟器核心...' : 
+                                 fakeProgress < 70 ? '初始化模拟器...' : 
+                                 '准备启动游戏...';
+                    self.onLoadProgress(fakeProgress, text);
+                }
+            }
+            
+            // 检查 EmulatorJS 是否已经准备好
+            if (window.EJS_emulator && window.EJS_emulator.started) {
+                clearInterval(progressInterval);
+                if (self.onLoadProgress) {
+                    self.onLoadProgress(100, '游戏启动中...');
+                }
+            }
+        }, 500);
+        
+        // 30秒后停止监听（防止无限循环）
+        setTimeout(() => {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+            }
+        }, 30000);
     }
 
     // 渲染NES帧

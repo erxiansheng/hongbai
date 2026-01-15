@@ -1613,6 +1613,38 @@ body {
     max-height: calc(50vw * 0.75);
 }
 
+/* PC 端街机模式 - 更大的画面 */
+@media (min-width: 769px) {
+    .game-screen.arcade-mode .screen-inner {
+        width: calc(75vh * 1.33);
+        height: 75vh;
+        max-width: 70vw;
+        max-height: calc(70vw * 0.75);
+    }
+    
+    /* EmulatorJS 内部元素铺满 */
+    .game-screen.arcade-mode .emulator-container,
+    .game-screen.arcade-mode #emulatorjs-game {
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    .game-screen.arcade-mode .ejs_parent,
+    .game-screen.arcade-mode .ejs_game,
+    .game-screen.arcade-mode .ejs_game_background,
+    .game-screen.arcade-mode .ejs_canvas_parent {
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    .game-screen.arcade-mode .ejs_canvas,
+    .game-screen.arcade-mode canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+    }
+}
+
 #nes-canvas {
     display: block;
     width: 100%;
@@ -2131,7 +2163,7 @@ body {
    按键设置弹窗内部样式
    ======================================== */
 .controls-hint {
-    font-size: 0.6rem;
+    font-size: 1rem;
     color: var(--fc-gray);
     margin-bottom: 20px;
     text-align: center;
@@ -2150,7 +2182,7 @@ body {
     background: linear-gradient(180deg, #2a2a3a 0%, #1a1a2a 100%);
     border: 3px solid #404050;
     cursor: pointer;
-    font-size: 0.6rem;
+    font-size: 1rem;
     color: var(--fc-gray);
     text-align: center;
     transition: all 0.2s;
@@ -2189,7 +2221,7 @@ body {
     gap: 12px;
     padding: 14px 20px;
     background: linear-gradient(180deg, #1a1a2a 0%, #0a0a1a 100%);
-    font-size: 0.55rem;
+    font-size: 0.85rem;
     color: var(--fc-gray);
     text-align: center;
     border: 2px solid #333;
@@ -2204,7 +2236,7 @@ body {
 }
 
 .mapping-section .section-title {
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     color: var(--fc-gold);
     padding: 12px 20px;
     background: rgba(255,215,0,0.1);
@@ -2226,7 +2258,7 @@ body {
 }
 
 .action-name {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     color: var(--fc-cream);
 }
 
@@ -2265,7 +2297,7 @@ body {
 .unified-bind-btn .kb-key,
 .unified-bind-btn .gp-key {
     font-family: 'Press Start 2P', monospace;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     padding: 8px 12px;
     background: #1a1a25;
     text-align: center;
@@ -2315,7 +2347,7 @@ body {
 }
 
 #gamepad-status-text {
-    font-size: 0.6rem;
+    font-size: 1rem;
     color: var(--fc-gray);
 }
 
@@ -2575,7 +2607,7 @@ body {
     border: 3px solid var(--fc-gray-dark);
     color: var(--fc-gray);
     font-family: inherit;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -2652,7 +2684,7 @@ body {
 }
 
 .slot-name {
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     color: var(--fc-cream);
     margin-bottom: 5px;
     white-space: nowrap;
@@ -2661,7 +2693,7 @@ body {
 }
 
 .slot-time {
-    font-size: 0.5rem;
+    font-size: 0.65rem;
     color: var(--fc-gray);
 }
 
@@ -2722,7 +2754,7 @@ body {
 }
 
 .slot-empty-hint {
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     color: var(--fc-gray);
     padding: 10px;
 }
@@ -2735,7 +2767,7 @@ body {
 }
 
 #storage-info {
-    font-size: 0.55rem;
+    font-size: 0.7rem;
     color: var(--fc-gray);
 }
 
