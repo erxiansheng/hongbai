@@ -1709,7 +1709,6 @@ class GameApp {
         }
         
         // NES 游戏：优先从本地 roms/nes 目录读取
-        // 注意：必须对文件名进行 URL 编码，否则包含中文/空格/方括号的文件名会导致 400 错误
         const encodedGameId = encodeURIComponent(gameId);
         const urls = [
             `roms/nes/${encodedGameId}.zip`,

@@ -10,19 +10,19 @@
   },
   "files": [
     {
-      "name": "1942 [MS汉化].nes",
+      "name": "1942.nes",
       "key": "roms:nes:1942_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "1944 [MS汉化].nes",
+      "name": "1944.nes",
       "key": "roms:nes:1944_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "1991赌马 [Idea-Tek].nes",
+      "name": "1991赌马.nes",
       "key": "roms:nes:1991赌马_.nes",
       "size": 65552,
       "platform": "nes"
@@ -34,43 +34,43 @@
       "platform": "nes"
     },
     {
-      "name": "4人麻将 [星空汉化].nes",
+      "name": "4人麻将.nes",
       "key": "roms:nes:4人麻将_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "75宾果 [Sachen].nes",
+      "name": "75宾果.nes",
       "key": "roms:nes:75宾果_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "90坦克 [九班汉化].nes",
+      "name": "90坦克.nes",
       "key": "roms:nes:90坦克_.nes",
       "size": 41104,
       "platform": "nes"
     },
     {
-      "name": "93超级魂 [烟山软件修改].nes",
+      "name": "93超级魂.nes",
       "key": "roms:nes:93超级魂_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "97回归港京拉力赛[天苑软件].NES",
+      "name": "97回归港京拉力赛.NES",
       "key": "roms:nes:97回归港京拉力赛.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "ABM中英文电脑学习机 [maxzhou88].nes",
+      "name": "ABM中英文电脑学习机.nes",
       "key": "roms:nes:ABM中英文电脑学习机_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "ABM学习机 [maxzhou88].nes",
+      "name": "ABM学习机.nes",
       "key": "roms:nes:ABM学习机_.nes",
       "size": 1048592,
       "platform": "nes"
@@ -82,13 +82,13 @@
       "platform": "nes"
     },
     {
-      "name": "AV 美少女战士 [COPYRIGHTS].nes",
+      "name": "AV 美少女战士.nes",
       "key": "roms:nes:AV_美少女战士_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "AV麻雀俱乐部 [星空汉化].nes",
+      "name": "AV麻雀俱乐部.nes",
       "key": "roms:nes:AV麻雀俱乐部_.nes",
       "size": 131088,
       "platform": "nes"
@@ -118,7 +118,7 @@
       "platform": "nes"
     },
     {
-      "name": "CAPCOM音乐30合一 (v1.3) [九班汉化].nes",
+      "name": "CAPCOM音乐30合一 (v1.3).nes",
       "key": "roms:nes:CAPCOM音乐30合一_(v1.3)_.nes",
       "size": 524304,
       "platform": "nes"
@@ -130,37 +130,37 @@
       "platform": "nes"
     },
     {
-      "name": "Dr.马里奥 (v2.0) [九班汉化].nes",
+      "name": "Dr.马里奥 (v2.0).nes",
       "key": "roms:nes:Dr.马里奥_(v2.0)_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "F-15战机 [Idea-Tek].nes",
+      "name": "F-15战机.nes",
       "key": "roms:nes:F-15战机_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "F-1赛车 [MS汉化].nes",
+      "name": "F-1赛车.nes",
       "key": "roms:nes:F-1赛车_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "FC原人 [MS汉化].nes",
+      "name": "FC原人.nes",
       "key": "roms:nes:FC原人_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "Fengli跳舞机 [maxzhou88].nes",
+      "name": "Fengli跳舞机.nes",
       "key": "roms:nes:Fengli跳舞机_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "Gardman [南晶科技].nes",
+      "name": "Gardman.nes",
       "key": "roms:nes:Gardman_.nes",
       "size": 524304,
       "platform": "nes"
@@ -172,7 +172,7 @@
       "platform": "nes"
     },
     {
-      "name": "JuJu传说 [MS汉化].nes",
+      "name": "JuJu传说.nes",
       "key": "roms:nes:JuJu传说_.nes",
       "size": 393232,
       "platform": "nes"
@@ -196,7 +196,7 @@
       "platform": "nes"
     },
     {
-      "name": "MXMDHTWO学习卡 [TXC].nes",
+      "name": "MXMDHTWO学习卡.nes",
       "key": "roms:nes:MXMDHTWO学习卡_.nes",
       "size": 524304,
       "platform": "nes"
@@ -220,7 +220,7 @@
       "platform": "nes"
     },
     {
-      "name": "Q版沙罗曼蛇 [俞亮汉化].nes",
+      "name": "Q版沙罗曼蛇.nes",
       "key": "roms:nes:Q版沙罗曼蛇_.nes",
       "size": 262160,
       "platform": "nes"
@@ -232,25 +232,25 @@
       "platform": "nes"
     },
     {
-      "name": "Raf世界 (v2.0) [九班汉化].nes",
+      "name": "Raf世界 (v2.0).nes",
       "key": "roms:nes:Raf世界_(v2.0)_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "SD英雄总决战 - 打倒恶之军团 [Zero Boy汉化].nes",
+      "name": "SD英雄总决战 - 打倒恶之军团.nes",
       "key": "roms:nes:SD英雄总决战_-_打倒恶之军团_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "SD英雄总决战 - 打倒邪恶军团 [MS汉化].nes",
+      "name": "SD英雄总决战 - 打倒邪恶军团.nes",
       "key": "roms:nes:SD英雄总决战_-_打倒邪恶军团_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "SD英雄总决战-打倒邪恶军团 [MS汉化 星夜之幻 大字体].NES",
+      "name": "SD英雄总决战-打倒邪恶军团.NES",
       "key": "roms:nes:SD英雄总决战-打倒邪恶军团_.NES",
       "size": 262160,
       "platform": "nes"
@@ -274,331 +274,331 @@
       "platform": "nes"
     },
     {
-      "name": "Windows 2000 [未知].nes",
+      "name": "Windows 2000.nes",
       "key": "roms:nes:Windows_2000_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "Windows 98 [maxzhou88].nes",
+      "name": "Windows 98.nes",
       "key": "roms:nes:Windows_98_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "YieAr功夫 (v1.0) [九班汉化].nes",
+      "name": "YieAr功夫 (v1.0).nes",
       "key": "roms:nes:YieAr功夫_(v1.0)_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "一揆 [无极汉化].nes",
+      "name": "一揆.nes",
       "key": "roms:nes:一揆_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "七国大战 [南晶科技].nes",
+      "name": "七国大战.nes",
       "key": "roms:nes:七国大战_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "七宝奇谋 [王龙汉化小组汉化 MS修正].nes",
+      "name": "七宝奇谋.nes",
       "key": "roms:nes:七宝奇谋_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "七龙珠Z - 超武斗传5 (可选语言版) [卡圣].nes",
+      "name": "七龙珠Z - 超武斗传5 (可选语言版).nes",
       "key": "roms:nes:七龙珠Z_-_超武斗传5_(可选语言版)_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "七龙珠大冒险 [南晶科技].nes",
+      "name": "七龙珠大冒险.nes",
       "key": "roms:nes:七龙珠大冒险_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "三侠五义 - 御猫传奇 [外星科技].nes",
+      "name": "三侠五义 - 御猫传奇.nes",
       "key": "roms:nes:三侠五义_-_御猫传奇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "三十六计 [外星科技].nes",
+      "name": "三十六计.nes",
       "key": "roms:nes:三十六计_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "三只小猪 [MS汉化].nes",
+      "name": "三只小猪.nes",
       "key": "roms:nes:三只小猪_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "三国大乱斗 - 战国 [南晶科技].nes",
+      "name": "三国大乱斗 - 战国.nes",
       "key": "roms:nes:三国大乱斗_-_战国_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "三国志 - 傲视天地 [南晶科技].nes",
+      "name": "三国志 - 傲视天地.nes",
       "key": "roms:nes:三国志_-_傲视天地_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "三国志 - 吕布传 [南晶科技].nes",
+      "name": "三国志 - 吕布传.nes",
       "key": "roms:nes:三国志_-_吕布传_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "三国志 - 曹操传 [南晶科技].nes",
+      "name": "三国志 - 曹操传.nes",
       "key": "roms:nes:三国志_-_曹操传_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "三国志 - 群雄争霸 [Asder].nes",
+      "name": "三国志 - 群雄争霸.nes",
       "key": "roms:nes:三国志_-_群雄争霸_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "三国志 - 赤壁之战 [Asder].nes",
+      "name": "三国志 - 赤壁之战.nes",
       "key": "roms:nes:三国志_-_赤壁之战_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "三国志 - 雄霸天下 [外星科技].nes",
+      "name": "三国志 - 雄霸天下.nes",
       "key": "roms:nes:三国志_-_雄霸天下_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "三国志 [外星科技汉化].nes",
+      "name": "三国志.nes",
       "key": "roms:nes:三国志_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "三国志-蜀魏争霸 [科泰电子].NES",
+      "name": "三国志-蜀魏争霸.NES",
       "key": "roms:nes:三国志-蜀魏争霸_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "三国志2 - 霸王的大陆 [外星科技汉化].nes",
+      "name": "三国志2 - 霸王的大陆.nes",
       "key": "roms:nes:三国志2_-_霸王的大陆_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "三国志2中文加强版 [外星科技].NES",
+      "name": "三国志2中文加强版.NES",
       "key": "roms:nes:三国志2中文加强版_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "三国志3 - 中原之霸者 [外星科技].NES",
+      "name": "三国志3 - 中原之霸者.NES",
       "key": "roms:nes:三国志3_-_中原之霸者_.NES",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "三国志IV－赤壁风云 [FutureMedia].nes",
+      "name": "三国志IV－赤壁风云.nes",
       "key": "roms:nes:三国志IV－赤壁风云_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "三国志英杰传 (吞食天地1) (简体中文版) [外星科技汉化].nes",
+      "name": "三国志英杰传 (吞食天地1) (简体中文版).nes",
       "key": "roms:nes:三国志英杰传_(吞食天地1)_(简体中文版)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "三国忠烈传 [外星科技].nes",
+      "name": "三国忠烈传.nes",
       "key": "roms:nes:三国忠烈传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "三国无双 - 猛将传 [南晶科技].nes",
+      "name": "三国无双 - 猛将传.nes",
       "key": "roms:nes:三国无双_-_猛将传_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "三国春秋 - 四川省 [卡圣].nes",
+      "name": "三国春秋 - 四川省.nes",
       "key": "roms:nes:三国春秋_-_四川省_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "三国桃园记 [南晶科技].NES",
+      "name": "三国桃园记.NES",
       "key": "roms:nes:三国桃园记_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "三国群侠传 [南晶科技].NES",
+      "name": "三国群侠传.NES",
       "key": "roms:nes:三国群侠传_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "三目童子 [MS汉化].nes",
+      "name": "三目童子.nes",
       "key": "roms:nes:三目童子_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "三眼神童 (v1.1) [星空汉化].nes",
+      "name": "三眼神童 (v1.1).nes",
       "key": "roms:nes:三眼神童_(v1.1)_.nes",
       "size": 278544,
       "platform": "nes"
     },
     {
-      "name": "上古神剑 [恒格电子].nes",
+      "name": "上古神剑.nes",
       "key": "roms:nes:上古神剑_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "上古神殿 [外星科技].NES",
+      "name": "上古神殿.NES",
       "key": "roms:nes:上古神殿_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "东周列国志 [外星科技].nes",
+      "name": "东周列国志.nes",
       "key": "roms:nes:东周列国志_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "东方传说 - 封印岛 [南晶科技].nes",
+      "name": "东方传说 - 封印岛.nes",
       "key": "roms:nes:东方传说_-_封印岛_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "东方的传说 [外星科技汉化 (qqgba转简体版)].nes",
+      "name": "东方的传说.nes",
       "key": "roms:nes:东方的传说_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "东风 [天使汉化组].nes",
+      "name": "东风.nes",
       "key": "roms:nes:东风_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "丝路传奇 [恒格电子].nes",
+      "name": "丝路传奇.nes",
       "key": "roms:nes:丝路传奇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "中东战争 (v1.1) [星空汉化].nes",
+      "name": "中东战争 (v1.1).nes",
       "key": "roms:nes:中东战争_(v1.1)_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "中国兔宝宝 [JY Company].nes",
+      "name": "中国兔宝宝.nes",
       "key": "roms:nes:中国兔宝宝_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "中国大亨 [Sachen].nes",
+      "name": "中国大亨.nes",
       "key": "roms:nes:中国大亨_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "中国大亨-迈向大富翁之路 [圣谦].nes",
+      "name": "中国大亨-迈向大富翁之路.nes",
       "key": "roms:nes:中国大亨-迈向大富翁之路_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "中国象棋 [TXC].nes",
+      "name": "中国象棋.nes",
       "key": "roms:nes:中国象棋_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "九七港京拉力赛车 [天苑软件].nes",
+      "name": "九七港京拉力赛车.nes",
       "key": "roms:nes:九七港京拉力赛车_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "乱世三国 [南晶科技].NES",
+      "name": "乱世三国.NES",
       "key": "roms:nes:乱世三国_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "争霸世纪 [外星科技].nes",
+      "name": "争霸世纪.nes",
       "key": "roms:nes:争霸世纪_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "亚特鲁战记 [外星科技].NES",
+      "name": "亚特鲁战记.NES",
       "key": "roms:nes:亚特鲁战记_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "亡灵崛起 [科泰电子].NES",
+      "name": "亡灵崛起.NES",
       "key": "roms:nes:亡灵崛起_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "人间兵器 (v2.0) [星空汉化].nes",
+      "name": "人间兵器 (v2.0).nes",
       "key": "roms:nes:人间兵器_(v2.0)_.nes",
       "size": 303120,
       "platform": "nes"
     },
     {
-      "name": "仙剑奇侠 [南晶科技].nes",
+      "name": "仙剑奇侠.nes",
       "key": "roms:nes:仙剑奇侠_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "仙剑问情 [南晶科技].nes",
+      "name": "仙剑问情.nes",
       "key": "roms:nes:仙剑问情_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "仙界精灵 [南晶科技].nes",
+      "name": "仙界精灵.nes",
       "key": "roms:nes:仙界精灵_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "任天堂战争 [快乐的龙汉化].nes",
+      "name": "任天堂战争.nes",
       "key": "roms:nes:任天堂战争_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "企鹅先生 - 冒险之旅 [MS汉化].nes",
+      "name": "企鹅先生 - 冒险之旅.nes",
       "key": "roms:nes:企鹅先生_-_冒险之旅_.nes",
       "size": 24592,
       "platform": "nes"
@@ -628,253 +628,253 @@
       "platform": "nes"
     },
     {
-      "name": "伏魔英雄传 [科泰电子].NES",
+      "name": "伏魔英雄传.NES",
       "key": "roms:nes:伏魔英雄传_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "侍魂III [外星科技].nes",
+      "name": "侍魂III.nes",
       "key": "roms:nes:侍魂III_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "侠客传奇 [外星科技].NES",
+      "name": "侠客传奇.NES",
       "key": "roms:nes:侠客传奇_.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "侠客情 - 荆轲刺秦王 [外星科技].nes",
+      "name": "侠客情 - 荆轲刺秦王.nes",
       "key": "roms:nes:侠客情_-_荆轲刺秦王_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "俄罗斯文学习卡 [小霸王电子].nes",
+      "name": "俄罗斯文学习卡.nes",
       "key": "roms:nes:俄罗斯文学习卡_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "俄罗斯方块 [佛易汉化组 8GUA汉化 MS修正].nes",
+      "name": "俄罗斯方块.nes",
       "key": "roms:nes:俄罗斯方块_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "倚天剑传奇 [南晶科技].NES",
+      "name": "倚天剑传奇.NES",
       "key": "roms:nes:倚天剑传奇_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "假面忍者 - 花丸 [Peacock Wang汉化].nes",
+      "name": "假面忍者 - 花丸.nes",
       "key": "roms:nes:假面忍者_-_花丸_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "假面的忍者 - 赤影 [MS汉化].nes",
+      "name": "假面的忍者 - 赤影.nes",
       "key": "roms:nes:假面的忍者_-_赤影_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "偷看扑克 [星空汉化].nes",
+      "name": "偷看扑克.nes",
       "key": "roms:nes:偷看扑克_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "傲剑江湖 [南晶科技].NES",
+      "name": "傲剑江湖.NES",
       "key": "roms:nes:傲剑江湖_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "傲视三国志 [南晶科技].NES",
+      "name": "傲视三国志.NES",
       "key": "roms:nes:傲视三国志_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "光之神话 - 天使岛传说 [MS汉化].nes",
+      "name": "光之神话 - 天使岛传说.nes",
       "key": "roms:nes:光之神话_-_天使岛传说_.nes",
       "size": 131215,
       "platform": "nes"
     },
     {
-      "name": "光明之神 [酷哥电子].nes",
+      "name": "光明之神.nes",
       "key": "roms:nes:光明之神_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "兔宝宝历险记2 [烈火暴龙汉化].nes",
+      "name": "兔宝宝历险记2.nes",
       "key": "roms:nes:兔宝宝历险记2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "兔宝宝大冒险 [MM之神汉化].nes",
+      "name": "兔宝宝大冒险.nes",
       "key": "roms:nes:兔宝宝大冒险_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "八宝奇珠 - 里见八犬传 [外星科技汉化].nes",
+      "name": "八宝奇珠 - 里见八犬传.nes",
       "key": "roms:nes:八宝奇珠_-_里见八犬传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "公路之星 (v1.0) [九班汉化].nes",
+      "name": "公路之星 (v1.0).nes",
       "key": "roms:nes:公路之星_(v1.0)_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "公路之星2 (v1.0) [九班汉化].nes",
+      "name": "公路之星2 (v1.0).nes",
       "key": "roms:nes:公路之星2_(v1.0)_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "公路赛车 [阿渊汉化].nes",
+      "name": "公路赛车.nes",
       "key": "roms:nes:公路赛车_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "六角方块 [TXC].nes",
+      "name": "六角方块.nes",
       "key": "roms:nes:六角方块_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "兴奋摩托车 [F0REVERD汉化].nes",
+      "name": "兴奋摩托车.nes",
       "key": "roms:nes:兴奋摩托车_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "兴奋自动二轮 [未知].nes",
+      "name": "兴奋自动二轮.nes",
       "key": "roms:nes:兴奋自动二轮_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "兵蜂 [MS汉化].nes",
+      "name": "兵蜂.nes",
       "key": "roms:nes:兵蜂_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "兵蜂3 [MS汉化].nes",
+      "name": "兵蜂3.nes",
       "key": "roms:nes:兵蜂3_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "内藤九段 - 将棋秘传 [九班汉化].nes",
+      "name": "内藤九段 - 将棋秘传.nes",
       "key": "roms:nes:内藤九段_-_将棋秘传_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "冒险岛 (v20100528) [Nokoh汉化].nes",
+      "name": "冒险岛 (v20100528).nes",
       "key": "roms:nes:冒险岛_(v20100528)_.nes",
       "size": 106512,
       "platform": "nes"
     },
     {
-      "name": "冒险岛2 (v20101231) [Nokoh汉化].nes",
+      "name": "冒险岛2 (v20101231).nes",
       "key": "roms:nes:冒险岛2_(v20101231)_.nes",
       "size": 278544,
       "platform": "nes"
     },
     {
-      "name": "冒险岛3 (v20110101) [Nokoh汉化].nes",
+      "name": "冒险岛3 (v20110101).nes",
       "key": "roms:nes:冒险岛3_(v20110101)_.nes",
       "size": 286736,
       "platform": "nes"
     },
     {
-      "name": "冒险岛4 (v20121002) [Nokoh汉化].nes",
+      "name": "冒险岛4 (v20121002).nes",
       "key": "roms:nes:冒险岛4_(v20121002)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "军事家 [圣谦].nes",
+      "name": "军事家.nes",
       "key": "roms:nes:军事家_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "农场小精灵 [南晶科技].nes",
+      "name": "农场小精灵.nes",
       "key": "roms:nes:农场小精灵_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "冰山登山者 [未知].nes",
+      "name": "冰山登山者.nes",
       "key": "roms:nes:冰山登山者_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "决战太平洋 [外星科技].NES",
+      "name": "决战太平洋.NES",
       "key": "roms:nes:决战太平洋_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "刀剑英雄传 [科泰电子].NES",
+      "name": "刀剑英雄传.NES",
       "key": "roms:nes:刀剑英雄传_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "列车奇案 [酷哥电子].NES",
+      "name": "列车奇案.NES",
       "key": "roms:nes:列车奇案_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "创世纪英雄 [外星科技汉化].nes",
+      "name": "创世纪英雄.nes",
       "key": "roms:nes:创世纪英雄_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "前线大作战 [MS汉化].nes",
+      "name": "前线大作战.nes",
       "key": "roms:nes:前线大作战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "剑侠情缘 [南晶科技].nes",
+      "name": "剑侠情缘.nes",
       "key": "roms:nes:剑侠情缘_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "剑王 [金明汉化].nes",
+      "name": "剑王.nes",
       "key": "roms:nes:剑王_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "加纳战机 [九班汉化].nes",
+      "name": "加纳战机.nes",
       "key": "roms:nes:加纳战机_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "加纳战机完美汉化版[KASURAJ&九班汉化].nes",
+      "name": "加纳战机完美汉化版.nes",
       "key": "roms:nes:加纳战机完美汉化版.nes",
       "size": 393232,
       "platform": "nes"
@@ -886,7 +886,7 @@
       "platform": "nes"
     },
     {
-      "name": "动动脑2 - 国中英文 [Sachen].nes",
+      "name": "动动脑2 - 国中英文.nes",
       "key": "roms:nes:动动脑2_-_国中英文_.nes",
       "size": 65552,
       "platform": "nes"
@@ -898,427 +898,427 @@
       "platform": "nes"
     },
     {
-      "name": "勇者传说 [南晶科技].nes",
+      "name": "勇者传说.nes",
       "key": "roms:nes:勇者传说_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙3罪恶渊源 [科泰电子].NES",
+      "name": "勇者斗恶龙3罪恶渊源.NES",
       "key": "roms:nes:勇者斗恶龙3罪恶渊源_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙4 [外星科技汉化].nes",
+      "name": "勇者斗恶龙4.nes",
       "key": "roms:nes:勇者斗恶龙4_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙5 [外星科技汉化].nes",
+      "name": "勇者斗恶龙5.nes",
       "key": "roms:nes:勇者斗恶龙5_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙6 [外星科技汉化].nes",
+      "name": "勇者斗恶龙6.nes",
       "key": "roms:nes:勇者斗恶龙6_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙7 [外星科技汉化].nes",
+      "name": "勇者斗恶龙7.nes",
       "key": "roms:nes:勇者斗恶龙7_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙8 [外星科技].nes",
+      "name": "勇者斗恶龙8.nes",
       "key": "roms:nes:勇者斗恶龙8_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "勇者斗恶龙之勇者的试炼 [科泰电子].NES",
+      "name": "勇者斗恶龙之勇者的试炼.NES",
       "key": "roms:nes:勇者斗恶龙之勇者的试炼_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "勇者黑暗世界之混沌世界 [科泰电子].NES",
+      "name": "勇者黑暗世界之混沌世界.NES",
       "key": "roms:nes:勇者黑暗世界之混沌世界_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "包青天 [卡圣].nes",
+      "name": "包青天.nes",
       "key": "roms:nes:包青天_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "匹诺槽的复苏 [外星科技].nes",
+      "name": "匹诺槽的复苏.nes",
       "key": "roms:nes:匹诺槽的复苏_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "十项全能运动 [C&E Inc].nes",
+      "name": "十项全能运动.nes",
       "key": "roms:nes:十项全能运动_.nes",
       "size": 196624,
       "platform": "nes"
     },
     {
-      "name": "卓越之剑 [恒格电子].NES",
+      "name": "卓越之剑.NES",
       "key": "roms:nes:卓越之剑_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "南极冒险 (v2.0) [九班汉化].nes",
+      "name": "南极冒险 (v2.0).nes",
       "key": "roms:nes:南极冒险_(v2.0)_.nes",
       "size": 24720,
       "platform": "nes"
     },
     {
-      "name": "南极大冒险 (v20100423) [Nokoh汉化].nes",
+      "name": "南极大冒险 (v20100423).nes",
       "key": "roms:nes:南极大冒险_(v20100423)_.nes",
       "size": 32784,
       "platform": "nes"
     },
     {
-      "name": "卡拉OK演示 [maxzhou88].nes",
+      "name": "卡拉OK演示.nes",
       "key": "roms:nes:卡拉OK演示_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "原始人 [外星科技].nes",
+      "name": "原始人.nes",
       "key": "roms:nes:原始人_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "原始人2 [外星科技].nes",
+      "name": "原始人2.nes",
       "key": "roms:nes:原始人2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "双响炮 [Bit].nes",
+      "name": "双响炮.nes",
       "key": "roms:nes:双响炮_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "双截龙 [佛易汉化小组 吸血男爵汉化].nes",
+      "name": "双截龙.nes",
       "key": "roms:nes:双截龙_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "双截龙2 (v1.1) [星空汉化].nes",
+      "name": "双截龙2 (v1.1).nes",
       "key": "roms:nes:双截龙2_(v1.1)_.nes",
       "size": 327696,
       "platform": "nes"
     },
     {
-      "name": "双截龙3 (v1.1) [星空汉化].nes",
+      "name": "双截龙3 (v1.1).nes",
       "key": "roms:nes:双截龙3_(v1.1)_.nes",
       "size": 327696,
       "platform": "nes"
     },
     {
-      "name": "双月传  [外星科技汉化].nes",
+      "name": "双月传.nes",
       "key": "roms:nes:双月传_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "双翼人 [金明汉化].nes",
+      "name": "双翼人.nes",
       "key": "roms:nes:双翼人_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "双赢赛车 [圣谦].nes",
+      "name": "双赢赛车.nes",
       "key": "roms:nes:双赢赛车_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "双鹰 - 乔兄弟的复仇 [烈火暴龙汉化].nes",
+      "name": "双鹰 - 乔兄弟的复仇.nes",
       "key": "roms:nes:双鹰_-_乔兄弟的复仇_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "双鹰 [圣谦].nes",
+      "name": "双鹰.nes",
       "key": "roms:nes:双鹰_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "反恐精英 [恒格电子].nes",
+      "name": "反恐精英.nes",
       "key": "roms:nes:反恐精英_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "反恐风暴[未知].NES",
+      "name": "反恐风暴.NES",
       "key": "roms:nes:反恐风暴.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪 - 珍珠版 [科泰电子].NES",
+      "name": "口袋妖怪 - 珍珠版.NES",
       "key": "roms:nes:口袋妖怪_-_珍珠版_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪 - 白玉版 [科泰电子].nes",
+      "name": "口袋妖怪 - 白玉版.nes",
       "key": "roms:nes:口袋妖怪_-_白玉版_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪 - 白金版 [科泰电子].NES",
+      "name": "口袋妖怪 - 白金版.NES",
       "key": "roms:nes:口袋妖怪_-_白金版_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪 - 翡翠版 [科泰电子].nes",
+      "name": "口袋妖怪 - 翡翠版.nes",
       "key": "roms:nes:口袋妖怪_-_翡翠版_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪 - 钻石 [外星科技].nes",
+      "name": "口袋妖怪 - 钻石.nes",
       "key": "roms:nes:口袋妖怪_-_钻石_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪 - 钻石版 [科泰电子].NES",
+      "name": "口袋妖怪 - 钻石版.NES",
       "key": "roms:nes:口袋妖怪_-_钻石版_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋妖怪四合一 [火星电子].NES",
+      "name": "口袋妖怪四合一.NES",
       "key": "roms:nes:口袋妖怪四合一_.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "口袋宝石 - 红 [南晶科技].NES",
+      "name": "口袋宝石 - 红.NES",
       "key": "roms:nes:口袋宝石_-_红_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "口袋宝石 - 蓝 [南晶科技].NES",
+      "name": "口袋宝石 - 蓝.NES",
       "key": "roms:nes:口袋宝石_-_蓝_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "口袋宝石 - 金 [南晶科技].nes",
+      "name": "口袋宝石 - 金.nes",
       "key": "roms:nes:口袋宝石_-_金_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "口袋宝石 - 银 [南晶科技].nes",
+      "name": "口袋宝石 - 银.nes",
       "key": "roms:nes:口袋宝石_-_银_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "口袋怪兽 绿叶版 [恒格电子].NES",
+      "name": "口袋怪兽 绿叶版.NES",
       "key": "roms:nes:口袋怪兽_绿叶版_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋怪兽 绿叶版2 [恒格电子].NES",
+      "name": "口袋怪兽 绿叶版2.NES",
       "key": "roms:nes:口袋怪兽_绿叶版2_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋怪兽II [恒格电子].nes",
+      "name": "口袋怪兽II.nes",
       "key": "roms:nes:口袋怪兽II_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋怪兽III [恒格电子].NES",
+      "name": "口袋怪兽III.NES",
       "key": "roms:nes:口袋怪兽III_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋水晶 [南晶科技].NES",
+      "name": "口袋水晶.NES",
       "key": "roms:nes:口袋水晶_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "口袋精灵 - 水晶 [火星电子].nes",
+      "name": "口袋精灵 - 水晶.nes",
       "key": "roms:nes:口袋精灵_-_水晶_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋精灵 - 金 [火星电子 (147201688转简体版)].nes",
+      "name": "口袋精灵 - 金.nes",
       "key": "roms:nes:口袋精灵_-_金_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "口袋里的魔鬼 [MM之神汉化].nes",
+      "name": "口袋里的魔鬼.nes",
       "key": "roms:nes:口袋里的魔鬼_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "口袋钻石 [南晶科技].nes",
+      "name": "口袋钻石.nes",
       "key": "roms:nes:口袋钻石_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "古墓丽影 [南晶科技].nes",
+      "name": "古墓丽影.nes",
       "key": "roms:nes:古墓丽影_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "古巴战士 [惊风汉化].nes",
+      "name": "古巴战士.nes",
       "key": "roms:nes:古巴战士_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "台湾花牌麻雀 [Sachen].nes",
+      "name": "台湾花牌麻雀.nes",
       "key": "roms:nes:台湾花牌麻雀_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "台湾麻雀 [Sachen].nes",
+      "name": "台湾麻雀.nes",
       "key": "roms:nes:台湾麻雀_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "吃豆小精灵 [MS汉化].nes",
+      "name": "吃豆小精灵.nes",
       "key": "roms:nes:吃豆小精灵_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "合金风暴 [南晶科技].NES",
+      "name": "合金风暴.NES",
       "key": "roms:nes:合金风暴_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "吞食天地2 [先锋卡通汉化 (简体中文屎王修正版)].nes",
+      "name": "吞食天地2.nes",
       "key": "roms:nes:吞食天地2_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "吞食天地IV刘备传 [南晶科技].NES",
+      "name": "吞食天地IV刘备传.NES",
       "key": "roms:nes:吞食天地IV刘备传_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "启智屋A [未知].nes",
+      "name": "启智屋A.nes",
       "key": "roms:nes:启智屋A_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "启智屋B [未知].nes",
+      "name": "启智屋B.nes",
       "key": "roms:nes:启智屋B_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "哆啦A梦 (v20090616) [Nokoh汉化].nes",
+      "name": "哆啦A梦 (v20090616).nes",
       "key": "roms:nes:哆啦A梦_(v20090616)_.nes",
       "size": 180240,
       "platform": "nes"
     },
     {
-      "name": "哆啦A梦 超时空历险[外星科技汉化].nes",
+      "name": "哆啦A梦 超时空历险.nes",
       "key": "roms:nes:哆啦A梦_超时空历险.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "哈利传奇 [天空联盟汉化].nes",
+      "name": "哈利传奇.nes",
       "key": "roms:nes:哈利传奇_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "哈利波特传奇 [未知].nes",
+      "name": "哈利波特传奇.nes",
       "key": "roms:nes:哈利波特传奇_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "响尾蛇 [圣谦].nes",
+      "name": "响尾蛇.nes",
       "key": "roms:nes:响尾蛇_.nes",
       "size": 32784,
       "platform": "nes"
     },
     {
-      "name": "响尾蛇直升机 [圣谦].nes",
+      "name": "响尾蛇直升机.nes",
       "key": "roms:nes:响尾蛇直升机_.nes",
       "size": 32784,
       "platform": "nes"
     },
     {
-      "name": "哥伦布传 [外星科技汉化].nes",
+      "name": "哥伦布传.nes",
       "key": "roms:nes:哥伦布传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "哪吒传奇 [南晶科技].nes",
+      "name": "哪吒传奇.nes",
       "key": "roms:nes:哪吒传奇_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "唐伯虎点秋香 [南晶科技].nes",
+      "name": "唐伯虎点秋香.nes",
       "key": "roms:nes:唐伯虎点秋香_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "嘉蒂外传[T_C_十三汉化].nes",
+      "name": "嘉蒂外传.nes",
       "key": "roms:nes:嘉蒂外传.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "四川麻将 - 制服篇 [Sachen].nes",
+      "name": "四川麻将 - 制服篇.nes",
       "key": "roms:nes:四川麻将_-_制服篇_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "四川麻将 [圣谦].nes",
+      "name": "四川麻将.nes",
       "key": "roms:nes:四川麻将_.nes",
       "size": 65552,
       "platform": "nes"
@@ -1330,517 +1330,517 @@
       "platform": "nes"
     },
     {
-      "name": "围棋大战 [DC汉化].nes",
+      "name": "围棋大战.nes",
       "key": "roms:nes:围棋大战_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "图形推理 & 智力拼图 [先锋卡通].nes",
+      "name": "图形推理 & 智力拼图.nes",
       "key": "roms:nes:图形推理_智力拼图_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "图形推理 智力拼图 [小霸王电子].NES",
+      "name": "图形推理 智力拼图.NES",
       "key": "roms:nes:图形推理_智力拼图_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "圣剑传说 [南晶科技].nes",
+      "name": "圣剑传说.nes",
       "key": "roms:nes:圣剑传说_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "圣战之系谱 [外星科技].NES",
+      "name": "圣战之系谱.NES",
       "key": "roms:nes:圣战之系谱_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "圣斗士星矢 - 北欧突击篇 [南晶科技].nes",
+      "name": "圣斗士星矢 - 北欧突击篇.nes",
       "key": "roms:nes:圣斗士星矢_-_北欧突击篇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "圣斗士星矢 - 天马之幻想 [南晶科技].nes",
+      "name": "圣斗士星矢 - 天马之幻想.nes",
       "key": "roms:nes:圣斗士星矢_-_天马之幻想_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "圣斗士星矢 - 黄金传说完结篇 [勇者汉化小组汉化].nes",
+      "name": "圣斗士星矢 - 黄金传说完结篇.nes",
       "key": "roms:nes:圣斗士星矢_-_黄金传说完结篇_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "圣火列传 [C&E Inc].nes",
+      "name": "圣火列传.nes",
       "key": "roms:nes:圣火列传_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "圣火少侠 [南晶科技].NES",
+      "name": "圣火少侠.NES",
       "key": "roms:nes:圣火少侠_.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "圣火徽章 - 索非亚复苏 [外星科技汉化].nes",
+      "name": "圣火徽章 - 索非亚复苏.nes",
       "key": "roms:nes:圣火徽章_-_索非亚复苏_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "圣火徽章2 [外星科技汉化].nes",
+      "name": "圣火徽章2.nes",
       "key": "roms:nes:圣火徽章2_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "圣火徽章3 [外星科技].NES",
+      "name": "圣火徽章3.NES",
       "key": "roms:nes:圣火徽章3_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "圣火徽章外传 [酷哥电子].nes",
+      "name": "圣火徽章外传.nes",
       "key": "roms:nes:圣火徽章外传_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "圣铃传说 [MS汉化].nes",
+      "name": "圣铃传说.nes",
       "key": "roms:nes:圣铃传说_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "地球虫2 [和众科技].nes",
+      "name": "地球虫2.nes",
       "key": "roms:nes:地球虫2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "地道战 [外星科技].nes",
+      "name": "地道战.nes",
       "key": "roms:nes:地道战_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "坦克1990  [烟山软件修改].nes",
+      "name": "坦克1990.nes",
       "key": "roms:nes:坦克1990_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "坦克仔 [张晓波汉化].nes",
+      "name": "坦克仔.nes",
       "key": "roms:nes:坦克仔_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "坦克大作战 [模拟中文网 流心小雨汉化].nes",
+      "name": "坦克大作战.nes",
       "key": "roms:nes:坦克大作战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "坦克大战 [ENTA汉化].nes",
+      "name": "坦克大战.nes",
       "key": "roms:nes:坦克大战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "坦克大战2008 [叶枫汉化].nes",
+      "name": "坦克大战2008.nes",
       "key": "roms:nes:坦克大战2008_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "坦克游戏大战 [模拟中文网 流心小雨汉化].nes",
+      "name": "坦克游戏大战.nes",
       "key": "roms:nes:坦克游戏大战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "坦克风云 [三协资讯].nes",
+      "name": "坦克风云.nes",
       "key": "roms:nes:坦克风云_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "埃及 [MS汉化].nes",
+      "name": "埃及.nes",
       "key": "roms:nes:埃及_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "城堡探险 [MM之神汉化].nes",
+      "name": "城堡探险.nes",
       "key": "roms:nes:城堡探险_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "基督山恩仇记 [外星科技].nes",
+      "name": "基督山恩仇记.nes",
       "key": "roms:nes:基督山恩仇记_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "塞外奇侠传 [恒格电子].nes",
+      "name": "塞外奇侠传.nes",
       "key": "roms:nes:塞外奇侠传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "塞尔达传说 - 三神之力 [外星科技].nes",
+      "name": "塞尔达传说 - 三神之力.nes",
       "key": "roms:nes:塞尔达传说_-_三神之力_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "塞尔达传说 - 幻想大陆海尔拉 (Zpix) [小笨笨汉化].nes",
+      "name": "塞尔达传说 - 幻想大陆海尔拉 (Zpix).nes",
       "key": "roms:nes:塞尔达传说_-_幻想大陆海尔拉_(Zpix)_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "塞尔达传说 - 林克冒险 [小笨笨汉化].nes",
+      "name": "塞尔达传说 - 林克冒险.nes",
       "key": "roms:nes:塞尔达传说_-_林克冒险_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "塞尔达传说 - 神奇的帽子 [南晶科技].nes",
+      "name": "塞尔达传说 - 神奇的帽子.nes",
       "key": "roms:nes:塞尔达传说_-_神奇的帽子_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "塞尔达传说2 [普路同汉化].nes",
+      "name": "塞尔达传说2.nes",
       "key": "roms:nes:塞尔达传说2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "外星战士 [外星科技 (147201688转简体版)].nes",
+      "name": "外星战士.nes",
       "key": "roms:nes:外星战士_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "外星战士2 [外星科技 (147201688转简体版)].nes",
+      "name": "外星战士2.nes",
       "key": "roms:nes:外星战士2_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "外星战将 [AXI汉化].nes",
+      "name": "外星战将.nes",
       "key": "roms:nes:外星战将_.nes",
       "size": 426000,
       "platform": "nes"
     },
     {
-      "name": "夜明珠 [外星科技].nes",
+      "name": "夜明珠.nes",
       "key": "roms:nes:夜明珠_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "大力水手 [MS汉化].nes",
+      "name": "大力水手.nes",
       "key": "roms:nes:大力水手_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "大唐风云VI代 [未知].NES",
+      "name": "大唐风云VI代.NES",
       "key": "roms:nes:大唐风云VI代_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "大富翁2 - 上海大亨 [外星科技].nes",
+      "name": "大富翁2 - 上海大亨.nes",
       "key": "roms:nes:大富翁2_-_上海大亨_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "大战略 [未知].nes",
+      "name": "大战略.nes",
       "key": "roms:nes:大战略_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "大盗伍佑卫门外传二代-天下财宝 [外星科技汉化].nes",
+      "name": "大盗伍佑卫门外传二代-天下财宝.nes",
       "key": "roms:nes:大盗伍佑卫门外传二代-天下财宝_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "大眼蛙大冒险 (v1.0) [九班汉化].nes",
+      "name": "大眼蛙大冒险 (v1.0).nes",
       "key": "roms:nes:大眼蛙大冒险_(v1.0)_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "大航海7 [外星科技].nes",
+      "name": "大航海7.nes",
       "key": "roms:nes:大航海7_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "大蜜蜂 [MS汉化].nes",
+      "name": "大蜜蜂.nes",
       "key": "roms:nes:大蜜蜂_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "大话水浒 [南晶科技].nes",
+      "name": "大话水浒.nes",
       "key": "roms:nes:大话水浒_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "大话西游 [南晶科技].nes",
+      "name": "大话西游.nes",
       "key": "roms:nes:大话西游_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "大金刚 - 香蕉船 [两亦].nes",
+      "name": "大金刚 - 香蕉船.nes",
       "key": "roms:nes:大金刚_-_香蕉船_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "大金刚 [MS汉化].nes",
+      "name": "大金刚.nes",
       "key": "roms:nes:大金刚_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "大金刚3 [MS汉化].nes",
+      "name": "大金刚3.nes",
       "key": "roms:nes:大金刚3_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "大金刚Jr [MS汉化].nes",
+      "name": "大金刚Jr.nes",
       "key": "roms:nes:大金刚Jr_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "天使之翼2 [外星科技汉化 (lirdrepus繁体版 KANOU转简体第二版)].nes",
+      "name": "天使之翼2.nes",
       "key": "roms:nes:天使之翼2_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "天使之翼2 完美汉化版[太阳王子葵新伍汉化].NES",
+      "name": "天使之翼2 完美汉化版.NES",
       "key": "roms:nes:天使之翼2_完美汉化版.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "天才厨师 [Zero Boy汉化].nes",
+      "name": "天才厨师.nes",
       "key": "roms:nes:天才厨师_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "天王降魔传 [外星科技].nes",
+      "name": "天王降魔传.nes",
       "key": "roms:nes:天王降魔传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "天神之剑 [外星游戏大厅].nes",
+      "name": "天神之剑.nes",
       "key": "roms:nes:天神之剑_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "天龙八部 [南晶科技].nes",
+      "name": "天龙八部.nes",
       "key": "roms:nes:天龙八部_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "太空射击战 (v20100408) [Nokoh汉化].nes",
+      "name": "太空射击战 (v20100408).nes",
       "key": "roms:nes:太空射击战_(v20100408)_.nes",
       "size": 180240,
       "platform": "nes"
     },
     {
-      "name": "太空幻想 [南晶科技].nes",
+      "name": "太空幻想.nes",
       "key": "roms:nes:太空幻想_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "太空战士5 [火星电子].nes",
+      "name": "太空战士5.nes",
       "key": "roms:nes:太空战士5_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "太阳系战机 [NOKOH].nes",
+      "name": "太阳系战机.nes",
       "key": "roms:nes:太阳系战机_.nes",
       "size": 180240,
       "platform": "nes"
     },
     {
-      "name": "夺宝小英豪 - 光明与黑暗传说 [外星科技].nes",
+      "name": "夺宝小英豪 - 光明与黑暗传说.nes",
       "key": "roms:nes:夺宝小英豪_-_光明与黑暗传说_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "奥塞罗棋 [Bit].nes",
+      "name": "奥塞罗棋.nes",
       "key": "roms:nes:奥塞罗棋_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "女神的救赎 [外星科技汉化].NES",
+      "name": "女神的救赎.NES",
       "key": "roms:nes:女神的救赎_.NES",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "威洛传奇 [金巴比伦汉化].nes",
+      "name": "威洛传奇.nes",
       "key": "roms:nes:威洛传奇_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "孙小毛奇幻岛 [年代科技修改].nes",
+      "name": "孙小毛奇幻岛.nes",
       "key": "roms:nes:孙小毛奇幻岛_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "宇宙巡航机 [罗云汉化].nes",
+      "name": "宇宙巡航机.nes",
       "key": "roms:nes:宇宙巡航机_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "宇宙巡航机2 [MS汉化].nes",
+      "name": "宇宙巡航机2.nes",
       "key": "roms:nes:宇宙巡航机2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "宇宙战将 [外星科技汉化].nes",
+      "name": "宇宙战将.nes",
       "key": "roms:nes:宇宙战将_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "守护者坦克 [烈火暴龙汉化].nes",
+      "name": "守护者坦克.nes",
       "key": "roms:nes:守护者坦克_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "宠物 - 红 [外星科技].nes",
+      "name": "宠物 - 红.nes",
       "key": "roms:nes:宠物_-_红_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "宠物 - 翡翠 [外星科技].nes",
+      "name": "宠物 - 翡翠.nes",
       "key": "roms:nes:宠物_-_翡翠_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "宠物大家族 - 部落纷争 [外星科技].nes",
+      "name": "宠物大家族 - 部落纷争.nes",
       "key": "roms:nes:宠物大家族_-_部落纷争_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "宠物小精灵2 [酷哥电子].NES",
+      "name": "宠物小精灵2.NES",
       "key": "roms:nes:宠物小精灵2_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "宠物进化史 [外星科技].nes",
+      "name": "宠物进化史.nes",
       "key": "roms:nes:宠物进化史_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "宠物高达战记 [南晶科技].nes",
+      "name": "宠物高达战记.nes",
       "key": "roms:nes:宠物高达战记_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "寂静突袭队 [圣谦].nes",
+      "name": "寂静突袭队.nes",
       "key": "roms:nes:寂静突袭队_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "富甲三国 [外星科技].NES",
+      "name": "富甲三国.NES",
       "key": "roms:nes:富甲三国_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "寻秦记 [南晶科技].nes",
+      "name": "寻秦记.nes",
       "key": "roms:nes:寻秦记_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "导弹坦克 (v1.0) [九班汉化].nes",
+      "name": "导弹坦克 (v1.0).nes",
       "key": "roms:nes:导弹坦克_(v1.0)_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "封神榜 - 伏魔三太子 [C&E Inc (147201688 转简体版)].nes",
+      "name": "封神榜 - 伏魔三太子.nes",
       "key": "roms:nes:封神榜_-_伏魔三太子_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "封神榜格斗版 [外星科技].nes",
+      "name": "封神榜格斗版.nes",
       "key": "roms:nes:封神榜格斗版_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "射雕英雄传 [南晶科技].NES",
+      "name": "射雕英雄传.NES",
       "key": "roms:nes:射雕英雄传_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "将棋 [九班汉化].nes",
+      "name": "将棋.nes",
       "key": "roms:nes:将棋_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "小博士 [鸿达].nes",
+      "name": "小博士.nes",
       "key": "roms:nes:小博士_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "小博士-智力小状元[数奇玉].NES",
+      "name": "小博士-智力小状元.NES",
       "key": "roms:nes:小博士-智力小状元.NES",
       "size": 196624,
       "platform": "nes"
@@ -1852,61 +1852,61 @@
       "platform": "nes"
     },
     {
-      "name": "小玛琍 [Idea-Tek].nes",
+      "name": "小玛琍.nes",
       "key": "roms:nes:小玛琍_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "小红帽 [圣谦].nes",
+      "name": "小红帽.nes",
       "key": "roms:nes:小红帽_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "小美人鱼 [中伟汉化].nes",
+      "name": "小美人鱼.nes",
       "key": "roms:nes:小美人鱼_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "小蜜蜂 [MS汉化].nes",
+      "name": "小蜜蜂.nes",
       "key": "roms:nes:小蜜蜂_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "小霸王中英文电脑学习卡V1.1 [小霸王电子].NES",
+      "name": "小霸王中英文电脑学习卡V1.1.NES",
       "key": "roms:nes:小霸王中英文电脑学习卡V1.1_.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "小霸王中英文电脑学习机III（版本一） [小霸王电子].nes",
+      "name": "小霸王中英文电脑学习机III（版本一）.nes",
       "key": "roms:nes:小霸王中英文电脑学习机III（版本一）_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "小霸王中英文电脑学习机III（版本二） [小霸王电子].nes",
+      "name": "小霸王中英文电脑学习机III（版本二）.nes",
       "key": "roms:nes:小霸王中英文电脑学习机III（版本二）_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "小霸王学习卡-英语词霸 [小霸王电子].nes",
+      "name": "小霸王学习卡-英语词霸.nes",
       "key": "roms:nes:小霸王学习卡-英语词霸_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "小霸王系列学习软件－英语词霸 [小霸王电子].nes",
+      "name": "小霸王系列学习软件－英语词霸.nes",
       "key": "roms:nes:小霸王系列学习软件－英语词霸_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "少年游侠 [外星科技].nes",
+      "name": "少年游侠.nes",
       "key": "roms:nes:少年游侠_.nes",
       "size": 786448,
       "platform": "nes"
@@ -1924,229 +1924,229 @@
       "platform": "nes"
     },
     {
-      "name": "少林武者 [Sachen].nes",
+      "name": "少林武者.nes",
       "key": "roms:nes:少林武者_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "屠龙刀 [外星科技].nes",
+      "name": "屠龙刀.nes",
       "key": "roms:nes:屠龙刀_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "屠龙记4 [孔雀天汉化].nes",
+      "name": "屠龙记4.nes",
       "key": "roms:nes:屠龙记4_.nes",
       "size": 196624,
       "platform": "nes"
     },
     {
-      "name": "岳飞传 [火星电子].nes",
+      "name": "岳飞传.nes",
       "key": "roms:nes:岳飞传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "希特勒复活 [TPU汉化].nes",
+      "name": "希特勒复活.nes",
       "key": "roms:nes:希特勒复活_.nes",
       "size": 294928,
       "platform": "nes"
     },
     {
-      "name": "帝国战机 [幻想汉化].nes",
+      "name": "帝国战机.nes",
       "key": "roms:nes:帝国战机_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "帝国时代 [外星科技汉化].nes",
+      "name": "帝国时代.nes",
       "key": "roms:nes:帝国时代_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "帝国直升机 [小鬼混汉化].nes",
+      "name": "帝国直升机.nes",
       "key": "roms:nes:帝国直升机_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "帝国风暴 [外星科技].nes",
+      "name": "帝国风暴.nes",
       "key": "roms:nes:帝国风暴_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "平成BT帝国战 [小鬼混汉化].nes",
+      "name": "平成BT帝国战.nes",
       "key": "roms:nes:平成BT帝国战_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "幻世录 [南晶科技].nes",
+      "name": "幻世录.nes",
       "key": "roms:nes:幻世录_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "幻想传说 [南晶科技].nes",
+      "name": "幻想传说.nes",
       "key": "roms:nes:幻想传说_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "幽游白书 - 魔界最强列传 Final [卡圣].nes",
+      "name": "幽游白书 - 魔界最强列传 Final.nes",
       "key": "roms:nes:幽游白书_-_魔界最强列传_Final_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "幽游白书97 V [卡圣].nes",
+      "name": "幽游白书97 V.nes",
       "key": "roms:nes:幽游白书97_V_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "幽灵列车 [外星科技汉化].nes",
+      "name": "幽灵列车.nes",
       "key": "roms:nes:幽灵列车_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "幽灵行动 [恒格电子].nes",
+      "name": "幽灵行动.nes",
       "key": "roms:nes:幽灵行动_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "库世家＆动脑筋 [小霸王电子].NES",
+      "name": "库世家＆动脑筋.NES",
       "key": "roms:nes:库世家＆动脑筋_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "康体舞王 [未知].nes",
+      "name": "康体舞王.nes",
       "key": "roms:nes:康体舞王_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "异域诛魂 [孔雀天汉化].nes",
+      "name": "异域诛魂.nes",
       "key": "roms:nes:异域诛魂_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "异形之太空探险者 [南晶科技].nes",
+      "name": "异形之太空探险者.nes",
       "key": "roms:nes:异形之太空探险者_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "弹射球 [佛易汉化组 8GUA汉化 MS修正].nes",
+      "name": "弹射球.nes",
       "key": "roms:nes:弹射球_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "弹珠台 [MS汉化].nes",
+      "name": "弹珠台.nes",
       "key": "roms:nes:弹珠台_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "影子传说(v20111021) [Nokoh汉化].nes",
+      "name": "影子传说(v20111021).nes",
       "key": "roms:nes:影子传说(v20111021)_.nes",
       "size": 106512,
       "platform": "nes"
     },
     {
-      "name": "征服太阳系＆小管家 [小霸王电子].NES",
+      "name": "征服太阳系＆小管家.NES",
       "key": "roms:nes:征服太阳系＆小管家_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "忍 [天空联盟汉化].nes",
+      "name": "忍.nes",
       "key": "roms:nes:忍_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "忍者 - 阿修罗之章 [金明汉化].nes",
+      "name": "忍者 - 阿修罗之章.nes",
       "key": "roms:nes:忍者_-_阿修罗之章_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "忍者大决战 [升阳电子汉化].nes",
+      "name": "忍者大决战.nes",
       "key": "roms:nes:忍者大决战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "忍者特训 [金明汉化].nes",
+      "name": "忍者特训.nes",
       "key": "roms:nes:忍者特训_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "忍者神龟2 [勒大治汉化 MS修正].nes",
+      "name": "忍者神龟2.nes",
       "key": "roms:nes:忍者神龟2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "忍者神龟3 [勒大治汉化 MS修正].nes",
+      "name": "忍者神龟3.nes",
       "key": "roms:nes:忍者神龟3_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "忍者神龟3完美汉化 [未名汉化组&法兰克飞鸟].nes",
+      "name": "忍者神龟3完美汉化.nes",
       "key": "roms:nes:忍者神龟3完美汉化_.nes",
       "size": 786960,
       "platform": "nes"
     },
     {
-      "name": "忍者茶茶丸(v20111227) [Nokoh汉化].nes",
+      "name": "忍者茶茶丸(v20111227).nes",
       "key": "roms:nes:忍者茶茶丸(v20111227)_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "忍者龙剑传 [TPU汉化].nes",
+      "name": "忍者龙剑传.nes",
       "key": "roms:nes:忍者龙剑传_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "忍者龙剑传2 - 暗黑邪神剑 [TPU汉化].nes",
+      "name": "忍者龙剑传2 - 暗黑邪神剑.nes",
       "key": "roms:nes:忍者龙剑传2_-_暗黑邪神剑_.nes",
       "size": 335888,
       "platform": "nes"
     },
     {
-      "name": "忍者龙剑传3 - 黄泉方舟 [Peacock Wang汉化].nes",
+      "name": "忍者龙剑传3 - 黄泉方舟.nes",
       "key": "roms:nes:忍者龙剑传3_-_黄泉方舟_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "忍者龟2 (v20101223) [Nokoh汉化].nes",
+      "name": "忍者龟2 (v20101223).nes",
       "key": "roms:nes:忍者龟2_(v20101223)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "快乐比奇III - 地球战士 [外星科技].nes",
+      "name": "快乐比奇III - 地球战士.nes",
       "key": "roms:nes:快乐比奇III_-_地球战士_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "快乐猫 [MM之神汉化].nes",
+      "name": "快乐猫.nes",
       "key": "roms:nes:快乐猫_.nes",
       "size": 24592,
       "platform": "nes"
@@ -2158,7 +2158,7 @@
       "platform": "nes"
     },
     {
-      "name": "快打旋风 [模拟中文网汉化 MS修正].NES",
+      "name": "快打旋风.NES",
       "key": "roms:nes:快打旋风_.NES",
       "size": 262160,
       "platform": "nes"
@@ -2170,1285 +2170,1285 @@
       "platform": "nes"
     },
     {
-      "name": "快打旋风3 [dfqshy汉化].nes",
+      "name": "快打旋风3.nes",
       "key": "roms:nes:快打旋风3_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "快杰洋枪丸2 - 机关之地大冒险 [烈火暴龙汉化].nes",
+      "name": "快杰洋枪丸2 - 机关之地大冒险.nes",
       "key": "roms:nes:快杰洋枪丸2_-_机关之地大冒险_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "快杰洋枪丸3 - 对决!相凌轩 [烈火暴龙汉化].nes",
+      "name": "快杰洋枪丸3 - 对决!相凌轩.nes",
       "key": "roms:nes:快杰洋枪丸3_-_对决相凌轩_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "怪物制造者1 [外星科技汉化].nes",
+      "name": "怪物制造者1.nes",
       "key": "roms:nes:怪物制造者1_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "怪物制造者2 [外星科技汉化].nes",
+      "name": "怪物制造者2.nes",
       "key": "roms:nes:怪物制造者2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "恶魔之剑 [Antigloss汉化 MS修正].nes",
+      "name": "恶魔之剑.nes",
       "key": "roms:nes:恶魔之剑_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "恶魔城 [佛易汉化组 吸血男爵汉化].nes",
+      "name": "恶魔城.nes",
       "key": "roms:nes:恶魔城_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "恶魔城2 [KASURAJ汉化].nes",
+      "name": "恶魔城2.nes",
       "key": "roms:nes:恶魔城2_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "愤怒的小鸟 [maxzhou88].nes",
+      "name": "愤怒的小鸟.nes",
       "key": "roms:nes:愤怒的小鸟_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "愤怒的小鸟2 中文 [maxzhou88].nes",
+      "name": "愤怒的小鸟2 中文.nes",
       "key": "roms:nes:愤怒的小鸟2_中文_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "成吉思汗 [外星科技汉化].nes",
+      "name": "成吉思汗.nes",
       "key": "roms:nes:成吉思汗_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "成龙之龙 [俞亮汉化].nes",
+      "name": "成龙之龙.nes",
       "key": "roms:nes:成龙之龙_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "成龙踢馆 [MM之神汉化].nes",
+      "name": "成龙踢馆.nes",
       "key": "roms:nes:成龙踢馆_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "战国四川省 [C&E Inc].nes",
+      "name": "战国四川省.nes",
       "key": "roms:nes:战国四川省_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "战国无双 [奔升].nes",
+      "name": "战国无双.nes",
       "key": "roms:nes:战国无双_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "战国群雄传 [外星科技].nes",
+      "name": "战国群雄传.nes",
       "key": "roms:nes:战国群雄传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "战斗狼 [TXC].nes",
+      "name": "战斗狼.nes",
       "key": "roms:nes:战斗狼_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "战斧 [外星科技].nes",
+      "name": "战斧.nes",
       "key": "roms:nes:战斧_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "战神世界 [科泰电子].NES",
+      "name": "战神世界.NES",
       "key": "roms:nes:战神世界_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "扑克 [惊风汉化].nes",
+      "name": "扑克.nes",
       "key": "roms:nes:扑克_.nes",
       "size": 57360,
       "platform": "nes"
     },
     {
-      "name": "扑克精灵 [Idea-Tek].nes",
+      "name": "扑克精灵.nes",
       "key": "roms:nes:扑克精灵_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "扑克集锦 [Sachen].nes",
+      "name": "扑克集锦.nes",
       "key": "roms:nes:扑克集锦_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "扑克麻雀 [Sachen].nes",
+      "name": "扑克麻雀.nes",
       "key": "roms:nes:扑克麻雀_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "打地鼠 [MegaSoft].nes",
+      "name": "打地鼠.nes",
       "key": "roms:nes:打地鼠_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "打砖块 (v20100513) [Nokoh汉化].nes",
+      "name": "打砖块 (v20100513).nes",
       "key": "roms:nes:打砖块_(v20100513)_.nes",
       "size": 81936,
       "platform": "nes"
     },
     {
-      "name": "打空气 [MM之神汉化].nes",
+      "name": "打空气.nes",
       "key": "roms:nes:打空气_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "打飞虫 [maxzhou88].nes",
+      "name": "打飞虫.nes",
       "key": "roms:nes:打飞虫_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "拉迪亚战记 [外星科技].nes",
+      "name": "拉迪亚战记.nes",
       "key": "roms:nes:拉迪亚战记_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "拯救世纪 - 光明之神 [外星科技].nes",
+      "name": "拯救世纪 - 光明之神.nes",
       "key": "roms:nes:拯救世纪_-_光明之神_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "拳皇96 [未知].nes",
+      "name": "拳皇96.nes",
       "key": "roms:nes:拳皇96_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "拳皇R1-最强格斗王 [南晶科技].NES",
+      "name": "拳皇R1-最强格斗王.NES",
       "key": "roms:nes:拳皇R1-最强格斗王_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "拳皇R2-大蛇4天王 [南晶科技].NES",
+      "name": "拳皇R2-大蛇4天王.NES",
       "key": "roms:nes:拳皇R2-大蛇4天王_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "拳霸4代 [恒格电子].NES",
+      "name": "拳霸4代.NES",
       "key": "roms:nes:拳霸4代_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "挖地雷 [未知].nes",
+      "name": "挖地雷.nes",
       "key": "roms:nes:挖地雷_.nes",
       "size": 32784,
       "platform": "nes"
     },
     {
-      "name": "挖掘 [MM之神汉化].nes",
+      "name": "挖掘.nes",
       "key": "roms:nes:挖掘_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "挖金 [Dogout汉化].nes",
+      "name": "挖金.nes",
       "key": "roms:nes:挖金_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "推倒胡麻将 [凯程电子汉化].nes",
+      "name": "推倒胡麻将.nes",
       "key": "roms:nes:推倒胡麻将_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "撞球传说 - 花撞2 [Sun Team].nes",
+      "name": "撞球传说 - 花撞2.nes",
       "key": "roms:nes:撞球传说_-_花撞2_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "撞球传说—花撞II [晶碁电子].nes",
+      "name": "撞球传说—花撞II.nes",
       "key": "roms:nes:撞球传说—花撞II_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "救火英雄 [cslrxyz汉化].nes",
+      "name": "救火英雄.nes",
       "key": "roms:nes:救火英雄_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "数独2合1 [南晶科技].NES",
+      "name": "数独2合1.NES",
       "key": "roms:nes:数独2合1_.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "数码宝贝 [酷哥电子].nes",
+      "name": "数码宝贝.nes",
       "key": "roms:nes:数码宝贝_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "数码战队2 [南晶科技].nes",
+      "name": "数码战队2.nes",
       "key": "roms:nes:数码战队2_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "数码暴龙 [南晶科技].nes",
+      "name": "数码暴龙.nes",
       "key": "roms:nes:数码暴龙_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "数码暴龙4 - 水晶版 [外星科技].nes",
+      "name": "数码暴龙4 - 水晶版.nes",
       "key": "roms:nes:数码暴龙4_-_水晶版_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "敲冰块(v20110814) [Nokoh汉化].nes",
+      "name": "敲冰块(v20110814).nes",
       "key": "roms:nes:敲冰块(v20110814)_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "敲砖块 [maxzhou88].nes",
+      "name": "敲砖块.nes",
       "key": "roms:nes:敲砖块_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "斗智拼盘 [Sun Team].nes",
+      "name": "斗智拼盘.nes",
       "key": "roms:nes:斗智拼盘_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "斗者的挽歌 [孔雀天汉化].nes",
+      "name": "斗者的挽歌.nes",
       "key": "roms:nes:斗者的挽歌_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "新人类 [Yurica汉化].nes",
+      "name": "新人类.nes",
       "key": "roms:nes:新人类_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "新包青天2 [外星科技].nes",
+      "name": "新包青天2.nes",
       "key": "roms:nes:新包青天2_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "新月剑痕  [南晶科技].NES",
+      "name": "新月剑痕.NES",
       "key": "roms:nes:新月剑痕_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "方世玉 [南晶科技].nes",
+      "name": "方世玉.nes",
       "key": "roms:nes:方世玉_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "无双乱舞 [科泰电子].NES",
+      "name": "无双乱舞.NES",
       "key": "roms:nes:无双乱舞_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "无尽的任务 [外星科技汉化].nes",
+      "name": "无尽的任务.nes",
       "key": "roms:nes:无尽的任务_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "无极魔界 [恒格电子].NES",
+      "name": "无极魔界.NES",
       "key": "roms:nes:无极魔界_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "无间道风云 [恒格电子].NES",
+      "name": "无间道风云.NES",
       "key": "roms:nes:无间道风云_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "时尚跳舞毯 [maxzhou88].nes",
+      "name": "时尚跳舞毯.nes",
       "key": "roms:nes:时尚跳舞毯_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "时空之轮 [南晶科技].nes",
+      "name": "时空之轮.nes",
       "key": "roms:nes:时空之轮_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "时空小子 [孔雀天汉化].nes",
+      "name": "时空小子.nes",
       "key": "roms:nes:时空小子_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "时空斗士 [南晶科技].nes",
+      "name": "时空斗士.nes",
       "key": "roms:nes:时空斗士_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "星之卡比 - 星之泉物语 [烈火暴龙汉化].nes",
+      "name": "星之卡比 - 星之泉物语.nes",
       "key": "roms:nes:星之卡比_-_星之泉物语_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "星战情缘 [恒格电子].nes",
+      "name": "星战情缘.nes",
       "key": "roms:nes:星战情缘_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "星河战士 [恒格电子].nes",
+      "name": "星河战士.nes",
       "key": "roms:nes:星河战士_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "星空飞箭 [强典].nes",
+      "name": "星空飞箭.nes",
       "key": "roms:nes:星空飞箭_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "星际争霸 [恒格电子].nes",
+      "name": "星际争霸.nes",
       "key": "roms:nes:星际争霸_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "星际战机 [MS汉化].nes",
+      "name": "星际战机.nes",
       "key": "roms:nes:星际战机_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "星际武士 [Cony Soft].nes",
+      "name": "星际武士.nes",
       "key": "roms:nes:星际武士_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "星际飞车 [三协资讯].nes",
+      "name": "星际飞车.nes",
       "key": "roms:nes:星际飞车_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "星际魂斗罗 [樱组汉化 MS修正].nes",
+      "name": "星际魂斗罗.nes",
       "key": "roms:nes:星际魂斗罗_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "智慧方块 [烈火暴龙汉化].nes",
+      "name": "智慧方块.nes",
       "key": "roms:nes:智慧方块_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "暗棋 [圣谦].nes",
+      "name": "暗棋.nes",
       "key": "roms:nes:暗棋_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "暗黑破坏神 [南晶科技].nes",
+      "name": "暗黑破坏神.nes",
       "key": "roms:nes:暗黑破坏神_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "暴走淘金者 [九班汉化].nes",
+      "name": "暴走淘金者.nes",
       "key": "roms:nes:暴走淘金者_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "暴走淘金者2 [九班汉化].nes",
+      "name": "暴走淘金者2.nes",
       "key": "roms:nes:暴走淘金者2_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "最游记之唐三藏 [南晶科技].nes",
+      "name": "最游记之唐三藏.nes",
       "key": "roms:nes:最游记之唐三藏_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "最终幻想1 [SSforME标题修正版].nes",
+      "name": "最终幻想1.nes",
       "key": "roms:nes:最终幻想1_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "最终幻想2 [SSforME标题修正版].nes",
+      "name": "最终幻想2.nes",
       "key": "roms:nes:最终幻想2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "最终幻想3 [外星科技].nes",
+      "name": "最终幻想3.nes",
       "key": "roms:nes:最终幻想3_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "最终幻想4 - 光与暗 水晶纷争 [南晶科技].nes",
+      "name": "最终幻想4 - 光与暗 水晶纷争.nes",
       "key": "roms:nes:最终幻想4_-_光与暗_水晶纷争_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "最终幻想7 [南晶科技].nes",
+      "name": "最终幻想7.nes",
       "key": "roms:nes:最终幻想7_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "最终幻想X1 黑暗篇 [恒格电子].nes",
+      "name": "最终幻想X1 黑暗篇.nes",
       "key": "roms:nes:最终幻想X1_黑暗篇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "最终幻想X2 光明篇 [恒格电子].NES",
+      "name": "最终幻想X2 光明篇.NES",
       "key": "roms:nes:最终幻想X2_光明篇_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "最终幻想X3 终结篇 [恒格电子].nes",
+      "name": "最终幻想X3 终结篇.nes",
       "key": "roms:nes:最终幻想X3_终结篇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "月之水晶 [MM之神汉化].nes",
+      "name": "月之水晶.nes",
       "key": "roms:nes:月之水晶_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "月宫桌球 [闪 纯静水汉化 MS修正版].nes",
+      "name": "月宫桌球.nes",
       "key": "roms:nes:月宫桌球_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "月风魔传 (简体中文版) [冰组汉化].nes",
+      "name": "月风魔传 (简体中文版).nes",
       "key": "roms:nes:月风魔传_(简体中文版)_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "有趣的方块游戏 [龙组汉化].nes",
+      "name": "有趣的方块游戏.nes",
       "key": "roms:nes:有趣的方块游戏_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "未来小子 [圣谦].nes",
+      "name": "未来小子.nes",
       "key": "roms:nes:未来小子_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "机器人大战 [南晶科技].nes",
+      "name": "机器人大战.nes",
       "key": "roms:nes:机器人大战_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "机器小子大作战 (v20111016) [Nokoh汉化].nes",
+      "name": "机器小子大作战 (v20111016).nes",
       "key": "roms:nes:机器小子大作战_(v20111016)_.nes",
       "size": 671760,
       "platform": "nes"
     },
     {
-      "name": "机器战士高达 [科泰电子].NES",
+      "name": "机器战士高达.NES",
       "key": "roms:nes:机器战士高达_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "机器猫小叮当 [外星科技].nes",
+      "name": "机器猫小叮当.nes",
       "key": "roms:nes:机器猫小叮当_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "机甲战士 [外星科技汉化].nes",
+      "name": "机甲战士.nes",
       "key": "roms:nes:机甲战士_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "杀戮战场 (v20100527) [Nokoh汉化].nes",
+      "name": "杀戮战场 (v20100527).nes",
       "key": "roms:nes:杀戮战场_(v20100527)_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "杀虫大战 [天翔工作组汉化 MS修正].nes",
+      "name": "杀虫大战.nes",
       "key": "roms:nes:杀虫大战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "杨家将 [外星科技].nes",
+      "name": "杨家将.nes",
       "key": "roms:nes:杨家将_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "松鼠大作战 [星空汉化].nes",
+      "name": "松鼠大作战.nes",
       "key": "roms:nes:松鼠大作战_.nes",
       "size": 786464,
       "platform": "nes"
     },
     {
-      "name": "松鼠大作战2 [星空汉化].nes",
+      "name": "松鼠大作战2.nes",
       "key": "roms:nes:松鼠大作战2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "松鼠大战 [汉化你妹汉化组].nes",
+      "name": "松鼠大战.nes",
       "key": "roms:nes:松鼠大战_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "松鼠大战2 [汉化你妹汉化组].nes",
+      "name": "松鼠大战2.nes",
       "key": "roms:nes:松鼠大战2_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "林则徐禁烟 [外星科技 nfzxyd修正].nes",
+      "name": "林则徐禁烟.nes",
       "key": "roms:nes:林则徐禁烟_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "枪卡三合一 [TXC].nes",
+      "name": "枪卡三合一.nes",
       "key": "roms:nes:枪卡三合一_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "核心危机 [南晶科技].nes",
+      "name": "核心危机.nes",
       "key": "roms:nes:核心危机_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "格兰蒂亚 [外星科技].nes",
+      "name": "格兰蒂亚.nes",
       "key": "roms:nes:格兰蒂亚_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "格拉朗日点 [姜维第二汉化].nes",
+      "name": "格拉朗日点.nes",
       "key": "roms:nes:格拉朗日点_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "格斗七龙珠 [恒格电子].NES",
+      "name": "格斗七龙珠.NES",
       "key": "roms:nes:格斗七龙珠_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "梁山英雄 [南晶科技].nes",
+      "name": "梁山英雄.nes",
       "key": "roms:nes:梁山英雄_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "梦之勇士 [中伟汉化].nes",
+      "name": "梦之勇士.nes",
       "key": "roms:nes:梦之勇士_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "梦境之王 [外星科技].NES",
+      "name": "梦境之王.NES",
       "key": "roms:nes:梦境之王_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "梦幻 - 香帅传奇之血海飘零 [恒格电子].nes",
+      "name": "梦幻 - 香帅传奇之血海飘零.nes",
       "key": "roms:nes:梦幻_-_香帅传奇之血海飘零_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "梦幻之星4 [外星科技].nes",
+      "name": "梦幻之星4.nes",
       "key": "roms:nes:梦幻之星4_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "梦幻仙境 [未知].NES",
+      "name": "梦幻仙境.NES",
       "key": "roms:nes:梦幻仙境_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "梦幻沙漏 [南晶科技].nes",
+      "name": "梦幻沙漏.nes",
       "key": "roms:nes:梦幻沙漏_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "棋王 [TXC].nes",
+      "name": "棋王.nes",
       "key": "roms:nes:棋王_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "楚汉争霸 [外星科技].nes",
+      "name": "楚汉争霸.nes",
       "key": "roms:nes:楚汉争霸_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "楚汉风云 [南晶科技].nes",
+      "name": "楚汉风云.nes",
       "key": "roms:nes:楚汉风云_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "楚留香 - 香帅传奇之血海飘零 [外星科技].nes",
+      "name": "楚留香 - 香帅传奇之血海飘零.nes",
       "key": "roms:nes:楚留香_-_香帅传奇之血海飘零_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "楚留香新传[南晶科技].NES",
+      "name": "楚留香新传.NES",
       "key": "roms:nes:楚留香新传.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "樱桃小丸子 [火星电子].nes",
+      "name": "樱桃小丸子.nes",
       "key": "roms:nes:樱桃小丸子_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "欧陆之战 [外星科技].nes",
+      "name": "欧陆之战.nes",
       "key": "roms:nes:欧陆之战_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "武侠天地 [南晶科技].NES",
+      "name": "武侠天地.NES",
       "key": "roms:nes:武侠天地_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "武士魂 [Rex].nes",
+      "name": "武士魂.nes",
       "key": "roms:nes:武士魂_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "武林外传 [南晶科技].nes",
+      "name": "武林外传.nes",
       "key": "roms:nes:武林外传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "气球大战 [MS汉化].nes",
+      "name": "气球大战.nes",
       "key": "roms:nes:气球大战_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "水果狸 (v1.1) [九班汉化].nes",
+      "name": "水果狸 (v1.1).nes",
       "key": "roms:nes:水果狸_(v1.1)_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "水浒3 [南晶科技].nes",
+      "name": "水浒3.nes",
       "key": "roms:nes:水浒3_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "水浒传 [外星科技].nes",
+      "name": "水浒传.nes",
       "key": "roms:nes:水浒传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "水浒神兽 [外星科技].NES",
+      "name": "水浒神兽.NES",
       "key": "roms:nes:水浒神兽_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "水管工马里奥 [MS汉化].nes",
+      "name": "水管工马里奥.nes",
       "key": "roms:nes:水管工马里奥_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "汉刘邦 [南晶科技].nes",
+      "name": "汉刘邦.nes",
       "key": "roms:nes:汉刘邦_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "汉堡包 [金明汉化].nes",
+      "name": "汉堡包.nes",
       "key": "roms:nes:汉堡包_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "汤姆历险记 [外星科技汉化].nes",
+      "name": "汤姆历险记.nes",
       "key": "roms:nes:汤姆历险记_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "汤姆和杰瑞和塔菲 [MS汉化].nes",
+      "name": "汤姆和杰瑞和塔菲.nes",
       "key": "roms:nes:汤姆和杰瑞和塔菲_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "沙罗曼蛇2 [未知].nes",
+      "name": "沙罗曼蛇2.nes",
       "key": "roms:nes:沙罗曼蛇2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "法老王 [外星科技].NES",
+      "name": "法老王.NES",
       "key": "roms:nes:法老王_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "泡泡龙 (v20101230) [Nokoh汉化].nes",
+      "name": "泡泡龙 (v20101230).nes",
       "key": "roms:nes:泡泡龙_(v20101230)_.nes",
       "size": 188432,
       "platform": "nes"
     },
     {
-      "name": "泡泡龙2 (v20110207) [Nokoh汉化].nes",
+      "name": "泡泡龙2 (v20110207).nes",
       "key": "roms:nes:泡泡龙2_(v20110207)_.nes",
       "size": 278544,
       "platform": "nes"
     },
     {
-      "name": "泰坦尼克号 [南晶科技].nes",
+      "name": "泰坦尼克号.nes",
       "key": "roms:nes:泰坦尼克号_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "洛克人 [MS汉化].nes",
+      "name": "洛克人.nes",
       "key": "roms:nes:洛克人_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "洛克人2 - Dr.Wily之谜 [MS汉化].nes",
+      "name": "洛克人2 - Dr.Wily之谜.nes",
       "key": "roms:nes:洛克人2_-_Dr.Wily之谜_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "洛克人2 [NeoX汉化].nes",
+      "name": "洛克人2.nes",
       "key": "roms:nes:洛克人2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "洛克人3 - Dr.Wily的末日 [MS汉化].nes",
+      "name": "洛克人3 - Dr.Wily的末日.nes",
       "key": "roms:nes:洛克人3_-_Dr.Wily的末日_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "洛克人4 - 新的野心 [MS汉化].nes",
+      "name": "洛克人4 - 新的野心.nes",
       "key": "roms:nes:洛克人4_-_新的野心_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "洛克人5 - 布鲁斯的圈套 [MS汉化].nes",
+      "name": "洛克人5 - 布鲁斯的圈套.nes",
       "key": "roms:nes:洛克人5_-_布鲁斯的圈套_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "洛克人6 - 史上最大的战争 [Madcell汉化].nes",
+      "name": "洛克人6 - 史上最大的战争.nes",
       "key": "roms:nes:洛克人6_-_史上最大的战争_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "洛克人6 - 史上最长的战斗 [MS汉化].nes",
+      "name": "洛克人6 - 史上最长的战斗.nes",
       "key": "roms:nes:洛克人6_-_史上最长的战斗_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "洛克人Exile [中伟汉化].nes",
+      "name": "洛克人Exile.nes",
       "key": "roms:nes:洛克人Exile_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "洛克人X [MS汉化].nes",
+      "name": "洛克人X.nes",
       "key": "roms:nes:洛克人X_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "淘气厨师 - 食物的世界 [MS汉化].nes",
+      "name": "淘气厨师 - 食物的世界.nes",
       "key": "roms:nes:淘气厨师_-_食物的世界_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "淘金者 [叶枫汉化].nes",
+      "name": "淘金者.nes",
       "key": "roms:nes:淘金者_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "淘金者2 扩容汉化版 [叶枫汉化].nes",
+      "name": "淘金者2 扩容汉化版.nes",
       "key": "roms:nes:淘金者2_扩容汉化版_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "混沌世界 [外星科技].nes",
+      "name": "混沌世界.nes",
       "key": "roms:nes:混沌世界_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡1 - 超级 4 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡1 - 超级 4 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡1_-_超级_4_合_1_(亚洲版)_(合卡)_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡2 - 超级 10 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡2 - 超级 10 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡2_-_超级_10_合_1_(亚洲版)_(合卡)_.nes",
       "size": 196624,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡3 - 超级 8 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡3 - 超级 8 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡3_-_超级_8_合_1_(亚洲版)_(合卡)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡4 - 超级 6 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡4 - 超级 6 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡4_-_超级_6_合_1_(亚洲版)_(合卡)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡5 - 超级 7 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡5 - 超级 7 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡5_-_超级_7_合_1_(亚洲版)_(合卡)_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡6 - 超级 6 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡6 - 超级 6 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡6_-_超级_6_合_1_(亚洲版)_(合卡)_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡7 - 超级 4 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡7 - 超级 4 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡7_-_超级_4_合_1_(亚洲版)_(合卡)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡8 - 超级 4 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡8 - 超级 4 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡8_-_超级_4_合_1_(亚洲版)_(合卡)_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "游戏合卡9 - 超级 3 合 1 (亚洲版) (合卡) [圣谦].nes",
+      "name": "游戏合卡9 - 超级 3 合 1 (亚洲版) (合卡).nes",
       "key": "roms:nes:游戏合卡9_-_超级_3_合_1_(亚洲版)_(合卡)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "游戏王 [南晶科技].nes",
+      "name": "游戏王.nes",
       "key": "roms:nes:游戏王_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "激斗圣战士 [外星科技汉化].nes",
+      "name": "激斗圣战士.nes",
       "key": "roms:nes:激斗圣战士_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "激龟格斗 (v1.0) [星空汉化].nes",
+      "name": "激龟格斗 (v1.0).nes",
       "key": "roms:nes:激龟格斗_(v1.0)_.nes",
       "size": 311312,
       "platform": "nes"
     },
     {
-      "name": "火影忍者 [南晶科技].nes",
+      "name": "火影忍者.nes",
       "key": "roms:nes:火影忍者_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "火焰之纹章 - 暗黑龙与光之剑 [庞先生修正版].nes",
+      "name": "火焰之纹章 - 暗黑龙与光之剑.nes",
       "key": "roms:nes:火焰之纹章_-_暗黑龙与光之剑_.nes",
       "size": 786449,
       "platform": "nes"
     },
     {
-      "name": "火焰使者 [恒格电子].NES",
+      "name": "火焰使者.NES",
       "key": "roms:nes:火焰使者_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "火箭飞车 (v1.2) [九班汉化].nes",
+      "name": "火箭飞车 (v1.2).nes",
       "key": "roms:nes:火箭飞车_(v1.2)_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "火龙 [三协资讯].nes",
+      "name": "火龙.nes",
       "key": "roms:nes:火龙_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "灵界护法 [外星科技].nes",
+      "name": "灵界护法.nes",
       "key": "roms:nes:灵界护法_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "炸弹人 [MS汉化].nes",
+      "name": "炸弹人.nes",
       "key": "roms:nes:炸弹人_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "烈火92 [幻想汉化 MS修正].nes",
+      "name": "烈火92.nes",
       "key": "roms:nes:烈火92_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "热血新纪录完美简体汉化版 [AXI汉化].nes",
+      "name": "热血新纪录完美简体汉化版.nes",
       "key": "roms:nes:热血新纪录完美简体汉化版_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "热血新记录 [AIR汉化].nes",
+      "name": "热血新记录.nes",
       "key": "roms:nes:热血新记录_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "热血时代剧完美汉化版 [AXI & AHE汉化].nes",
+      "name": "热血时代剧完美汉化版.nes",
       "key": "roms:nes:热血时代剧完美汉化版_.nes",
       "size": 327696,
       "platform": "nes"
     },
     {
-      "name": "热血格斗传说 [8-bit Zone&热血鱼缸].nes",
+      "name": "热血格斗传说.nes",
       "key": "roms:nes:热血格斗传说_.nes",
       "size": 408768,
       "platform": "nes"
     },
     {
-      "name": "热血格斗简体完美汉化版 [AXI汉化].nes",
+      "name": "热血格斗简体完美汉化版.nes",
       "key": "roms:nes:热血格斗简体完美汉化版_.nes",
       "size": 408768,
       "platform": "nes"
     },
     {
-      "name": "热血格斗繁体完美汉化版 [AXI汉化].nes",
+      "name": "热血格斗繁体完美汉化版.nes",
       "key": "roms:nes:热血格斗繁体完美汉化版_.nes",
       "size": 408768,
       "platform": "nes"
     },
     {
-      "name": "热血物语 [AIR汉化].nes",
+      "name": "热血物语.nes",
       "key": "roms:nes:热血物语_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "热血硬派 [AXI汉化].nes",
+      "name": "热血硬派.nes",
       "key": "roms:nes:热血硬派_.nes",
       "size": 147472,
       "platform": "nes"
     },
     {
-      "name": "热血篮球 (v0.9) [AXI & AHE汉化].nes",
+      "name": "热血篮球 (v0.9).nes",
       "key": "roms:nes:热血篮球_(v0.9)_.nes",
       "size": 376848,
       "platform": "nes"
     },
     {
-      "name": "热血足球 [王龙汉化小组汉化].nes",
+      "name": "热血足球.nes",
       "key": "roms:nes:热血足球_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "热血足球1 [AXI汉化].nes",
+      "name": "热血足球1.nes",
       "key": "roms:nes:热血足球1_.nes",
       "size": 917536,
       "platform": "nes"
     },
     {
-      "name": "热血足球联盟 [惊风 & AirTeam汉化].nes",
+      "name": "热血足球联盟.nes",
       "key": "roms:nes:热血足球联盟_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "热血进行曲 (v20090803) [Nokoh汉化].nes",
+      "name": "热血进行曲 (v20090803).nes",
       "key": "roms:nes:热血进行曲_(v20090803)_.nes",
       "size": 483344,
       "platform": "nes"
     },
     {
-      "name": "热血高校躲避球 [Old Liu汉化].nes",
+      "name": "热血高校躲避球.nes",
       "key": "roms:nes:热血高校躲避球_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "熊猫太子 [dragon2snow汉化].nes",
+      "name": "熊猫太子.nes",
       "key": "roms:nes:熊猫太子_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "熊猫王子 [卡圣].nes",
+      "name": "熊猫王子.nes",
       "key": "roms:nes:熊猫王子_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "燃烧战车[AXI].NES",
+      "name": "燃烧战车.NES",
       "key": "roms:nes:燃烧战车.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "爆笑三国 [外星科技 (147201688转简体版)].nes",
+      "name": "爆笑三国.nes",
       "key": "roms:nes:爆笑三国_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "爱的小屋 [MS汉化].nes",
+      "name": "爱的小屋.nes",
       "key": "roms:nes:爱的小屋_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "牧场物语 [南晶科技].nes",
+      "name": "牧场物语.nes",
       "key": "roms:nes:牧场物语_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "特库摩世界杯足球赛 [王龙汉化小组汉化 MS修正].nes",
+      "name": "特库摩世界杯足球赛.nes",
       "key": "roms:nes:特库摩世界杯足球赛_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "特救指令 [Puszta汉化].nes",
+      "name": "特救指令.nes",
       "key": "roms:nes:特救指令_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "猫之狂欢 (v1.0) [九班汉化].nes",
+      "name": "猫之狂欢 (v1.0).nes",
       "key": "roms:nes:猫之狂欢_(v1.0)_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "猫捉老鼠 [奇玉汉化].nes",
+      "name": "猫捉老鼠.nes",
       "key": "roms:nes:猫捉老鼠_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "王中霸学习卡 [荣丰].nes",
+      "name": "王中霸学习卡.nes",
       "key": "roms:nes:王中霸学习卡_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "王子复仇记 [恒格电子].nes",
+      "name": "王子复仇记.nes",
       "key": "roms:nes:王子复仇记_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "王牌海战 [TCL王牌].nes",
+      "name": "王牌海战.nes",
       "key": "roms:nes:王牌海战_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "王者无双 [南晶科技].NES",
+      "name": "王者无双.NES",
       "key": "roms:nes:王者无双_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "玛莉医生 [Puszta汉化].nes",
+      "name": "玛莉医生.nes",
       "key": "roms:nes:玛莉医生_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "玛莉欧兄弟 (v20110401) [Nokoh汉化].nes",
+      "name": "玛莉欧兄弟 (v20110401).nes",
       "key": "roms:nes:玛莉欧兄弟_(v20110401)_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "玛莉欧兄弟拆屋工 (v20110409) [Nokoh汉化].nes",
+      "name": "玛莉欧兄弟拆屋工 (v20110409).nes",
       "key": "roms:nes:玛莉欧兄弟拆屋工_(v20110409)_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "玩具总动员 [和众科技].nes",
+      "name": "玩具总动员.nes",
       "key": "roms:nes:玩具总动员_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "生化危机 [外星科技].nes",
+      "name": "生化危机.nes",
       "key": "roms:nes:生化危机_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "生命的奇迹 - 超级宝宝 [MS汉化].nes",
+      "name": "生命的奇迹 - 超级宝宝.nes",
       "key": "roms:nes:生命的奇迹_-_超级宝宝_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "甲A [外星科技].nes",
+      "name": "甲A.nes",
       "key": "roms:nes:甲A_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "电视玛琍 [Namco].nes",
+      "name": "电视玛琍.nes",
       "key": "roms:nes:电视玛琍_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "疯狂鸡蛋仔 [外星科技].nes",
+      "name": "疯狂鸡蛋仔.nes",
       "key": "roms:nes:疯狂鸡蛋仔_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "百万富翁 [未知].nes",
+      "name": "百万富翁.nes",
       "key": "roms:nes:百万富翁_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "皮卡丘Y2K [天空联盟汉化].nes",
+      "name": "皮卡丘Y2K.nes",
       "key": "roms:nes:皮卡丘Y2K_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "盗帅 [圣谦].nes",
+      "name": "盗帅.nes",
       "key": "roms:nes:盗帅_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "盟军赶死队 [外星科技].nes",
+      "name": "盟军赶死队.nes",
       "key": "roms:nes:盟军赶死队_.nes",
       "size": 524304,
       "platform": "nes"
@@ -3472,415 +3472,415 @@
       "platform": "nes"
     },
     {
-      "name": "真侍魂 - 武士道列传 [南晶科技].nes",
+      "name": "真侍魂 - 武士道列传.nes",
       "key": "roms:nes:真侍魂_-_武士道列传_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "真侍魂 - 魂之利刃 [南晶科技].nes",
+      "name": "真侍魂 - 魂之利刃.nes",
       "key": "roms:nes:真侍魂_-_魂之利刃_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "真假猴王 [外星科技].nes",
+      "name": "真假猴王.nes",
       "key": "roms:nes:真假猴王_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "真本西游记 [Asder].nes",
+      "name": "真本西游记.nes",
       "key": "roms:nes:真本西游记_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "真田十勇士 [外星科技汉化].nes",
+      "name": "真田十勇士.nes",
       "key": "roms:nes:真田十勇士_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "眼镜蛇任务 [Asder].nes",
+      "name": "眼镜蛇任务.nes",
       "key": "roms:nes:眼镜蛇任务_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "石器时代 [南晶科技].NES",
+      "name": "石器时代.NES",
       "key": "roms:nes:石器时代_.NES",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "破釜沉舟 [外星科技].nes",
+      "name": "破釜沉舟.nes",
       "key": "roms:nes:破釜沉舟_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "碰碰车 [MS汉化].nes",
+      "name": "碰碰车.nes",
       "key": "roms:nes:碰碰车_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "神奇宝贝 [未知].NES",
+      "name": "神奇宝贝.NES",
       "key": "roms:nes:神奇宝贝_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "神密金三角 [外星科技汉化].nes",
+      "name": "神密金三角.nes",
       "key": "roms:nes:神密金三角_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "神探柯南 [星星科技].nes",
+      "name": "神探柯南.nes",
       "key": "roms:nes:神探柯南_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "神话剑云3 [恒格电子].nes",
+      "name": "神话剑云3.nes",
       "key": "roms:nes:神话剑云3_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "神鬼传奇(法老王传奇)[外星科技汉化].nes",
+      "name": "神鬼传奇(法老王传奇).nes",
       "key": "roms:nes:神鬼传奇(法老王传奇).nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "神魔大陆 [科泰科技].NES",
+      "name": "神魔大陆.NES",
       "key": "roms:nes:神魔大陆_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "科乐美世界(v20120904) [Nokoh汉化].nes",
+      "name": "科乐美世界(v20120904).nes",
       "key": "roms:nes:科乐美世界(v20120904)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "空中魂斗罗 (v1.0) [星空汉化].nes",
+      "name": "空中魂斗罗 (v1.0).nes",
       "key": "roms:nes:空中魂斗罗_(v1.0)_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "空中魂斗罗 - 纽约行动 [maoweimam汉化].nes",
+      "name": "空中魂斗罗 - 纽约行动.nes",
       "key": "roms:nes:空中魂斗罗_-_纽约行动_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "突然君 [烈火暴龙汉化].nes",
+      "name": "突然君.nes",
       "key": "roms:nes:突然君_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "笑傲江湖 [外星科技].nes",
+      "name": "笑傲江湖.nes",
       "key": "roms:nes:笑傲江湖_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "笑傲江湖群侠记 [南晶科技].NES",
+      "name": "笑傲江湖群侠记.NES",
       "key": "roms:nes:笑傲江湖群侠记_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "第2次超级机器人大战 (记忆修正版) [先锋卡通汉化].nes",
+      "name": "第2次超级机器人大战 (记忆修正版).nes",
       "key": "roms:nes:第2次超级机器人大战_(记忆修正版)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "第二次机器人大战 [外星科技].nes",
+      "name": "第二次机器人大战.nes",
       "key": "roms:nes:第二次机器人大战_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "第四次机器人大战 [外星科技汉化].nes",
+      "name": "第四次机器人大战.nes",
       "key": "roms:nes:第四次机器人大战_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "筋肉人 - 摔角大赛 [MS汉化].nes",
+      "name": "筋肉人 - 摔角大赛.nes",
       "key": "roms:nes:筋肉人_-_摔角大赛_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "筋肉人 [Madcell汉化].nes",
+      "name": "筋肉人.nes",
       "key": "roms:nes:筋肉人_.nes",
       "size": 32784,
       "platform": "nes"
     },
     {
-      "name": "米老鼠 [星空汉化].nes",
+      "name": "米老鼠.nes",
       "key": "roms:nes:米老鼠_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "红巾特攻队 [佛易汉化组 8GUA汉化].nes",
+      "name": "红巾特攻队.nes",
       "key": "roms:nes:红巾特攻队_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "红楼梦 [Dragon Software].nes",
+      "name": "红楼梦.nes",
       "key": "roms:nes:红楼梦_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "纽约大拳猫 [MS汉化].nes",
+      "name": "纽约大拳猫.nes",
       "key": "roms:nes:纽约大拳猫_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "终极联盟足球 [C&E Inc].nes",
+      "name": "终极联盟足球.nes",
       "key": "roms:nes:终极联盟足球_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "绝代双骄 [南晶科技].nes",
+      "name": "绝代双骄.nes",
       "key": "roms:nes:绝代双骄_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "绝代英雄 [外星科技汉化].nes",
+      "name": "绝代英雄.nes",
       "key": "roms:nes:绝代英雄_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "维尼斯沙滩排球 [Idea-Tek].nes",
+      "name": "维尼斯沙滩排球.nes",
       "key": "roms:nes:维尼斯沙滩排球_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "绿色兵团 [星空汉化].nes",
+      "name": "绿色兵团.nes",
       "key": "roms:nes:绿色兵团_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "绿野仙踪 [外星科技].nes",
+      "name": "绿野仙踪.nes",
       "key": "roms:nes:绿野仙踪_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "网球 [佛易汉化组 8GUA汉化].nes",
+      "name": "网球.nes",
       "key": "roms:nes:网球_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "罪恶克星 [Bit].nes",
+      "name": "罪恶克星.nes",
       "key": "roms:nes:罪恶克星_.nes",
       "size": 163856,
       "platform": "nes"
     },
     {
-      "name": "美国富豪 [恒格电子].nes",
+      "name": "美国富豪.nes",
       "key": "roms:nes:美国富豪_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "美女拳 [Sachen].nes",
+      "name": "美女拳.nes",
       "key": "roms:nes:美女拳_.nes",
       "size": 163856,
       "platform": "nes"
     },
     {
-      "name": "美猴王 [外星科技].nes",
+      "name": "美猴王.nes",
       "key": "roms:nes:美猴王_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "耀奇之神奇蛋仔 [Puszta汉化].nes",
+      "name": "耀奇之神奇蛋仔.nes",
       "key": "roms:nes:耀奇之神奇蛋仔_.nes",
       "size": 163856,
       "platform": "nes"
     },
     {
-      "name": "耀西的饼干 (v1.3) [九班汉化].nes",
+      "name": "耀西的饼干 (v1.3).nes",
       "key": "roms:nes:耀西的饼干_(v1.3)_.nes",
       "size": 196624,
       "platform": "nes"
     },
     {
-      "name": "脱狱 [Peacock Wang汉化 MS修正].nes",
+      "name": "脱狱.nes",
       "key": "roms:nes:脱狱_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "脱狱之被俘的战斗 [星空汉化].nes",
+      "name": "脱狱之被俘的战斗.nes",
       "key": "roms:nes:脱狱之被俘的战斗_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "脱狱完美中文版 [星空汉化].nes",
+      "name": "脱狱完美中文版.nes",
       "key": "roms:nes:脱狱完美中文版_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "艾摩君 [jiuban汉化].nes",
+      "name": "艾摩君.nes",
       "key": "roms:nes:艾摩君_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "花式九球 (版本1) [星空汉化].nes",
+      "name": "花式九球 (版本1).nes",
       "key": "roms:nes:花式九球_(版本1)_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "英汉词典1 [未知].nes",
+      "name": "英汉词典1.nes",
       "key": "roms:nes:英汉词典1_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "英汉词典2 [未知].nes",
+      "name": "英汉词典2.nes",
       "key": "roms:nes:英汉词典2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "英烈群侠传 [外星科技].nes",
+      "name": "英烈群侠传.nes",
       "key": "roms:nes:英烈群侠传_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "英语声霸卡 [东生].nes",
+      "name": "英语声霸卡.nes",
       "key": "roms:nes:英语声霸卡_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "英雄传 [Cony Soft].nes",
+      "name": "英雄传.nes",
       "key": "roms:nes:英雄传_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "英雄传奇 [恒格电子].nes",
+      "name": "英雄传奇.nes",
       "key": "roms:nes:英雄传奇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "英雄源义经传奇 [恒格电子].nes",
+      "name": "英雄源义经传奇.nes",
       "key": "roms:nes:英雄源义经传奇_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "茶茶丸之大冒险 [Nineswords汉化].nes",
+      "name": "茶茶丸之大冒险.nes",
       "key": "roms:nes:茶茶丸之大冒险_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "荆轲新传 [Super Tone].nes",
+      "name": "荆轲新传.nes",
       "key": "roms:nes:荆轲新传_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "荒野大镖客 [高艳龙汉化 MS修正].nes",
+      "name": "荒野大镖客.nes",
       "key": "roms:nes:荒野大镖客_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "荣丰学习卡 [荣丰].nes",
+      "name": "荣丰学习卡.nes",
       "key": "roms:nes:荣丰学习卡_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "荣耀之骑士团 [酷哥电子].NES",
+      "name": "荣耀之骑士团.NES",
       "key": "roms:nes:荣耀之骑士团_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "荣誉勋章 [外星科技汉化].nes",
+      "name": "荣誉勋章.nes",
       "key": "roms:nes:荣誉勋章_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "菩故须苛战争 [Rinkaku汉化].nes",
+      "name": "菩故须苛战争.nes",
       "key": "roms:nes:菩故须苛战争_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "葫芦金刚 [南晶科技].nes",
+      "name": "葫芦金刚.nes",
       "key": "roms:nes:葫芦金刚_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "虎穴行动 [孔雀天汉化].nes",
+      "name": "虎穴行动.nes",
       "key": "roms:nes:虎穴行动_.nes",
       "size": 786464,
       "platform": "nes"
     },
     {
-      "name": "虎门硝烟 [酷哥电子].nes",
+      "name": "虎门硝烟.nes",
       "key": "roms:nes:虎门硝烟_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "蜡笔小新 [FutureMedia].nes",
+      "name": "蜡笔小新.nes",
       "key": "roms:nes:蜡笔小新_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "蝙蝠侠 [幻想汉化].nes",
+      "name": "蝙蝠侠.nes",
       "key": "roms:nes:蝙蝠侠_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "蝶变 [圣谦].nes",
+      "name": "蝶变.nes",
       "key": "roms:nes:蝶变_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "街头格斗小子 [天空联盟汉化].nes",
+      "name": "街头格斗小子.nes",
       "key": "roms:nes:街头格斗小子_.nes",
       "size": 24592,
       "platform": "nes"
@@ -3910,511 +3910,511 @@
       "platform": "nes"
     },
     {
-      "name": "街霸3 [天空联盟汉化].nes",
+      "name": "街霸3.nes",
       "key": "roms:nes:街霸3_.nes",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "街霸60人加速版 [Cony Soft].NES",
+      "name": "街霸60人加速版.NES",
       "key": "roms:nes:街霸60人加速版_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "西天取经 [TXC].nes",
+      "name": "西天取经.nes",
       "key": "roms:nes:西天取经_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "西天取经2 [外星科技].nes",
+      "name": "西天取经2.nes",
       "key": "roms:nes:西天取经2_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "西楚霸王 [外星科技].nes",
+      "name": "西楚霸王.nes",
       "key": "roms:nes:西楚霸王_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "西游记(v20090617) [Nokoh汉化].nes",
+      "name": "西游记(v20090617).nes",
       "key": "roms:nes:西游记(v20090617)_.nes",
       "size": 81936,
       "platform": "nes"
     },
     {
-      "name": "西游记后传 [外星科技].nes",
+      "name": "西游记后传.nes",
       "key": "roms:nes:西游记后传_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "象棋学园 [Sachen].nes",
+      "name": "象棋学园.nes",
       "key": "roms:nes:象棋学园_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "财神到 [SBNS02VB].NES",
+      "name": "财神到.NES",
       "key": "roms:nes:财神到_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "赌神 [外星科技汉化].nes",
+      "name": "赌神.nes",
       "key": "roms:nes:赌神_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "赌神字体优化版 [星夜之幻].nes",
+      "name": "赌神字体优化版.nes",
       "key": "roms:nes:赌神字体优化版_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "赤影战士 (v2.0) [星空汉化].nes",
+      "name": "赤影战士 (v2.0).nes",
       "key": "roms:nes:赤影战士_(v2.0)_.nes",
       "size": 270352,
       "platform": "nes"
     },
     {
-      "name": "超一流烟山杯围棋 [外星科技汉化].NES",
+      "name": "超一流烟山杯围棋.NES",
       "key": "roms:nes:超一流烟山杯围棋_.NES",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "超惑星战记 [樱组汉化 MS修正].nes",
+      "name": "超惑星战记.nes",
       "key": "roms:nes:超惑星战记_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "超时空要塞 [姜维第二汉化].nes",
+      "name": "超时空要塞.nes",
       "key": "roms:nes:超时空要塞_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "超级大富翁 [外星科技].nes",
+      "name": "超级大富翁.nes",
       "key": "roms:nes:超级大富翁_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "超级大战略 [外星科技].nes",
+      "name": "超级大战略.nes",
       "key": "roms:nes:超级大战略_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "超级忍 [和众科技].nes",
+      "name": "超级忍.nes",
       "key": "roms:nes:超级忍_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "超级战魂 [外星科技].nes",
+      "name": "超级战魂.nes",
       "key": "roms:nes:超级战魂_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "超级机器人大战A [南晶科技].nes",
+      "name": "超级机器人大战A.nes",
       "key": "roms:nes:超级机器人大战A_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "超级玛莉 [PKome汉化].nes",
+      "name": "超级玛莉.nes",
       "key": "roms:nes:超级玛莉_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "超级玛莉欧兄弟2 (v20110328) [Nokoh汉化].nes",
+      "name": "超级玛莉欧兄弟2 (v20110328).nes",
       "key": "roms:nes:超级玛莉欧兄弟2_(v20110328)_.nes",
       "size": 278544,
       "platform": "nes"
     },
     {
-      "name": "超级贪吃蛇 [菜菜学堂].nes",
+      "name": "超级贪吃蛇.nes",
       "key": "roms:nes:超级贪吃蛇_.nes",
       "size": 57360,
       "platform": "nes"
     },
     {
-      "name": "超级铁板阵 - 加索布之谜 [MS汉化].nes",
+      "name": "超级铁板阵 - 加索布之谜.nes",
       "key": "roms:nes:超级铁板阵_-_加索布之谜_.nes",
       "size": 163856,
       "platform": "nes"
     },
     {
-      "name": "超级阿拉丁 [和众科技].nes",
+      "name": "超级阿拉丁.nes",
       "key": "roms:nes:超级阿拉丁_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "超级马莉欧兄弟 (v20090422) [Nokoh汉化].nes",
+      "name": "超级马莉欧兄弟 (v20090422).nes",
       "key": "roms:nes:超级马莉欧兄弟_(v20090422)_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "超级马莉欧兄弟3 (v20090423) [Nokoh汉化].nes",
+      "name": "超级马莉欧兄弟3 (v20090423).nes",
       "key": "roms:nes:超级马莉欧兄弟3_(v20090423)_.nes",
       "size": 450576,
       "platform": "nes"
     },
     {
-      "name": "超级马里奥兄弟 [未知 (MS修正)].nes",
+      "name": "超级马里奥兄弟.nes",
       "key": "roms:nes:超级马里奥兄弟_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "超级马里奥兄弟3 [MM之神汉化].nes",
+      "name": "超级马里奥兄弟3.nes",
       "key": "roms:nes:超级马里奥兄弟3_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "超级魂2 [烟山软件修改].nes",
+      "name": "超级魂2.nes",
       "key": "roms:nes:超级魂2_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "超级魂斗罗 (v2.0) [九班汉化].nes",
+      "name": "超级魂斗罗 (v2.0).nes",
       "key": "roms:nes:超级魂斗罗_(v2.0)_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "超级魂斗罗X [孔雀天汉化].nes",
+      "name": "超级魂斗罗X.nes",
       "key": "roms:nes:超级魂斗罗X_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "超级魔法气泡 [圣谦].nes",
+      "name": "超级魔法气泡.nes",
       "key": "roms:nes:超级魔法气泡_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "超级魔法气泡2 [圣谦].nes",
+      "name": "超级魔法气泡2.nes",
       "key": "roms:nes:超级魔法气泡2_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "超越地平线 [Nineswords汉化].nes",
+      "name": "超越地平线.nes",
       "key": "roms:nes:超越地平线_.nes",
       "size": 786464,
       "platform": "nes"
     },
     {
-      "name": "超魔兽大战 [封印记忆汉化].nes",
+      "name": "超魔兽大战.nes",
       "key": "roms:nes:超魔兽大战_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "趣味成语屋 & 马步迷阵 [小霸王电子].nes",
+      "name": "趣味成语屋 & 马步迷阵.nes",
       "key": "roms:nes:趣味成语屋_马步迷阵_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "趣味成语屋&马步迷阵 [小霸王电子].NES",
+      "name": "趣味成语屋&马步迷阵.NES",
       "key": "roms:nes:趣味成语屋马步迷阵_.NES",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "足球小将 [外星科技汉化].NES",
+      "name": "足球小将.NES",
       "key": "roms:nes:足球小将_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "路易基之谜 [F0REVERD汉化].nes",
+      "name": "路易基之谜.nes",
       "key": "roms:nes:路易基之谜_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "轩辕剑-云的彼端 [科泰电子].NES",
+      "name": "轩辕剑-云的彼端.NES",
       "key": "roms:nes:轩辕剑-云的彼端_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "轩辕剑-枫之舞 [科泰电子].NES",
+      "name": "轩辕剑-枫之舞.NES",
       "key": "roms:nes:轩辕剑-枫之舞_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "轩辕剑之天之痕 [科泰电子].NES",
+      "name": "轩辕剑之天之痕.NES",
       "key": "roms:nes:轩辕剑之天之痕_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "轩辕剑外传之天之痕 [南晶科技].nes",
+      "name": "轩辕剑外传之天之痕.nes",
       "key": "roms:nes:轩辕剑外传之天之痕_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "轰天至尊 [TXC].nes",
+      "name": "轰天至尊.nes",
       "key": "roms:nes:轰天至尊_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "轰炸超人 (v20100411) [Nokoh汉化].nes",
+      "name": "轰炸超人 (v20100411).nes",
       "key": "roms:nes:轰炸超人_(v20100411)_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "轰炸超人II (v20110309) [Nokoh汉化].nes",
+      "name": "轰炸超人II (v20110309).nes",
       "key": "roms:nes:轰炸超人II_(v20110309)_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "迷宫封印 [Sachen].nes",
+      "name": "迷宫封印.nes",
       "key": "roms:nes:迷宫封印_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "迷宫龙 [圣谦].nes",
+      "name": "迷宫龙.nes",
       "key": "roms:nes:迷宫龙_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "迷糊车 [未知].NES",
+      "name": "迷糊车.NES",
       "key": "roms:nes:迷糊车_.NES",
       "size": 49246,
       "platform": "nes"
     },
     {
-      "name": "迷魂车 [Puszta汉化].nes",
+      "name": "迷魂车.nes",
       "key": "roms:nes:迷魂车_.nes",
       "size": 98320,
       "platform": "nes"
     },
     {
-      "name": "重装机兵 [先锋卡通汉化 (MS修正)].nes",
+      "name": "重装机兵.nes",
       "key": "roms:nes:重装机兵_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "重装机兵字体优化版 [星夜之幻].nes",
+      "name": "重装机兵字体优化版.nes",
       "key": "roms:nes:重装机兵字体优化版_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "金庸群侠传 - 书剑江山 [南晶科技].nes",
+      "name": "金庸群侠传 - 书剑江山.nes",
       "key": "roms:nes:金庸群侠传_-_书剑江山_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "金曲KTV [未知].nes",
+      "name": "金曲KTV.nes",
       "key": "roms:nes:金曲KTV_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "铁板阵 (v1.0) [九班汉化].nes",
+      "name": "铁板阵 (v1.0).nes",
       "key": "roms:nes:铁板阵_(v1.0)_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "铁血战士 [MS汉化].nes",
+      "name": "铁血战士.nes",
       "key": "roms:nes:铁血战士_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "银河时代 [外星科技汉化].nes",
+      "name": "银河时代.nes",
       "key": "roms:nes:银河时代_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "银白色沙加 [外星科技汉化].nes",
+      "name": "银白色沙加.nes",
       "key": "roms:nes:银白色沙加_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "银色之鹰 [圣谦].nes",
+      "name": "银色之鹰.nes",
       "key": "roms:nes:银色之鹰_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "锄大D [台北裕威].nes",
+      "name": "锄大D.nes",
       "key": "roms:nes:锄大D_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "镜花缘 [外星科技].nes",
+      "name": "镜花缘.nes",
       "key": "roms:nes:镜花缘_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "闪电战机 [圣谦].nes",
+      "name": "闪电战机.nes",
       "key": "roms:nes:闪电战机_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "闪闪的红星 [南晶科技].nes",
+      "name": "闪闪的红星.nes",
       "key": "roms:nes:闪闪的红星_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "阿尔戈斯战士 [孔雀天汉化 MS修正].nes",
+      "name": "阿尔戈斯战士.nes",
       "key": "roms:nes:阿尔戈斯战士_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "阿拉丁 [叶枫汉化].nes",
+      "name": "阿拉丁.nes",
       "key": "roms:nes:阿拉丁_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "阿拉伯语学习卡  [Asder].nes",
+      "name": "阿拉伯语学习卡.nes",
       "key": "roms:nes:阿拉伯语学习卡_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "隋唐演义 [外星科技].nes",
+      "name": "隋唐演义.nes",
       "key": "roms:nes:隋唐演义_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "隋唐英雄 [南晶科技].nes",
+      "name": "隋唐英雄.nes",
       "key": "roms:nes:隋唐英雄_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "雪人兄弟 [MS汉化].nes",
+      "name": "雪人兄弟.nes",
       "key": "roms:nes:雪人兄弟_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "雷电2 [三协资讯].nes",
+      "name": "雷电2.nes",
       "key": "roms:nes:雷电2_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "雷电皇 - 比卡丘传说 [南晶科技].nes",
+      "name": "雷电皇 - 比卡丘传说.nes",
       "key": "roms:nes:雷电皇_-_比卡丘传说_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "雷霆任务 [金明汉化].nes",
+      "name": "雷霆任务.nes",
       "key": "roms:nes:雷霆任务_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "霍元甲 [南晶科技].NES",
+      "name": "霍元甲.NES",
       "key": "roms:nes:霍元甲_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "霸王的大陆汉化 [QQ兄弟汉化].nes",
+      "name": "霸王的大陆汉化.nes",
       "key": "roms:nes:霸王的大陆汉化_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "霹雳神兵 [金明汉化].nes",
+      "name": "霹雳神兵.nes",
       "key": "roms:nes:霹雳神兵_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "音乐盒 [未知].nes",
+      "name": "音乐盒.nes",
       "key": "roms:nes:音乐盒_.nes",
       "size": 196624,
       "platform": "nes"
     },
     {
-      "name": "风云 [外星科技].nes",
+      "name": "风云.nes",
       "key": "roms:nes:风云_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "风色幻想 [外星科技汉化].nes",
+      "name": "风色幻想.nes",
       "key": "roms:nes:风色幻想_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "飞人战士 [金明汉化].nes",
+      "name": "飞人战士.nes",
       "key": "roms:nes:飞人战士_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "餐厅争夺战 [九班汉化].nes",
+      "name": "餐厅争夺战.nes",
       "key": "roms:nes:餐厅争夺战_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "香帅传奇 [南晶科技].nes",
+      "name": "香帅传奇.nes",
       "key": "roms:nes:香帅传奇_.nes",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "马戏团 (v20100512) [Nokoh汉化].nes",
+      "name": "马戏团 (v20100512).nes",
       "key": "roms:nes:马戏团_(v20100512)_.nes",
       "size": 49168,
       "platform": "nes"
     },
     {
-      "name": "马桶先生 [和众科技].nes",
+      "name": "马桶先生.nes",
       "key": "roms:nes:马桶先生_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "马里奥兄弟 [Madcell汉化].nes",
+      "name": "马里奥兄弟.nes",
       "key": "roms:nes:马里奥兄弟_.nes",
       "size": 49168,
       "platform": "nes"
@@ -4426,301 +4426,301 @@
       "platform": "nes"
     },
     {
-      "name": "高达之骑士物语 [外星科技汉化].NES",
+      "name": "高达之骑士物语.NES",
       "key": "roms:nes:高达之骑士物语_.NES",
       "size": 655376,
       "platform": "nes"
     },
     {
-      "name": "高达之骑士物语2 [外星科技汉化].NES",
+      "name": "高达之骑士物语2.NES",
       "key": "roms:nes:高达之骑士物语2_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "高达之高达外传3 [外星科技汉化].NES",
+      "name": "高达之高达外传3.NES",
       "key": "roms:nes:高达之高达外传3_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "鬼魅战记 [外星科技汉化].nes",
+      "name": "鬼魅战记.nes",
       "key": "roms:nes:鬼魅战记_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "魂斗罗 [酷酷小熊汉化 MS修正].nes",
+      "name": "魂斗罗.nes",
       "key": "roms:nes:魂斗罗_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "魂斗罗力量 [MS汉化].nes",
+      "name": "魂斗罗力量.nes",
       "key": "roms:nes:魂斗罗力量_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "魔兽世界-恶魔猎人 [南晶科技].NES",
+      "name": "魔兽世界-恶魔猎人.NES",
       "key": "roms:nes:魔兽世界-恶魔猎人_.NES",
       "size": 1048592,
       "platform": "nes"
     },
     {
-      "name": "魔力战士 [恒格电子].NES",
+      "name": "魔力战士.NES",
       "key": "roms:nes:魔力战士_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "魔域英雄传 [外星科技].nes",
+      "name": "魔域英雄传.nes",
       "key": "roms:nes:魔域英雄传_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "魔女小红帽 (简体中文版) [冰组汉化].nes",
+      "name": "魔女小红帽 (简体中文版).nes",
       "key": "roms:nes:魔女小红帽_(简体中文版)_.nes",
       "size": 278544,
       "platform": "nes"
     },
     {
-      "name": "魔幻三国志 [科泰电子].NES",
+      "name": "魔幻三国志.NES",
       "key": "roms:nes:魔幻三国志_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "魔幻世界 [南晶科技].nes",
+      "name": "魔幻世界.nes",
       "key": "roms:nes:魔幻世界_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "魔法宝石 [黄信维].nes",
+      "name": "魔法宝石.nes",
       "key": "roms:nes:魔法宝石_.nes",
       "size": 24592,
       "platform": "nes"
     },
     {
-      "name": "魔法宝石II [黄信维].nes",
+      "name": "魔法宝石II.nes",
       "key": "roms:nes:魔法宝石II_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "魔法总动员 [混沌星辰汉化 MS修正].nes",
+      "name": "魔法总动员.nes",
       "key": "roms:nes:魔法总动员_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "魔法泡泡 [C&E Inc].nes",
+      "name": "魔法泡泡.nes",
       "key": "roms:nes:魔法泡泡_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "魔法门之英雄无敌 [外星科技].nes",
+      "name": "魔法门之英雄无敌.nes",
       "key": "roms:nes:魔法门之英雄无敌_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "魔界塔士 [南晶科技].nes",
+      "name": "魔界塔士.nes",
       "key": "roms:nes:魔界塔士_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "魔界霸主 [南晶科技].nes",
+      "name": "魔界霸主.nes",
       "key": "roms:nes:魔界霸主_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "魔神法师 [外星科技].nes",
+      "name": "魔神法师.nes",
       "key": "roms:nes:魔神法师_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "魔神英雄传外传 (v2.0) [Ken XYGong Macro汉化].nes",
+      "name": "魔神英雄传外传 (v2.0).nes",
       "key": "roms:nes:魔神英雄传外传_(v2.0)_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "魔道士的阴谋 [冰组汉化].nes",
+      "name": "魔道士的阴谋.nes",
       "key": "roms:nes:魔道士的阴谋_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "魔道士阴谋 [外星科技汉化 姜维第二修正].nes",
+      "name": "魔道士阴谋.nes",
       "key": "roms:nes:魔道士阴谋_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "鸟人战队 [烈火暴龙汉化].nes",
+      "name": "鸟人战队.nes",
       "key": "roms:nes:鸟人战队_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "鸭子 [Bit].nes",
+      "name": "鸭子.nes",
       "key": "roms:nes:鸭子_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "麻将方块 [Idea-Tek].nes",
+      "name": "麻将方块.nes",
       "key": "roms:nes:麻将方块_.nes",
       "size": 65552,
       "platform": "nes"
     },
     {
-      "name": "麻雀 (v1.1a) [星空汉化].nes",
+      "name": "麻雀 (v1.1a).nes",
       "key": "roms:nes:麻雀_(v1.1a)_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "麻雀世界 - 歌舞伎町篇 [Sachen].nes",
+      "name": "麻雀世界 - 歌舞伎町篇.nes",
       "key": "roms:nes:麻雀世界_-_歌舞伎町篇_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "麻雀世界 [Sachen].nes",
+      "name": "麻雀世界.nes",
       "key": "roms:nes:麻雀世界_.nes",
       "size": 131088,
       "platform": "nes"
     },
     {
-      "name": "黄帝 - 涿鹿之战 [Asder].nes",
+      "name": "黄帝 - 涿鹿之战.nes",
       "key": "roms:nes:黄帝_-_涿鹿之战_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "黄金太阳 [南晶科技].nes",
+      "name": "黄金太阳.nes",
       "key": "roms:nes:黄金太阳_.nes",
       "size": 2097168,
       "platform": "nes"
     },
     {
-      "name": "黄飞鸿 [南晶科技].NES",
+      "name": "黄飞鸿.NES",
       "key": "roms:nes:黄飞鸿_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "黑客 [南晶科技].nes",
+      "name": "黑客.nes",
       "key": "roms:nes:黑客_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "黑暗之蛊 [火星电子].nes",
+      "name": "黑暗之蛊.nes",
       "key": "roms:nes:黑暗之蛊_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "黑白棋 (v1.0) [九班汉化].nes",
+      "name": "黑白棋 (v1.0).nes",
       "key": "roms:nes:黑白棋_(v1.0)_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "齐天大圣 [南晶科技].NES",
+      "name": "齐天大圣.NES",
       "key": "roms:nes:齐天大圣_.NES",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "龙之忍者 [MS汉化].nes",
+      "name": "龙之忍者.nes",
       "key": "roms:nes:龙之忍者_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "龙之谷 [外星科技汉化].nes",
+      "name": "龙之谷.nes",
       "key": "roms:nes:龙之谷_.nes",
       "size": 524304,
       "platform": "nes"
     },
     {
-      "name": "龙域天下 [外星科技].NES",
+      "name": "龙域天下.NES",
       "key": "roms:nes:龙域天下_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "龙珠Z - 强袭！赛亚人 [外星科技汉化 (小铭转繁体版)].nes",
+      "name": "龙珠Z - 强袭！赛亚人.nes",
       "key": "roms:nes:龙珠Z_-_强袭赛亚人_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "龙珠Z - 超武斗传2 [天空联盟汉化].nes",
+      "name": "龙珠Z - 超武斗传2.nes",
       "key": "roms:nes:龙珠Z_-_超武斗传2_.nes",
       "size": 393232,
       "platform": "nes"
     },
     {
-      "name": "龙珠Z2 - 激战弗利萨 [外星游戏大厅 (小铭转繁体版)].nes",
+      "name": "龙珠Z2 - 激战弗利萨.nes",
       "key": "roms:nes:龙珠Z2_-_激战弗利萨_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "龙珠Z3 - 人造人列传 [外星科技汉化].nes",
+      "name": "龙珠Z3 - 人造人列传.nes",
       "key": "roms:nes:龙珠Z3_-_人造人列传_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "龙珠Z外传  [外星科技汉化].NES",
+      "name": "龙珠Z外传.NES",
       "key": "roms:nes:龙珠Z外传_.NES",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "龙珠Z外传 - 赛亚人灭绝计划 [外星游戏大厅].nes",
+      "name": "龙珠Z外传 - 赛亚人灭绝计划.nes",
       "key": "roms:nes:龙珠Z外传_-_赛亚人灭绝计划_.nes",
       "size": 786448,
       "platform": "nes"
     },
     {
-      "name": "龙珠英雄 (半熟英雄) [外星科技汉化].nes",
+      "name": "龙珠英雄 (半熟英雄).nes",
       "key": "roms:nes:龙珠英雄_(半熟英雄)_.nes",
       "size": 262160,
       "platform": "nes"
     },
     {
-      "name": "龙谷 [三协资讯].nes",
+      "name": "龙谷.nes",
       "key": "roms:nes:龙谷_.nes",
       "size": 40976,
       "platform": "nes"
     },
     {
-      "name": "龙魂 - 新的传说 [Nineswords汉化].nes",
+      "name": "龙魂 - 新的传说.nes",
       "key": "roms:nes:龙魂_-_新的传说_.nes",
       "size": 786464,
       "platform": "nes"
     },
     {
-      "name": "龙魂 - 新的血族 [Nineswords汉化].nes",
+      "name": "龙魂 - 新的血族.nes",
       "key": "roms:nes:龙魂_-_新的血族_.nes",
       "size": 786464,
       "platform": "nes"
     },
     {
-      "name": "龙魂 [外星科技汉化].nes",
+      "name": "龙魂.nes",
       "key": "roms:nes:龙魂_.nes",
       "size": 524304,
       "platform": "nes"

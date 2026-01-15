@@ -8,7 +8,13 @@
  * 
  * 七牛云配置存储在 KV 中:
  * - key: QINIU_CONFIG
- * - value: JSON 格式的配置 { accessKey, secretKey, domain, bucket }
+ * - value: JSON 格式的配置:
+ *   {
+ *     "accessKey": "七牛云AK",
+ *     "secretKey": "七牛云SK",
+ *     "domain": "下载域名，如 jieji.188np.cn",
+ *     "folder": "文件夹路径，如 jiejiroms"
+ *   }
  * 
  * 街机游戏代理:
  * - 从七牛云私密空间代理下载，使用签名认证
@@ -214,8 +220,10 @@ async function getArcadeRom(gameName, context) {
             return jsonResponse({ error: '七牛云配置未找到，请检查 KV 中的 QINIU_CONFIG' }, 500);
         }
         
-        // 文件在七牛云的路径
-        const fileKey = `${qiniuConfig.bucket}/${encodeURIComponent(gameName)}.zip`;
+        // 文件在七牛云的路径: folder/游戏名.zip
+        // folder 配置在 KV 的 bucket 字段（实际是文件夹名，如 jiejiroms）
+        const folder = qiniuConfig.folder || qiniuConfig.bucket || 'jiejiroms';
+        const fileKey = `${folder}/${encodeURIComponent(gameName)}.zip`;
         
         // 生成带签名的私密下载链接（有效期1小时）
         const signedUrl = await generateQiniuPrivateUrl(qiniuConfig, fileKey, 3600);

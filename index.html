@@ -815,13 +815,21 @@
                             <button id="reset-server-btn" class="nes-btn">恢复默认</button>
                         </div>
                         <div class="server-tips">
-                            <div class="tip-title">💡 部署说明</div>
+                            <div class="tip-title">💡 快速说明</div>
                             <ul>
-                                <li>前端可部署到任意静态托管（如阿里云边缘函数）</li>
-                                <li>后端信令服务器需要支持 WebSocket</li>
-                                <li>运行 <code>python server/signaling_server.py</code> 启动后端</li>
-                                <li>生产环境建议使用 wss:// 协议</li>
+                                <li>⚠️ <strong>联机仅支持 FC/NES 游戏</strong>，街机请用单人模式</li>
+                                <li>局域网联机：<code>ws://192.168.x.x:8765</code></li>
+                                <li>公网联机：<code>ws://服务器IP:8765</code></li>
+                                <li>HTTPS网站需使用：<code>wss://</code> 协议</li>
                             </ul>
+                        </div>
+                        <div class="server-guide-link">
+                            <a href="page/server-guide.html" target="_blank" class="guide-btn">
+                                📖 查看完整部署手册
+                            </a>
+                            <a href="server/signaling_server.py" download class="download-server-btn">
+                                📥 下载服务器文件
+                            </a>
                         </div>
                     </div>
                 </div>
