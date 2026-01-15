@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>红白机双人对战</title>
+    <title>街机游戏厅</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
@@ -15,39 +15,45 @@
     <div class="crt-overlay"></div>
     
     <div class="app-container">
-        <!-- 顶部装饰 -->
+        <!-- 顶部装饰 - FC 主机风格 -->
         <div class="console-top">
             <div class="console-stripe red"></div>
             <div class="console-stripe gold"></div>
         </div>
 
+        <!-- 右上角工具栏 -->
+        <div class="top-toolbar">
+            <button id="open-server-btn" class="toolbar-btn" title="服务器设置">🌐</button>
+            <button id="top-fullscreen-btn" class="toolbar-btn" title="全屏">⛶</button>
+        </div>
+
+        <!-- 标题区域 -->
         <header class="nes-header">
             <div class="logo-container">
-                <div class="controller-icon left">🎮</div>
-                <h1>FAMILY COMPUTER</h1>
-                <div class="controller-icon right">🎮</div>
+                <div class="controller-icon left">⭐</div>
+                <h1>Arcade Game Hall</h1>
+                <div class="controller-icon right">⭐</div>
             </div>
-            <p class="subtitle">多人联网对战系统</p>
         </header>
 
         <main class="main-content">
-            <!-- 模式选择面板 -->
+            <!-- ========== 模式选择面板 ========== -->
             <section id="mode-panel" class="panel mode-panel">
                 <div class="panel-header">
                     <span class="panel-led"></span>
-                    <h2>选择模式</h2>
+                    <h2>选 择 模 式</h2>
                 </div>
                 <div class="panel-body">
                     <div class="mode-cards">
                         <div class="mode-card" id="single-mode">
                             <div class="mode-icon">🎮</div>
                             <div class="mode-title">单人游戏</div>
-                            <div class="mode-desc">独自享受经典</div>
+                            <div class="mode-desc">NES/街机/多平台</div>
                         </div>
                         <div class="mode-card" id="create-mode">
                             <div class="mode-icon">🏠</div>
                             <div class="mode-title">创建房间</div>
-                            <div class="mode-desc">邀请好友加入</div>
+                            <div class="mode-desc">仅支持NES联机</div>
                         </div>
                         <div class="mode-card" id="join-mode">
                             <div class="mode-icon">🚪</div>
@@ -56,14 +62,27 @@
                         </div>
                     </div>
 
+                    <!-- 联机提示 -->
+                    <div class="online-notice">
+                        <span class="notice-icon">ℹ️</span>
+                        <span class="notice-text">联机对战仅支持NES游戏，街机游戏请选择单人模式</span>
+                    </div>
+
+                    <!-- 宣传图片 -->
+                    <div class="promo-image">
+                        <img src="page/image.png" alt="红白机联机对战">
+                    </div>
+
+
+
                     <!-- 加入房间表单 -->
                     <div id="join-form" class="join-form hidden">
-                        <label>输入房间号</label>
+                        <label>请输入房间号</label>
                         <div class="input-group">
                             <input type="text" id="room-input" placeholder="XXXXXX" maxlength="6" autocomplete="off">
-                            <button id="confirm-join-btn" class="nes-btn primary">加入</button>
+                            <button id="confirm-join-btn" class="nes-btn primary">加 入</button>
                         </div>
-                        <button id="back-to-mode-btn" class="nes-btn mini">返回</button>
+                        <button id="back-to-mode-btn" class="nes-btn mini">返 回</button>
                     </div>
 
                     <!-- 房间信息 -->
@@ -73,7 +92,7 @@
                             <div class="code-box">
                                 <span id="room-code"></span>
                             </div>
-                            <button id="copy-room-btn" class="nes-btn mini">📋 复制</button>
+                            <button id="copy-room-btn" class="nes-btn mini">📋 复制房间号</button>
                         </div>
                     </div>
 
@@ -84,7 +103,7 @@
                 </div>
             </section>
 
-            <!-- 房间面板（含座位） -->
+            <!-- ========== 房间面板（含座位） ========== -->
             <section id="room-panel" class="panel room-panel hidden">
                 <div class="panel-header">
                     <span class="panel-led active"></span>
@@ -97,75 +116,79 @@
                         <div class="tv-unit">
                             <div class="tv-screen" id="tv-preview">
                                 <div class="tv-static">请选择游戏</div>
+                                <!-- 加载进度条 -->
+                                <div class="loading-overlay hidden" id="loading-overlay">
+                                    <div class="loading-content">
+                                        <div class="loading-title">正在加载游戏...</div>
+                                        <div class="loading-bar">
+                                            <div class="loading-progress" id="loading-progress"></div>
+                                        </div>
+                                        <div class="loading-text" id="loading-text">0%</div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tv-stand"></div>
                         </div>
 
-                        <!-- 红白机主机 -->
-                        <div class="famicom-console" id="famicom">
-                            <div class="fc-body">
-                                <div class="fc-cartridge-slot" id="cartridge-slot">
-                                    <div class="fc-cartridge hidden" id="cartridge">
-                                        <div class="cart-label" id="cart-label">游戏</div>
+                        <!-- 街机控制台 -->
+                        <div class="arcade-cabinet" id="arcade-cabinet">
+                            <div class="arcade-panel">
+                                <!-- 摇杆区域 -->
+                                <div class="arcade-joystick-area">
+                                    <div class="arcade-joystick">
+                                        <div class="joystick-base"></div>
+                                        <div class="joystick-stick"></div>
+                                        <div class="joystick-ball"></div>
                                     </div>
                                 </div>
-                                <div class="fc-controls">
-                                    <div class="fc-power-btn" id="power-btn">
-                                        <span>POWER</span>
+                                <!-- 按钮区域 -->
+                                <div class="arcade-buttons">
+                                    <div class="arcade-btn red" id="power-btn">
+                                        <span>START</span>
                                     </div>
-                                    <div class="fc-reset-btn">
-                                        <span>RESET</span>
+                                    <div class="arcade-btn blue">
+                                        <span>A</span>
+                                    </div>
+                                    <div class="arcade-btn yellow">
+                                        <span>B</span>
                                     </div>
                                 </div>
-                                <div class="fc-stripe"></div>
+                                <!-- 投币口 -->
+                                <div class="coin-slot">
+                                    <div class="coin-slot-inner">INSERT COIN</div>
+                                </div>
+                            </div>
+                            <!-- 卡带插槽（隐藏，用于显示选中的游戏） -->
+                            <div class="fc-cartridge hidden" id="cartridge">
+                                <div class="cart-label" id="cart-label">游戏</div>
                             </div>
                         </div>
 
                         <!-- 玩家座位 -->
                         <div class="players-area">
                             <div class="player-seat" data-seat="1">
-                                <div class="seat-chair">
-                                    <div class="chair-back"></div>
-                                    <div class="chair-seat"></div>
-                                </div>
                                 <div class="seat-player empty" id="seat-1">
                                     <div class="player-avatar">👤</div>
                                 </div>
                                 <div class="seat-label">P1</div>
-                                <div class="seat-controller">🎮</div>
                             </div>
                             <div class="player-seat" data-seat="2">
-                                <div class="seat-chair">
-                                    <div class="chair-back"></div>
-                                    <div class="chair-seat"></div>
-                                </div>
                                 <div class="seat-player empty" id="seat-2">
                                     <div class="player-avatar">👤</div>
                                 </div>
                                 <div class="seat-label">P2</div>
-                                <div class="seat-controller">🎮</div>
                             </div>
                             <div class="player-seat" data-seat="3">
-                                <div class="seat-chair">
-                                    <div class="chair-back"></div>
-                                    <div class="chair-seat"></div>
-                                </div>
                                 <div class="seat-player empty" id="seat-3">
                                     <div class="player-avatar">👤</div>
                                 </div>
                                 <div class="seat-label">P3</div>
-                                <div class="seat-controller">🎮</div>
                             </div>
                             <div class="player-seat" data-seat="4">
-                                <div class="seat-chair">
-                                    <div class="chair-back"></div>
-                                    <div class="chair-seat"></div>
-                                </div>
                                 <div class="seat-player empty" id="seat-4">
                                     <div class="player-avatar">👤</div>
                                 </div>
                                 <div class="seat-label">P4</div>
-                                <div class="seat-controller">🎮</div>
                             </div>
                         </div>
                     </div>
@@ -173,36 +196,102 @@
                     <!-- 游戏搜索选择 -->
                     <div class="game-selector">
                         <div class="search-box">
-                            <input type="text" id="game-search" placeholder="🔍 搜索游戏..." autocomplete="off">
+                            <input type="text" id="game-search" placeholder="🔍 搜索NES游戏..." autocomplete="off">
                         </div>
                         <div class="game-results" id="game-results"></div>
                         <div class="upload-inline">
                             <label for="rom-upload" class="upload-btn-inline">
-                                📁 上传ROM
+                                📁 上传ROM文件
                             </label>
-                            <input type="file" id="rom-upload" accept=".nes,.unf,.unif" hidden>
+                            <input type="file" id="rom-upload" accept=".nes,.unf,.unif,.fds,.nsf,.jsnes,.sfc,.smc,.md,.bin,.gen,.gba,.zip,.7z,.rar" hidden>
                             <span id="upload-filename"></span>
                         </div>
                     </div>
 
                     <!-- 开始按钮 -->
                     <button id="start-game-btn" class="nes-btn primary large full-width" disabled>
-                        插入卡带并开始
+                        插入卡带并开始游戏
                     </button>
                 </div>
             </section>
 
-            <!-- 游戏画面 -->
+            <!-- ========== 游戏画面 ========== -->
             <section id="game-screen" class="game-screen hidden">
-                <div class="screen-wrapper">
-                    <div class="screen-bezel">
-                        <div class="screen-inner">
-                            <canvas id="nes-canvas" width="256" height="240"></canvas>
+                <!-- 游戏主区域：画面在上方，手柄在下方 -->
+                <div class="game-main-layout">
+                    <!-- 游戏画面（上方） -->
+                    <div class="screen-wrapper">
+                        <div class="screen-bezel">
+                            <div class="screen-inner">
+                                <canvas id="nes-canvas" width="256" height="240"></canvas>
+                                <!-- EmulatorJS 容器 (用于非NES平台) -->
+                                <div id="emulator-container" class="emulator-container hidden"></div>
+                            </div>
+                            <div class="screen-reflection"></div>
                         </div>
-                        <div class="screen-reflection"></div>
+                        <!-- 平台标识 -->
+                        <div class="platform-badge" id="platform-badge">
+                            <span class="platform-icon">🎮</span>
+                            <span class="platform-name" id="platform-name">FC/NES</span>
+                        </div>
+                    </div>
+
+                    <!-- P1P2 手柄控制器（下方） -->
+                    <div class="bottom-controllers">
+                        <div class="player-input-panel" data-player="1">
+                            <div class="input-panel-header">
+                                <span class="panel-player-label p1">P1</span>
+                                <span class="panel-latency" id="latency-p1">--ms</span>
+                            </div>
+                            <div class="unified-controller">
+                                <div class="mini-dpad">
+                                    <div class="mini-btn up" data-btn="UP"></div>
+                                    <div class="mini-btn left" data-btn="LEFT"></div>
+                                    <div class="mini-btn center"></div>
+                                    <div class="mini-btn right" data-btn="RIGHT"></div>
+                                    <div class="mini-btn down" data-btn="DOWN"></div>
+                                </div>
+                                <div class="mini-middle">
+                                    <div class="mini-btn select" data-btn="SELECT">SE</div>
+                                    <div class="mini-btn start" data-btn="START">ST</div>
+                                </div>
+                                <div class="mini-face">
+                                    <div class="mini-btn y-btn" data-btn="Y">Y</div>
+                                    <div class="mini-btn x-btn" data-btn="X">X</div>
+                                    <div class="mini-btn b-btn" data-btn="B">B</div>
+                                    <div class="mini-btn a-btn" data-btn="A">A</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="player-input-panel" data-player="2">
+                            <div class="input-panel-header">
+                                <span class="panel-player-label p2">P2</span>
+                                <span class="panel-latency" id="latency-p2">--ms</span>
+                            </div>
+                            <div class="unified-controller">
+                                <div class="mini-dpad">
+                                    <div class="mini-btn up" data-btn="UP"></div>
+                                    <div class="mini-btn left" data-btn="LEFT"></div>
+                                    <div class="mini-btn center"></div>
+                                    <div class="mini-btn right" data-btn="RIGHT"></div>
+                                    <div class="mini-btn down" data-btn="DOWN"></div>
+                                </div>
+                                <div class="mini-middle">
+                                    <div class="mini-btn select" data-btn="SELECT">SE</div>
+                                    <div class="mini-btn start" data-btn="START">ST</div>
+                                </div>
+                                <div class="mini-face">
+                                    <div class="mini-btn y-btn" data-btn="Y">Y</div>
+                                    <div class="mini-btn x-btn" data-btn="X">X</div>
+                                    <div class="mini-btn b-btn" data-btn="B">B</div>
+                                    <div class="mini-btn a-btn" data-btn="A">A</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
+
+                <!-- 玩家信息栏 -->
                 <div class="player-bar">
                     <div class="player-badge p1">
                         <span class="badge-label">P1</span>
@@ -223,60 +312,14 @@
                     </div>
                 </div>
 
-                <!-- 玩家按键显示区域 -->
-                <div class="players-input-display">
-                    <div class="player-input-panel" data-player="1">
-                        <div class="input-panel-header">
-                            <span class="panel-player-label p1">P1</span>
-                            <span class="panel-latency" id="latency-p1">--ms</span>
-                        </div>
-                        <div class="mini-controller">
-                            <div class="mini-dpad">
-                                <div class="mini-btn up" data-btn="UP"></div>
-                                <div class="mini-btn left" data-btn="LEFT"></div>
-                                <div class="mini-btn center"></div>
-                                <div class="mini-btn right" data-btn="RIGHT"></div>
-                                <div class="mini-btn down" data-btn="DOWN"></div>
-                            </div>
-                            <div class="mini-middle">
-                                <div class="mini-btn select" data-btn="SELECT">SE</div>
-                                <div class="mini-btn start" data-btn="START">ST</div>
-                            </div>
-                            <div class="mini-ab">
-                                <div class="mini-btn b-btn" data-btn="B">B</div>
-                                <div class="mini-btn a-btn" data-btn="A">A</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="player-input-panel" data-player="2">
-                        <div class="input-panel-header">
-                            <span class="panel-player-label p2">P2</span>
-                            <span class="panel-latency" id="latency-p2">--ms</span>
-                        </div>
-                        <div class="mini-controller">
-                            <div class="mini-dpad">
-                                <div class="mini-btn up" data-btn="UP"></div>
-                                <div class="mini-btn left" data-btn="LEFT"></div>
-                                <div class="mini-btn center"></div>
-                                <div class="mini-btn right" data-btn="RIGHT"></div>
-                                <div class="mini-btn down" data-btn="DOWN"></div>
-                            </div>
-                            <div class="mini-middle">
-                                <div class="mini-btn select" data-btn="SELECT">SE</div>
-                                <div class="mini-btn start" data-btn="START">ST</div>
-                            </div>
-                            <div class="mini-ab">
-                                <div class="mini-btn b-btn" data-btn="B">B</div>
-                                <div class="mini-btn a-btn" data-btn="A">A</div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- P3/P4 虚拟手柄（底部，仅多人时显示） -->
+                <div class="players-input-display extra-players">
                     <div class="player-input-panel" data-player="3">
                         <div class="input-panel-header">
                             <span class="panel-player-label p3">P3</span>
                             <span class="panel-latency" id="latency-p3">--ms</span>
                         </div>
-                        <div class="mini-controller">
+                        <div class="unified-controller">
                             <div class="mini-dpad">
                                 <div class="mini-btn up" data-btn="UP"></div>
                                 <div class="mini-btn left" data-btn="LEFT"></div>
@@ -288,7 +331,9 @@
                                 <div class="mini-btn select" data-btn="SELECT">SE</div>
                                 <div class="mini-btn start" data-btn="START">ST</div>
                             </div>
-                            <div class="mini-ab">
+                            <div class="mini-face">
+                                <div class="mini-btn y-btn" data-btn="Y">Y</div>
+                                <div class="mini-btn x-btn" data-btn="X">X</div>
                                 <div class="mini-btn b-btn" data-btn="B">B</div>
                                 <div class="mini-btn a-btn" data-btn="A">A</div>
                             </div>
@@ -299,7 +344,7 @@
                             <span class="panel-player-label p4">P4</span>
                             <span class="panel-latency" id="latency-p4">--ms</span>
                         </div>
-                        <div class="mini-controller">
+                        <div class="unified-controller">
                             <div class="mini-dpad">
                                 <div class="mini-btn up" data-btn="UP"></div>
                                 <div class="mini-btn left" data-btn="LEFT"></div>
@@ -311,7 +356,9 @@
                                 <div class="mini-btn select" data-btn="SELECT">SE</div>
                                 <div class="mini-btn start" data-btn="START">ST</div>
                             </div>
-                            <div class="mini-ab">
+                            <div class="mini-face">
+                                <div class="mini-btn y-btn" data-btn="Y">Y</div>
+                                <div class="mini-btn x-btn" data-btn="X">X</div>
                                 <div class="mini-btn b-btn" data-btn="B">B</div>
                                 <div class="mini-btn a-btn" data-btn="A">A</div>
                             </div>
@@ -322,14 +369,32 @@
                 <div class="game-toolbar">
                     <button id="pause-btn" class="nes-btn">⏸ 暂停</button>
                     <button id="reset-btn" class="nes-btn">🔄 重置</button>
+                    <button id="save-btn" class="nes-btn">💾 存档</button>
+                    <button id="controls-btn" class="nes-btn hidden">🎮 改键</button>
                     <button id="fullscreen-btn" class="nes-btn">⛶ 全屏</button>
                     <button id="exit-btn" class="nes-btn danger">✕ 退出</button>
                 </div>
+                
+                <!-- 街机按键提示 -->
+                <div id="arcade-keys-hint" class="arcade-keys-hint hidden">
+                    <div class="hint-title">🕹️ 街机游戏提示</div>
+                    <div class="hint-guide-image">
+                        <img src="page/gaijian.png" alt="改键引导">
+                    </div>
+                    <div class="hint-note">
+                        <p>💡 电脑端：点击模拟器左下角手柄图标改键</p>
+                        <p>📱 手机端：点击右下角菜单按钮唤出存档/设置</p>
+                    </div>
+                    <button class="hint-close-btn" onclick="this.parentElement.classList.add('hidden')">知道了</button>
+                </div>
+                
+                <!-- 街机模式浮动菜单按钮（手机端） -->
+                <button id="arcade-menu-btn" class="arcade-menu-btn hidden" title="打开菜单">☰</button>
 
                 <!-- 聊天面板 -->
                 <div class="chat-panel" id="chat-panel">
                     <div class="chat-header">
-                        <span>💬 聊天</span>
+                        <span>💬 游戏聊天</span>
                         <button id="voice-btn" class="voice-btn">🎤</button>
                         <button id="toggle-chat-btn" class="toggle-chat-btn">▼</button>
                     </div>
@@ -343,135 +408,253 @@
                 </div>
             </section>
 
-            <!-- 按键设置面板 -->
-            <section id="controls-panel" class="panel controls-panel">
-                <div class="panel-header">
-                    <span class="panel-led"></span>
-                    <h2>按键设置</h2>
-                    <button id="toggle-controls-btn" class="toggle-btn">▼</button>
-                </div>
-                <div class="panel-body controls-body">
-                    <div class="controls-tabs">
-                        <button class="tab-btn active" data-tab="keyboard">⌨️ 键盘</button>
-                        <button class="tab-btn" data-tab="gamepad">🎮 手柄</button>
-                        <button class="tab-btn" data-tab="test">🔍 测试</button>
+            <!-- ========== 按键设置弹窗 ========== -->
+            <div id="controls-modal" class="modal hidden">
+                <div class="modal-overlay"></div>
+                <div class="modal-content controls-modal-content">
+                    <div class="modal-header">
+                        <h2>🎮 按键设置</h2>
+                        <button id="close-controls-btn" class="modal-close-btn">✕</button>
+                    </div>
+                    <div class="modal-body">
+                    <!-- 手柄状态 -->
+                    <div class="gamepad-status">
+                        <span class="gamepad-icon">🎮</span>
+                        <span id="gamepad-status-text">未检测到手柄</span>
                     </div>
 
-                    <div id="keyboard-tab" class="tab-content active">
-                        <p class="tab-hint">点击按钮后按下新按键进行修改</p>
-                        <div class="key-mapping-grid">
-                            <div class="mapping-group">
-                                <h4>方向键</h4>
-                                <div class="mapping-row">
-                                    <span class="key-label">上</span>
-                                    <button class="key-bind-btn" data-action="UP">W</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">下</span>
-                                    <button class="key-bind-btn" data-action="DOWN">S</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">左</span>
-                                    <button class="key-bind-btn" data-action="LEFT">A</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">右</span>
-                                    <button class="key-bind-btn" data-action="RIGHT">D</button>
-                                </div>
-                            </div>
-                            <div class="mapping-group">
-                                <h4>功能键</h4>
-                                <div class="mapping-row">
-                                    <span class="key-label">A</span>
-                                    <button class="key-bind-btn" data-action="A">J</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">B</span>
-                                    <button class="key-bind-btn" data-action="B">K</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">X(→A)</span>
-                                    <button class="key-bind-btn" data-action="X">H</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">Y(→B)</span>
-                                    <button class="key-bind-btn" data-action="Y">G</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">SELECT</span>
-                                    <button class="key-bind-btn" data-action="SELECT">U</button>
-                                </div>
-                                <div class="mapping-row">
-                                    <span class="key-label">START</span>
-                                    <button class="key-bind-btn" data-action="START">I</button>
-                                </div>
-                            </div>
-                        </div>
-                        <button id="reset-keys-btn" class="nes-btn mini">恢复默认</button>
+                    <!-- 玩家切换标签 -->
+                    <div class="player-tabs">
+                        <button class="player-tab active" data-player="1">P1 玩家1</button>
+                        <button class="player-tab" data-player="2">P2 玩家2</button>
                     </div>
 
-                    <div id="gamepad-tab" class="tab-content">
-                        <div class="gamepad-status">
-                            <span class="gamepad-icon">🎮</span>
-                            <span id="gamepad-status-text">未检测到手柄</span>
+                    <p class="controls-hint">点击按钮，然后按键盘或手柄进行绑定</p>
+
+                    <!-- P1 按键映射 -->
+                    <div class="player-mapping active" data-player="1">
+                        <div class="mapping-header">
+                            <span class="col-action">按键</span>
+                            <span class="col-keyboard">⌨️ 键盘</span>
+                            <span class="col-gamepad">🎮 手柄</span>
                         </div>
-                        <div class="gamepad-visual">
-                            <div class="gamepad-diagram">
-                                <!-- 左侧摇杆 -->
-                                <div class="gp-stick-area">
-                                    <div class="gp-stick" id="gp-left-stick">
-                                        <div class="stick-indicator"></div>
-                                    </div>
-                                    <span class="stick-label">左摇杆</span>
-                                </div>
-                                <!-- 方向键 -->
-                                <div class="gp-dpad">
-                                    <div class="gp-btn up" data-btn="12">↑</div>
-                                    <div class="gp-btn left" data-btn="14">←</div>
-                                    <div class="gp-btn right" data-btn="15">→</div>
-                                    <div class="gp-btn down" data-btn="13">↓</div>
-                                </div>
-                                <!-- 中间功能键 -->
-                                <div class="gp-center">
-                                    <div class="gp-btn select" data-btn="8">SEL</div>
-                                    <div class="gp-btn start" data-btn="9">STA</div>
-                                </div>
-                                <!-- 右侧ABXY四键 -->
-                                <div class="gp-face-buttons">
-                                    <div class="gp-btn y" data-btn="3">Y</div>
-                                    <div class="gp-btn x" data-btn="2">X</div>
-                                    <div class="gp-btn b" data-btn="0">B</div>
-                                    <div class="gp-btn a" data-btn="1">A</div>
-                                </div>
-                                <!-- 肩键 -->
-                                <div class="gp-shoulders">
-                                    <div class="gp-btn lb" data-btn="4">LB</div>
-                                    <div class="gp-btn rb" data-btn="5">RB</div>
-                                </div>
+                        
+                        <div class="mapping-section">
+                            <div class="section-title">方向键</div>
+                            <div class="unified-row">
+                                <span class="action-name">↑ 上</span>
+                                <button class="unified-bind-btn" data-action="UP">
+                                    <span class="kb-key">W</span>
+                                    <span class="gp-key">↑</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">↓ 下</span>
+                                <button class="unified-bind-btn" data-action="DOWN">
+                                    <span class="kb-key">S</span>
+                                    <span class="gp-key">↓</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">← 左</span>
+                                <button class="unified-bind-btn" data-action="LEFT">
+                                    <span class="kb-key">A</span>
+                                    <span class="gp-key">←</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">→ 右</span>
+                                <button class="unified-bind-btn" data-action="RIGHT">
+                                    <span class="kb-key">D</span>
+                                    <span class="gp-key">→</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
                             </div>
                         </div>
-                        <p class="gamepad-hint">连接手柄后按任意键激活<br>摇杆/方向键=方向 | A/B=A/B | X/Y=连发</p>
+
+                        <div class="mapping-section">
+                            <div class="section-title">动作键</div>
+                            <div class="unified-row">
+                                <span class="action-name">🅰️ A</span>
+                                <button class="unified-bind-btn" data-action="A">
+                                    <span class="kb-key">J</span>
+                                    <span class="gp-key">A</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">🅱️ B</span>
+                                <button class="unified-bind-btn" data-action="B">
+                                    <span class="kb-key">K</span>
+                                    <span class="gp-key">B</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">🇽 X(→A)</span>
+                                <button class="unified-bind-btn" data-action="X">
+                                    <span class="kb-key">H</span>
+                                    <span class="gp-key">X</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">🇾 Y(→B)</span>
+                                <button class="unified-bind-btn" data-action="Y">
+                                    <span class="kb-key">G</span>
+                                    <span class="gp-key">Y</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mapping-section">
+                            <div class="section-title">系统键</div>
+                            <div class="unified-row">
+                                <span class="action-name">SELECT</span>
+                                <button class="unified-bind-btn" data-action="SELECT">
+                                    <span class="kb-key">U</span>
+                                    <span class="gp-key">SEL</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">START</span>
+                                <button class="unified-bind-btn" data-action="START">
+                                    <span class="kb-key">I</span>
+                                    <span class="gp-key">STA</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div id="test-tab" class="tab-content">
-                        <p class="tab-hint">按下键盘或手柄按键查看效果</p>
-                        <div class="test-display">
-                            <div class="test-nes-controller">
-                                <div class="nes-dpad">
-                                    <div class="nes-btn-test up" data-test="UP"></div>
-                                    <div class="nes-btn-test left" data-test="LEFT"></div>
-                                    <div class="nes-btn-test center"></div>
-                                    <div class="nes-btn-test right" data-test="RIGHT"></div>
-                                    <div class="nes-btn-test down" data-test="DOWN"></div>
-                                </div>
-                                <div class="nes-middle">
-                                    <div class="nes-btn-test select" data-test="SELECT">SELECT</div>
-                                    <div class="nes-btn-test start" data-test="START">START</div>
-                                </div>
-                                <div class="nes-ab">
-                                    <div class="nes-btn-test b-btn" data-test="B">B</div>
-                                    <div class="nes-btn-test a-btn" data-test="A">A</div>
-                                </div>
+                    <!-- P2 按键映射 -->
+                    <div class="player-mapping" data-player="2">
+                        <div class="mapping-header">
+                            <span class="col-action">按键</span>
+                            <span class="col-keyboard">⌨️ 键盘</span>
+                            <span class="col-gamepad">🎮 手柄</span>
+                        </div>
+                        
+                        <div class="mapping-section">
+                            <div class="section-title">方向键</div>
+                            <div class="unified-row">
+                                <span class="action-name">↑ 上</span>
+                                <button class="unified-bind-btn" data-action="UP">
+                                    <span class="kb-key">↑</span>
+                                    <span class="gp-key">↑</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">↓ 下</span>
+                                <button class="unified-bind-btn" data-action="DOWN">
+                                    <span class="kb-key">↓</span>
+                                    <span class="gp-key">↓</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">← 左</span>
+                                <button class="unified-bind-btn" data-action="LEFT">
+                                    <span class="kb-key">←</span>
+                                    <span class="gp-key">←</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">→ 右</span>
+                                <button class="unified-bind-btn" data-action="RIGHT">
+                                    <span class="kb-key">→</span>
+                                    <span class="gp-key">→</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mapping-section">
+                            <div class="section-title">动作键</div>
+                            <div class="unified-row">
+                                <span class="action-name">🅰️ A</span>
+                                <button class="unified-bind-btn" data-action="A">
+                                    <span class="kb-key">N1</span>
+                                    <span class="gp-key">A</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">🅱️ B</span>
+                                <button class="unified-bind-btn" data-action="B">
+                                    <span class="kb-key">N2</span>
+                                    <span class="gp-key">B</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">🇽 X(→A)</span>
+                                <button class="unified-bind-btn" data-action="X">
+                                    <span class="kb-key">N4</span>
+                                    <span class="gp-key">X</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">🇾 Y(→B)</span>
+                                <button class="unified-bind-btn" data-action="Y">
+                                    <span class="kb-key">N5</span>
+                                    <span class="gp-key">Y</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mapping-section">
+                            <div class="section-title">系统键</div>
+                            <div class="unified-row">
+                                <span class="action-name">SELECT</span>
+                                <button class="unified-bind-btn" data-action="SELECT">
+                                    <span class="kb-key">N7</span>
+                                    <span class="gp-key">SEL</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                            <div class="unified-row">
+                                <span class="action-name">START</span>
+                                <button class="unified-bind-btn" data-action="START">
+                                    <span class="kb-key">N9</span>
+                                    <span class="gp-key">STA</span>
+                                    <span class="edit-hint">按任意键...</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="reset-keys-btn" class="nes-btn mini">🔄 恢复默认按键</button>
+
+                    <!-- 测试区域 -->
+                    <div class="test-section">
+                        <div class="section-title">按键测试</div>
+                        <div class="test-nes-controller">
+                            <div class="nes-dpad">
+                                <div class="nes-btn-test up" data-test="UP"></div>
+                                <div class="nes-btn-test left" data-test="LEFT"></div>
+                                <div class="nes-btn-test center"></div>
+                                <div class="nes-btn-test right" data-test="RIGHT"></div>
+                                <div class="nes-btn-test down" data-test="DOWN"></div>
+                            </div>
+                            <div class="nes-middle">
+                                <div class="nes-btn-test select" data-test="SELECT">SE</div>
+                                <div class="nes-btn-test start" data-test="START">ST</div>
+                            </div>
+                            <div class="nes-face-buttons">
+                                <div class="nes-btn-test y-btn" data-test="Y">Y</div>
+                                <div class="nes-btn-test x-btn" data-test="X">X</div>
+                                <div class="nes-btn-test b-btn" data-test="B">B</div>
+                                <div class="nes-btn-test a-btn" data-test="A">A</div>
                             </div>
                         </div>
                         <div class="last-input">
@@ -479,37 +662,173 @@
                             <span id="last-input-display">-</span>
                         </div>
                     </div>
+
+                    <!-- 手柄可视化 -->
+                    <div class="gamepad-visual-section">
+                        <div class="section-title">手柄状态</div>
+                        <div class="gamepad-diagram">
+                            <div class="gp-stick-area">
+                                <div class="gp-stick" id="gp-left-stick">
+                                    <div class="stick-indicator"></div>
+                                </div>
+                            </div>
+                            <div class="gp-dpad">
+                                <div class="gp-btn up" data-btn="12">↑</div>
+                                <div class="gp-btn left" data-btn="14">←</div>
+                                <div class="gp-btn right" data-btn="15">→</div>
+                                <div class="gp-btn down" data-btn="13">↓</div>
+                            </div>
+                            <div class="gp-center">
+                                <div class="gp-btn select" data-btn="8">SEL</div>
+                            <div class="gp-btn start" data-btn="9">STA</div>
+                            </div>
+                            <div class="gp-face-buttons">
+                                <div class="gp-btn y" data-btn="4">Y</div>
+                                <div class="gp-btn x" data-btn="3">X</div>
+                                <div class="gp-btn b" data-btn="1">B</div>
+                                <div class="gp-btn a" data-btn="0">A</div>
+                            </div>
+                            <div class="gp-shoulders">
+                                <div class="gp-btn lb" data-btn="5">LB</div>
+                                <div class="gp-btn rb" data-btn="6">RB</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
+                </div>
+            </div>
         </main>
 
-        <!-- 虚拟手柄（手机端） -->
+        <!-- 虚拟手柄（手机端NES游戏专用） -->
         <div id="virtual-gamepad" class="virtual-gamepad hidden">
-            <!-- 左侧方向键 -->
+            <!-- 左侧摇杆 -->
             <div class="vgp-left">
-                <div class="vgp-dpad">
-                    <button class="vgp-btn up" data-key="UP"></button>
-                    <button class="vgp-btn left" data-key="LEFT"></button>
-                    <button class="vgp-btn center"></button>
-                    <button class="vgp-btn right" data-key="RIGHT"></button>
-                    <button class="vgp-btn down" data-key="DOWN"></button>
+                <div class="vgp-joystick-area">
+                    <div class="vgp-joystick" id="vgp-joystick">
+                        <div class="vgp-joystick-base"></div>
+                        <div class="vgp-joystick-stick" id="vgp-stick"></div>
+                    </div>
                 </div>
             </div>
-            <!-- 中间功能键 -->
-            <div class="vgp-center">
-                <button class="vgp-btn select" data-key="SELECT">SEL</button>
-                <button class="vgp-btn start" data-key="START">STA</button>
+            <!-- 中间功能键（底部居中） -->
+            <div class="vgp-middle">
+                <button class="vgp-btn select" data-key="SELECT">选择</button>
+                <button class="vgp-btn start" data-key="START">开始</button>
             </div>
-            <!-- 右侧AB键 -->
+            <!-- 右侧按键 YXBA - 正方形菱形布局 -->
             <div class="vgp-right">
-                <button class="vgp-btn b" data-key="B">B</button>
-                <button class="vgp-btn a" data-key="A">A</button>
+                <div class="vgp-buttons">
+                    <button class="vgp-btn y-btn" data-key="Y">Y</button>
+                    <button class="vgp-btn x-btn" data-key="X">X</button>
+                    <button class="vgp-btn b-btn" data-key="B">B</button>
+                    <button class="vgp-btn a-btn" data-key="A">A</button>
+                </div>
             </div>
         </div>
 
-        <!-- Toast -->
-        <div id="toast" class="toast hidden"></div>
+        <!-- 横屏提示 -->
+        <div id="landscape-hint" class="landscape-hint hidden">
+            <div class="landscape-hint-content">
+                <div class="landscape-icon">📱↻</div>
+                <div class="landscape-text">请将手机横屏以获得最佳游戏体验</div>
+                <button class="landscape-close-btn" id="landscape-close-btn">我知道了</button>
+            </div>
+        </div>
 
+        <!-- iOS添加到桌面提示 -->
+        <div id="ios-pwa-hint" class="ios-pwa-hint hidden">
+            <div class="ios-pwa-content">
+                <div class="ios-pwa-title">🎮 添加到主屏幕</div>
+                <div class="ios-pwa-steps">
+                    <div class="ios-pwa-step">
+                        <span class="step-num">1</span>
+                        <span>点击底部 <span class="ios-share-icon">⬆️</span> 分享按钮</span>
+                    </div>
+                    <div class="ios-pwa-step">
+                        <span class="step-num">2</span>
+                        <span>选择「添加到主屏幕」</span>
+                    </div>
+                    <div class="ios-pwa-step">
+                        <span class="step-num">3</span>
+                        <span>从主屏幕打开即可全屏游戏</span>
+                    </div>
+                </div>
+                <button class="ios-pwa-close-btn" id="ios-pwa-close-btn">知道了</button>
+                <label class="ios-pwa-noshow">
+                    <input type="checkbox" id="ios-pwa-noshow-check"> 不再提示
+                </label>
+            </div>
+        </div>
+
+        <!-- Toast 提示 -->
+        <div id="toast" class="hidden"></div>
+
+        <!-- 存档弹窗 -->
+        <div id="save-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content save-modal-content">
+                <div class="modal-header">
+                    <h2>💾 存档管理</h2>
+                    <button id="close-save-btn" class="modal-close-btn">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="save-tabs">
+                        <button class="save-tab active" data-mode="save">存档</button>
+                        <button class="save-tab" data-mode="load">读档</button>
+                    </div>
+                    <div class="save-slots" id="save-slots">
+                        <!-- 存档槽位将由 JS 动态生成 -->
+                    </div>
+                    <div class="save-info">
+                        <span id="storage-info">存储使用: 0 MB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 服务器设置弹窗 -->
+        <div id="server-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content server-modal-content">
+                <div class="modal-header">
+                    <h2>🌐 服务器设置</h2>
+                    <button id="close-server-btn" class="modal-close-btn">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="server-config-section">
+                        <p class="server-hint">
+                            如果你自己部署了信令服务器，可以在这里配置。<br>
+                            留空则使用默认服务器。
+                        </p>
+                        <div class="server-input-group">
+                            <label for="custom-server-input">信令服务器地址</label>
+                            <input type="text" id="custom-server-input" 
+                                   placeholder="ws://your-server.com:8765 或 wss://..." 
+                                   autocomplete="off">
+                        </div>
+                        <div class="server-current">
+                            <span>当前服务器: </span>
+                            <span id="current-server-display">默认</span>
+                        </div>
+                        <div class="server-buttons">
+                            <button id="save-server-btn" class="nes-btn primary">保存设置</button>
+                            <button id="reset-server-btn" class="nes-btn">恢复默认</button>
+                        </div>
+                        <div class="server-tips">
+                            <div class="tip-title">💡 部署说明</div>
+                            <ul>
+                                <li>前端可部署到任意静态托管（如阿里云边缘函数）</li>
+                                <li>后端信令服务器需要支持 WebSocket</li>
+                                <li>运行 <code>python server/signaling_server.py</code> 启动后端</li>
+                                <li>生产环境建议使用 wss:// 协议</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部装饰 -->
         <footer class="console-footer">
             <div class="footer-vents">
                 <span></span><span></span><span></span><span></span><span></span>

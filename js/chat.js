@@ -39,8 +39,8 @@ export class ChatManager {
 
         const playerNum = this.getMyPlayerNum();
 
-        // 本地显示
-        this.addMessage(playerNum, text);
+        // 本地显示（标记为自己发的）
+        this.addMessage(playerNum, text, true);
 
         // 发送给其他玩家
         this.roomManager.send({
@@ -53,17 +53,18 @@ export class ChatManager {
     }
 
     onChatMessage(data) {
-        this.addMessage(data.playerNum, data.text);
+        // 收到的消息不是自己发的
+        this.addMessage(data.playerNum, data.text, false);
     }
 
-    addMessage(playerNum, text) {
+    addMessage(playerNum, text, isSelf = false) {
         const container = document.getElementById('chat-messages');
         if (!container) return;
 
         const msg = document.createElement('div');
-        msg.className = 'chat-msg';
+        msg.className = 'chat-msg' + (isSelf ? ' self' : '');
         msg.innerHTML = `
-            <span class="msg-sender p${playerNum}">P${playerNum}:</span>
+            <span class="msg-sender p${playerNum}">P${playerNum}</span>
             <span class="msg-text">${this.escapeHtml(text)}</span>
         `;
         container.appendChild(msg);

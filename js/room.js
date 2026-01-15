@@ -1,4 +1,8 @@
 // 房间管理器 - WebSocket + WebRTC P2P 实时版本
+
+// 默认服务器配置
+const DEFAULT_WS_PORT = 8765;
+
 export class RoomManager {
     constructor() {
         this.roomCode = null;
@@ -33,20 +37,52 @@ export class RoomManager {
     }
 
     getWebSocketUrl() {
-        // 支持通过 URL 参数配置服务器地址
+        // 优先级：
+        // 1. URL 参数 ?server=ws://xxx
+        // 2. localStorage 中保存的自定义服务器
+        // 3. 默认配置
+        
         const params = new URLSearchParams(window.location.search);
-        const customServer = params.get('server');
-        if (customServer) {
-            return customServer;
+        const urlServer = params.get('server');
+        if (urlServer) {
+            console.log('使用 URL 参数指定的服务器:', urlServer);
+            return urlServer;
+        }
+        
+        // 检查 localStorage 中的自定义服务器配置
+        const customServer = localStorage.getItem('customSignalingServer');
+        if (customServer && customServer.trim()) {
+            console.log('使用自定义服务器:', customServer);
+            return customServer.trim();
         }
 
         // 本地开发
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return 'ws://localhost:8765';
+            return `ws://localhost:${DEFAULT_WS_PORT}`;
         }
 
-        // 生产环境 - 使用 wss
-        return `wss://${window.location.hostname}:8765`;
+        // 生产环境 - 使用固定的信令服务器
+        return 'wss://jieji.188np.cn';
+    }
+    
+    // 设置自定义服务器地址
+    static setCustomServer(serverUrl) {
+        if (serverUrl && serverUrl.trim()) {
+            localStorage.setItem('customSignalingServer', serverUrl.trim());
+            console.log('已保存自定义服务器:', serverUrl);
+        } else {
+            localStorage.removeItem('customSignalingServer');
+            console.log('已清除自定义服务器配置');
+        }
+    }
+    
+    // 获取当前服务器配置
+    static getServerConfig() {
+        const customServer = localStorage.getItem('customSignalingServer');
+        return {
+            customServer: customServer || '',
+            isCustom: !!customServer
+        };
     }
 
     on(event, handler) {
@@ -108,9 +144,10 @@ export class RoomManager {
             this.ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
+                    console.log('🔄 收到原始消息:', data);
                     this.handleWsMessage(data);
                 } catch (e) {
-                    console.error('消息解析错误:', e);
+                    console.error('消息解析错误:', e, '原始消息:', event.data);
                 }
             };
         });
@@ -149,6 +186,7 @@ export class RoomManager {
 
     sendWs(data) {
         if (this.ws?.readyState === WebSocket.OPEN) {
+            console.log('📤 发送消息:', data);
             this.ws.send(JSON.stringify(data));
             return true;
         }
@@ -166,6 +204,12 @@ export class RoomManager {
                 this.myPlayerNum = data.playerNum;
                 this.peerId = data.peerId;
                 this.emit('room-created', { roomCode: data.roomCode });
+                
+                // 解析 createRoom Promise
+                if (this.createRoomPromise) {
+                    this.createRoomPromise.resolve(this.roomCode);
+                    this.createRoomPromise = null;
+                }
                 break;
 
             case 'joined':
@@ -179,6 +223,15 @@ export class RoomManager {
                             this.emit('player-joined', { playerNum: p.playerNum, name: p.name });
                         }
                     }
+                }
+                
+                // 解析 joinRoom Promise
+                if (this.joinRoomPromise) {
+                    this.joinRoomPromise.resolve({
+                        playerNum: this.myPlayerNum,
+                        players: data.players
+                    });
+                    this.joinRoomPromise = null;
                 }
                 break;
 
@@ -216,6 +269,16 @@ export class RoomManager {
             case 'error':
                 console.error('服务器错误:', data.message);
                 this.emit('error', { message: data.message });
+                
+                // 解析失败的 Promise
+                if (this.createRoomPromise) {
+                    this.createRoomPromise.reject(new Error(data.message));
+                    this.createRoomPromise = null;
+                }
+                if (this.joinRoomPromise) {
+                    this.joinRoomPromise.reject(new Error(data.message));
+                    this.joinRoomPromise = null;
+                }
                 break;
         }
     }
@@ -239,64 +302,62 @@ export class RoomManager {
     // ========== 创建房间 ==========
     async createRoom() {
         this.isHost = true;
+        
+        try {
+            await this.connectWebSocket();
+        } catch (error) {
+            throw new Error('无法连接信令服务器: ' + error.message);
+        }
 
-        await this.connectWebSocket();
-
+        // 设置 Promise 解析器
         return new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
-                reject(new Error('创建房间超时'));
-            }, 5000);
+                console.error('❌ 创建房间超时，未收到服务器响应');
+                reject(new Error('创建房间超时，请检查服务器是否正常运行'));
+            }, 10000); // 增加到 10 秒
 
-            const handler = (event) => {
-                const data = JSON.parse(event.data);
-                if (data.type === 'created') {
+            this.createRoomPromise = {
+                resolve: (roomCode) => {
                     clearTimeout(timeout);
-                    this.ws.removeEventListener('message', handler);
-                    this.handleWsMessage(data);
-                    resolve(this.roomCode);
-                } else if (data.type === 'error') {
+                    resolve(roomCode);
+                },
+                reject: (error) => {
                     clearTimeout(timeout);
-                    this.ws.removeEventListener('message', handler);
-                    reject(new Error(data.message));
+                    reject(error);
                 }
             };
 
-            this.ws.addEventListener('message', handler);
-            this.sendWs({ type: 'create' });
+            // 发送创建房间请求
+            const sent = this.sendWs({ type: 'create' });
+            if (!sent) {
+                clearTimeout(timeout);
+                reject(new Error('发送创建房间请求失败'));
+            }
         });
     }
 
     // ========== 加入房间 ==========
     async joinRoom(roomCode) {
         this.isHost = false;
-
         await this.connectWebSocket();
 
-        return new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => {
-                reject(new Error('加入房间超时'));
-            }, 5000);
-
-            const handler = (event) => {
-                const data = JSON.parse(event.data);
-                if (data.type === 'joined') {
-                    clearTimeout(timeout);
-                    this.ws.removeEventListener('message', handler);
-                    this.handleWsMessage(data);
-                    resolve({
-                        playerNum: this.myPlayerNum,
-                        players: data.players
-                    });
-                } else if (data.type === 'error') {
-                    clearTimeout(timeout);
-                    this.ws.removeEventListener('message', handler);
-                    reject(new Error(data.message));
+        // 设置 Promise 解析器
+        this.joinRoomPromise = {};
+        const promise = new Promise((resolve, reject) => {
+            this.joinRoomPromise.resolve = resolve;
+            this.joinRoomPromise.reject = reject;
+            
+            // 5秒超时
+            setTimeout(() => {
+                if (this.joinRoomPromise) {
+                    this.joinRoomPromise.reject(new Error('加入房间超时'));
+                    this.joinRoomPromise = null;
                 }
-            };
-
-            this.ws.addEventListener('message', handler);
-            this.sendWs({ type: 'join', roomCode: roomCode.toUpperCase() });
+            }, 5000);
         });
+
+        this.sendWs({ type: 'join', roomCode: roomCode.toUpperCase() });
+        return promise;
     }
 
     // ========== WebRTC P2P 连接 ==========
@@ -551,15 +612,34 @@ export class RoomManager {
     handleGameMessage(data) {
         switch (data.type) {
             case 'input':
-                this.updateInputState(data.player || data.fromPlayer, data.button, data.pressed);
-                this.emit('input', data);
+                // 保留 fromPlayer 信息，用于远程输入映射
+                // 远程玩家使用自己的P1键位，但 fromPlayer 标识了实际的玩家编号
+                const inputData = {
+                    ...data,
+                    fromPlayer: data.fromPlayer  // 确保 fromPlayer 被传递
+                };
+                // 使用 fromPlayer 作为实际玩家编号更新输入状态
+                const actualPlayerNum = data.fromPlayer || data.player;
+                this.updateInputState(actualPlayerNum, data.button, data.pressed);
+                this.emit('input', inputData);
                 break;
             case 'game-start':
                 console.log('收到 game-start');
                 this.emit('game-start', data);
                 break;
+            case 'game-ready':
+                console.log('收到 game-ready from P' + data.playerNum);
+                this.emit('game-ready', data);
+                break;
+            case 'game-sync-start':
+                console.log('收到 game-sync-start');
+                this.emit('game-sync-start', data);
+                break;
             case 'frame':
                 this.emit('frame', data.frameData);
+                break;
+            case 'audio':
+                this.emit('audio', data.audioData);
                 break;
             case 'pause':
                 this.emit('pause', data);
@@ -579,10 +659,14 @@ export class RoomManager {
             case 'input-broadcast':
                 this.updateInputState(data.player, data.button, data.pressed);
                 break;
+            case 'input-mode':
+                // 处理输入模式变化（键盘/手柄）
+                this.emit('input-mode', { player: data.player, isGamepad: data.isGamepad });
+                break;
         }
 
         // 房主转发消息给其他玩家
-        if (this.isHost && !['frame', 'ping', 'pong'].includes(data.type)) {
+        if (this.isHost && !['frame', 'audio', 'ping', 'pong'].includes(data.type)) {
             this.broadcast(data, data.fromPlayer);
         }
     }
@@ -610,9 +694,38 @@ export class RoomManager {
         for (const [playerNum, channel] of Object.entries(this.dataChannels)) {
             if (channel?.readyState === 'open') {
                 try {
+                    // 检查缓冲区是否过满，避免阻塞
+                    const bufferedAmount = channel.bufferedAmount || 0;
+                    const maxBuffer = 1024 * 1024; // 1MB 阈值
+                    
+                    if (bufferedAmount > maxBuffer) {
+                        // 缓冲区过满，跳过这一帧
+                        if (bufferedAmount > maxBuffer * 2) {
+                            console.warn(`P${playerNum} 缓冲区过满 (${(bufferedAmount/1024).toFixed(0)}KB)，跳过帧`);
+                        }
+                        continue;
+                    }
+                    
                     channel.send(data);
                 } catch (e) {
-                    console.warn(`发送帧到 P${playerNum} 失败`);
+                    console.warn(`发送帧到 P${playerNum} 失败:`, e.message);
+                }
+            }
+        }
+    }
+    
+    sendAudio(audioData) {
+        if (!this.isHost) return;
+
+        const data = JSON.stringify({ type: 'audio', audioData });
+
+        for (const [playerNum, channel] of Object.entries(this.dataChannels)) {
+            if (channel?.readyState === 'open') {
+                try {
+                    // 音频数据较小，不需要检查缓冲区
+                    channel.send(data);
+                } catch (e) {
+                    // 忽略音频发送错误
                 }
             }
         }
@@ -630,15 +743,27 @@ export class RoomManager {
         }
     }
 
-    broadcastInput(button, pressed) {
+    broadcastInput(button, pressed, player = null) {
+        // 如果没有指定 player，使用 myPlayerNum
+        const playerNum = player !== null ? player : this.myPlayerNum;
         const data = {
             type: 'input-broadcast',
-            player: this.myPlayerNum,
+            player: playerNum,
             button,
             pressed
         };
         this.send(data);
-        this.updateInputState(this.myPlayerNum, button, pressed);
+        this.updateInputState(playerNum, button, pressed);
+    }
+    
+    // 广播输入模式变化（键盘/手柄）
+    broadcastInputMode(isGamepad) {
+        const data = {
+            type: 'input-mode',
+            player: this.myPlayerNum,
+            isGamepad
+        };
+        this.send(data);
     }
 
     // ========== 清理 ==========
