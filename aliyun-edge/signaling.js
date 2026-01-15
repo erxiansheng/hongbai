@@ -222,10 +222,17 @@ async function getRom(gameName) {
             ext = '.nes';
         }
 
+        // 检查 gameName 是否已经包含扩展名（不区分大小写）
+        const lowerGameName = gameName.toLowerCase();
+        let filename = gameName;
+        if (!lowerGameName.endsWith('.nes') && !lowerGameName.endsWith('.zip')) {
+            filename = gameName + ext;
+        }
+
         return new Response(romData, {
             headers: {
                 'Content-Type': contentType,
-                'Content-Disposition': `attachment; filename="${encodeURIComponent(gameName)}${ext}"`,
+                'Content-Disposition': `attachment; filename="${encodeURIComponent(filename)}"`,
                 'Access-Control-Allow-Origin': '*',
                 'Cache-Control': 'public, max-age=86400'
             }
