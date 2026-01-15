@@ -1713,10 +1713,18 @@ class GameApp {
         }
         
         // NES 游戏：优先从本地 roms/nes 目录读取
-        const encodedGameId = encodeURIComponent(gameId);
+        // 统一处理空格问题：将空格替换为下划线
+        const sanitizedGameId = gameId.replace(/ /g, '_').replace(/，/g, '_').replace(/,/g, '_');
+        const encodedGameId = encodeURIComponent(sanitizedGameId);
+        
+        // 同时尝试原始名称（兼容旧文件）
+        const encodedOriginalId = encodeURIComponent(gameId);
+        
         const urls = [
             `roms/nes/${encodedGameId}.zip`,
-            `roms/nes/${encodedGameId}.nes`
+            `roms/nes/${encodedGameId}.nes`,
+            `roms/nes/${encodedOriginalId}.zip`,
+            `roms/nes/${encodedOriginalId}.nes`
         ];
 
         this.showLoadingProgress(10, '加载NES游戏...');
