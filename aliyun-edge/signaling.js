@@ -6,19 +6,39 @@
  * - key: roms:{游戏名.zip} 或 roms:{游戏名.nes}
  * - value: ROM 文件的 base64 编码数据
  * 
+ * 七牛云配置存储在 KV 中:
+ * - key: QINIU_CONFIG
+ * - value: JSON 格式的配置 { accessKey, secretKey, domain, bucket }
+ * 
  * 街机游戏代理:
  * - 从七牛云私密空间代理下载，使用签名认证
  * - 隐藏真实地址和密钥，防止被刷流量
  */
 
-// ============ 七牛云配置（私密空间） ============
-// 注意：这些密钥只在边缘函数内部使用，不会暴露给前端
-const QINIU_CONFIG = {
-    accessKey: 'wusPRsFqSrjbDgQGvLxJfjV10kcDjEwWr2JVOA34',      // 替换为你的 AccessKey
-    secretKey: '0misZAF4L7s_fjWGrWGlBDs3g9ZyI6oguazuQPb-',      // 替换为你的 SecretKey
-    domain: 'jieji.188np.cn',  // 你的七牛云域名
-    bucket: 'jiejiroms'                // 存储空间名（用于路径）
-};
+// 七牛云配置缓存（避免每次请求都读取 KV）
+let qiniuConfigCache = null;
+
+/**
+ * 从 KV 获取七牛云配置
+ */
+async function getQiniuConfig(context) {
+    // 如果有缓存，直接返回
+    if (qiniuConfigCache) {
+        return qiniuConfigCache;
+    }
+    
+    try {
+        const configStr = await context.env.KV.get('QINIU_CONFIG', { type: 'text' });
+        if (configStr) {
+            qiniuConfigCache = JSON.parse(configStr);
+            return qiniuConfigCache;
+        }
+    } catch (e) {
+        console.error('读取七牛云配置失败:', e);
+    }
+    
+    return null;
+}
 
 /**
  * HMAC-SHA1 签名（使用 Web Crypto API）
@@ -54,22 +74,23 @@ function base64UrlSafe(buffer) {
 
 /**
  * 生成七牛云私密空间下载链接
+ * @param {object} config - 七牛云配置 { accessKey, secretKey, domain, bucket }
  * @param {string} key - 文件路径/名称
  * @param {number} expires - 过期时间（秒），默认1小时
  */
-async function generateQiniuPrivateUrl(key, expires = 3600) {
+async function generateQiniuPrivateUrl(config, key, expires = 3600) {
     const deadline = Math.floor(Date.now() / 1000) + expires;
     
     // 构建基础 URL
-    const baseUrl = `http://${QINIU_CONFIG.domain}/${key}`;
+    const baseUrl = `http://${config.domain}/${key}`;
     const urlWithDeadline = `${baseUrl}?e=${deadline}`;
     
     // 生成签名
-    const signature = await hmacSha1(QINIU_CONFIG.secretKey, urlWithDeadline);
+    const signature = await hmacSha1(config.secretKey, urlWithDeadline);
     const encodedSign = base64UrlSafe(signature);
     
     // 构建 token
-    const token = `${QINIU_CONFIG.accessKey}:${encodedSign}`;
+    const token = `${config.accessKey}:${encodedSign}`;
     
     // 返回完整的签名 URL
     return `${urlWithDeadline}&token=${token}`;
@@ -187,11 +208,17 @@ async function getRom(gameName, context) {
  */
 async function getArcadeRom(gameName, context) {
     try {
+        // 从 KV 获取七牛云配置
+        const qiniuConfig = await getQiniuConfig(context);
+        if (!qiniuConfig) {
+            return jsonResponse({ error: '七牛云配置未找到，请检查 KV 中的 QINIU_CONFIG' }, 500);
+        }
+        
         // 文件在七牛云的路径
-        const fileKey = `jiejiroms/${encodeURIComponent(gameName)}.zip`;
+        const fileKey = `${qiniuConfig.bucket}/${encodeURIComponent(gameName)}.zip`;
         
         // 生成带签名的私密下载链接（有效期1小时）
-        const signedUrl = await generateQiniuPrivateUrl(fileKey, 3600);
+        const signedUrl = await generateQiniuPrivateUrl(qiniuConfig, fileKey, 3600);
         console.log(`代理街机ROM: ${gameName}`);
         
         // 从七牛云下载
