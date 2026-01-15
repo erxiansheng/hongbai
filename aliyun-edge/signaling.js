@@ -130,6 +130,25 @@ export async function handleRequest(request, context) {
         });
     }
 
+    // 调试接口：查看 KV 读取情况
+    if (path === '/api/debug-kv') {
+        try {
+            const configStr = await edgeKV.get('QINIU_CONFIG', { type: 'text' });
+            return jsonResponse({
+                found: configStr !== undefined && configStr !== null,
+                type: typeof configStr,
+                length: configStr ? configStr.length : 0,
+                preview: configStr ? configStr.substring(0, 50) + '...' : null
+            });
+        } catch (e) {
+            return jsonResponse({
+                error: 'KV读取异常',
+                message: e.message,
+                stack: e.stack
+            }, 500);
+        }
+    }
+
     // NES ROM API: /api/rom/{游戏名}
     if (path.startsWith('/api/rom/')) {
         const gameName = decodeURIComponent(path.substring(9));
