@@ -238,10 +238,9 @@ async function getRom(gameName) {
  * 代理获取街机 ROM 文件（从七牛云私密空间）
  * 使用签名认证下载，隐藏真实地址和密钥
  * 
- * 缓存策略：
- * 1. 设置 Cache-Control 让 ESA 边缘节点缓存响应
- * 2. 配合 ESA 控制台的缓存规则，可实现边缘缓存
- * 3. 同一游戏第二次请求时直接从边缘返回，不回源七牛云
+ * 策略：
+ * 1. 小文件（<25MB）：代理下载，边缘缓存
+ * 2. 大文件（>=25MB）：返回签名URL重定向，避免边缘函数超时/内存限制
  */
 async function getArcadeRom(gameName) {
     try {
@@ -252,31 +251,54 @@ async function getArcadeRom(gameName) {
         }
         
         // 文件在七牛云的路径: folder/游戏名.zip
-        // 注意：这里不要对 gameName 进行 URL 编码，七牛云 key 是原始中文
         const folder = qiniuConfig.folder || qiniuConfig.bucket || 'jiejiroms';
         const fileKey = `${folder}/${gameName}.zip`;
         
         // 生成带签名的私密下载链接（有效期1小时）
         const signedUrl = await generateQiniuPrivateUrl(qiniuConfig, fileKey, 3600);
-        console.log(`代理街机ROM: ${gameName}, URL: ${signedUrl}`);
+        console.log(`代理街机ROM: ${gameName}`);
         
-        // 从七牛云下载
-        const response = await fetch(signedUrl, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 EdgeFunction'
+        // 先发送 HEAD 请求获取文件大小
+        const headResponse = await fetch(signedUrl, {
+            method: 'HEAD',
+            headers: { 'User-Agent': 'Mozilla/5.0 EdgeFunction' }
+        });
+        
+        if (!headResponse.ok) {
+            if (headResponse.status === 404) {
+                return jsonResponse({ error: '街机游戏不存在', game: gameName, key: fileKey }, 404);
             }
+            if (headResponse.status === 401 || headResponse.status === 403) {
+                return jsonResponse({ error: '签名验证失败，请检查 AK/SK 配置', status: headResponse.status }, 403);
+            }
+            return jsonResponse({ error: '获取文件信息失败', status: headResponse.status }, headResponse.status);
+        }
+        
+        const contentLength = parseInt(headResponse.headers.get('content-length') || '0', 10);
+        const fileSizeMB = contentLength / (1024 * 1024);
+        console.log(`文件大小: ${fileSizeMB.toFixed(2)} MB`);
+        
+        // 大文件（>=25MB）使用重定向，让客户端直接从七牛云下载
+        if (contentLength > 25 * 1024 * 1024) {
+            console.log(`大文件，使用重定向: ${gameName}`);
+            return new Response(null, {
+                status: 302,
+                headers: {
+                    'Location': signedUrl,
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-cache'
+                }
+            });
+        }
+        
+        // 小文件：代理下载
+        const response = await fetch(signedUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0 EdgeFunction' }
         });
         
         if (!response.ok) {
             const errorText = await response.text().catch(() => '');
             console.error(`七牛云返回错误: ${response.status}, body: ${errorText}`);
-            
-            if (response.status === 404) {
-                return jsonResponse({ error: '街机游戏不存在', game: gameName, key: fileKey }, 404);
-            }
-            if (response.status === 401 || response.status === 403) {
-                return jsonResponse({ error: '签名验证失败，请检查 AK/SK 配置', status: response.status }, 403);
-            }
             return jsonResponse({ error: '下载失败', status: response.status, detail: errorText }, response.status);
         }
         
@@ -289,7 +311,6 @@ async function getArcadeRom(gameName) {
                 'Content-Type': 'application/zip',
                 'Content-Disposition': `attachment; filename="${encodeURIComponent(gameName)}.zip"`,
                 'Access-Control-Allow-Origin': '*',
-                // 边缘缓存7天，浏览器缓存1天
                 'Cache-Control': 'public, max-age=86400, s-maxage=604800',
                 'CDN-Cache-Control': 'max-age=604800',
                 'Content-Length': romData.byteLength.toString()

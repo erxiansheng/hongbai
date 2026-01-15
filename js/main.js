@@ -1846,14 +1846,27 @@ class GameApp {
         try {
             this.showLoadingProgress(0, '连接服务器...');
             
-            const res = await fetch(proxyUrl);
+            // 使用 redirect: 'follow' 自动跟随重定向（大文件会重定向到七牛云）
+            const res = await fetch(proxyUrl, {
+                redirect: 'follow',
+                mode: 'cors'
+            });
+            
             if (!res.ok) {
+                // 检查是否返回了 JSON 错误
+                const contentType = res.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.error || `下载失败: ${res.status}`);
+                }
                 throw new Error(`下载失败: ${res.status}`);
             }
             
             // 获取文件大小用于进度计算
             const contentLength = res.headers.get('content-length');
             const total = contentLength ? parseInt(contentLength, 10) : 0;
+            
+            console.log(`文件大小: ${total > 0 ? (total / 1024 / 1024).toFixed(2) + ' MB' : '未知'}`);
             
             if (total > 0) {
                 // 使用流式读取显示进度
