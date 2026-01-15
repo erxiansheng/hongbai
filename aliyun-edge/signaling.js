@@ -24,17 +24,20 @@
 // 七牛云配置缓存（避免每次请求都读取 KV）
 let qiniuConfigCache = null;
 
+// 创建 EdgeKV 实例（阿里云 ESA 边缘存储）
+const edgeKV = new EdgeKV({ namespace: 'roms' });
+
 /**
  * 从 KV 获取七牛云配置
  */
-async function getQiniuConfig(context) {
+async function getQiniuConfig() {
     // 如果有缓存，直接返回
     if (qiniuConfigCache) {
         return qiniuConfigCache;
     }
     
     try {
-        const configStr = await context.env.KV.get('QINIU_CONFIG', { type: 'text' });
+        const configStr = await edgeKV.get('QINIU_CONFIG', { type: 'text' });
         if (configStr) {
             qiniuConfigCache = JSON.parse(configStr);
             return qiniuConfigCache;
@@ -130,13 +133,13 @@ export async function handleRequest(request, context) {
     // NES ROM API: /api/rom/{游戏名}
     if (path.startsWith('/api/rom/')) {
         const gameName = decodeURIComponent(path.substring(9));
-        return await getRom(gameName, context);
+        return await getRom(gameName);
     }
     
     // 街机 ROM 代理 API: /api/arcade/{游戏名}
     if (path.startsWith('/api/arcade/')) {
         const gameName = decodeURIComponent(path.substring(12));
-        return await getArcadeRom(gameName, context);
+        return await getArcadeRom(gameName);
     }
 
     return new Response('Not Found', { status: 404 });
@@ -152,7 +155,7 @@ function sanitizeKey(name) {
 /**
  * 获取 NES ROM 文件（从 KV 存储）
  */
-async function getRom(gameName, context) {
+async function getRom(gameName) {
     try {
         const sanitized = sanitizeKey(gameName);
         
@@ -168,7 +171,7 @@ async function getRom(gameName, context) {
         for (const key of keysToTry) {
             try {
                 // 阿里云 ESA EdgeKV 返回 base64 编码的数据
-                const value = await context.env.KV.get(key, { type: 'text' });
+                const value = await edgeKV.get(key, { type: 'text' });
                 if (value) {
                     // 解码 base64
                     romData = Uint8Array.from(atob(value), c => c.charCodeAt(0));
@@ -221,10 +224,10 @@ async function getRom(gameName, context) {
  * 2. 配合 ESA 控制台的缓存规则，可实现边缘缓存
  * 3. 同一游戏第二次请求时直接从边缘返回，不回源七牛云
  */
-async function getArcadeRom(gameName, context) {
+async function getArcadeRom(gameName) {
     try {
         // 从 KV 获取七牛云配置
-        const qiniuConfig = await getQiniuConfig(context);
+        const qiniuConfig = await getQiniuConfig();
         if (!qiniuConfig) {
             return jsonResponse({ error: '七牛云配置未找到，请检查 KV 中的 QINIU_CONFIG' }, 500);
         }
