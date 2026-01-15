@@ -1747,7 +1747,7 @@ class GameApp {
     // KV 存储格式: key = roms:{游戏名}.nes 或 roms:{游戏名}.NES
     async loadRomFromKV(gameId) {
         // 边缘函数 API 地址
-        const EDGE_API_BASE = 'https://jieji.188np.cn';
+        const EDGE_API_BASE = 'https://arcade.188np.cn';
         
         this.showLoadingProgress(20, '从云端下载...');
         

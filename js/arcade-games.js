@@ -207,7 +207,7 @@ export const ARCADE_GAMES = {
 };
 
 // OSS 基础 URL（通过边缘函数代理，隐藏真实地址）
-export const ARCADE_OSS_BASE = 'https://jieji.188np.cn/api/arcade';
+export const ARCADE_OSS_BASE = 'https://arcade.188np.cn/api/arcade';
 
 // 获取街机游戏的英文ROM名
 export function getArcadeRomName(chineseName) {
