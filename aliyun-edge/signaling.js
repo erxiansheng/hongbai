@@ -80,22 +80,31 @@ function base64UrlSafe(buffer) {
 
 /**
  * 生成七牛云私密空间下载链接
- * @param {object} config - 七牛云配置 { accessKey, secretKey, domain, bucket }
- * @param {string} key - 文件路径/名称
+ * 参考官方文档: https://developer.qiniu.com/kodo/1202/download-token
+ * 
+ * @param {object} config - 七牛云配置 { accessKey, secretKey, domain }
+ * @param {string} key - 文件路径/名称（不需要 URL 编码，函数内部处理）
  * @param {number} expires - 过期时间（秒），默认1小时
  */
 async function generateQiniuPrivateUrl(config, key, expires = 3600) {
     const deadline = Math.floor(Date.now() / 1000) + expires;
     
-    // 构建基础 URL
-    const baseUrl = `http://${config.domain}/${key}`;
+    // 构建基础 URL（key 不需要额外编码，七牛云会处理）
+    // 注意：domain 可能已包含 http:// 或 https://
+    let domain = config.domain;
+    if (!domain.startsWith('http://') && !domain.startsWith('https://')) {
+        domain = `http://${domain}`;
+    }
+    
+    // 原始 URL（key 保持原样，不编码）
+    const baseUrl = `${domain}/${key}`;
     const urlWithDeadline = `${baseUrl}?e=${deadline}`;
     
-    // 生成签名
+    // 生成签名 - 对完整 URL 进行 HMAC-SHA1
     const signature = await hmacSha1(config.secretKey, urlWithDeadline);
     const encodedSign = base64UrlSafe(signature);
     
-    // 构建 token
+    // 构建 token: accessKey:encodedSign
     const token = `${config.accessKey}:${encodedSign}`;
     
     // 返回完整的签名 URL
@@ -221,13 +230,13 @@ async function getArcadeRom(gameName, context) {
         }
         
         // 文件在七牛云的路径: folder/游戏名.zip
-        // folder 配置在 KV 的 bucket 字段（实际是文件夹名，如 jiejiroms）
+        // 注意：这里不要对 gameName 进行 URL 编码，七牛云 key 是原始中文
         const folder = qiniuConfig.folder || qiniuConfig.bucket || 'jiejiroms';
-        const fileKey = `${folder}/${encodeURIComponent(gameName)}.zip`;
+        const fileKey = `${folder}/${gameName}.zip`;
         
         // 生成带签名的私密下载链接（有效期1小时）
         const signedUrl = await generateQiniuPrivateUrl(qiniuConfig, fileKey, 3600);
-        console.log(`代理街机ROM: ${gameName}`);
+        console.log(`代理街机ROM: ${gameName}, URL: ${signedUrl}`);
         
         // 从七牛云下载
         const response = await fetch(signedUrl, {
@@ -237,13 +246,16 @@ async function getArcadeRom(gameName, context) {
         });
         
         if (!response.ok) {
+            const errorText = await response.text().catch(() => '');
+            console.error(`七牛云返回错误: ${response.status}, body: ${errorText}`);
+            
             if (response.status === 404) {
-                return jsonResponse({ error: '街机游戏不存在', game: gameName }, 404);
+                return jsonResponse({ error: '街机游戏不存在', game: gameName, key: fileKey }, 404);
             }
             if (response.status === 401 || response.status === 403) {
-                return jsonResponse({ error: '签名验证失败', status: response.status }, 403);
+                return jsonResponse({ error: '签名验证失败，请检查 AK/SK 配置', status: response.status }, 403);
             }
-            return jsonResponse({ error: '下载失败', status: response.status }, response.status);
+            return jsonResponse({ error: '下载失败', status: response.status, detail: errorText }, response.status);
         }
         
         // 获取文件内容
@@ -264,7 +276,7 @@ async function getArcadeRom(gameName, context) {
         
     } catch (error) {
         console.error('代理街机ROM失败:', error);
-        return jsonResponse({ error: '代理下载失败', message: error.message }, 500);
+        return jsonResponse({ error: '代理下载失败', message: error.message, stack: error.stack }, 500);
     }
 }
 
