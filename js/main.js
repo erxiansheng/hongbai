@@ -268,6 +268,10 @@ class GameApp {
             document.getElementById('room-info').classList.remove('hidden');
             document.querySelector('.neon-menu').classList.add('hidden');
             this.ui.setConnectionStatus('connected', 'P2P 就绪');
+            
+            // 提前初始化聊天和语音，确保能捕获 P2P 连接事件
+            this.chatManager.init();
+            this.voiceChatManager.init();
 
             // 添加"进入房间"按钮，让用户主动进入
             this.showEnterRoomButton(roomCode);
@@ -348,6 +352,11 @@ class GameApp {
             document.getElementById('room-code-display').textContent = roomCode;
             this.updateSeats();
             this.updateStartButton();
+            
+            // 提前初始化聊天和语音，确保能捕获 P2P 连接事件
+            this.chatManager.init();
+            this.voiceChatManager.init();
+            
             this.ui.showToast(`你是 P${this.myPlayerNum}`);
         } catch (error) {
             console.error('加入房间失败:', error);

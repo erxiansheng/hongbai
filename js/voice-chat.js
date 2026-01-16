@@ -56,6 +56,18 @@ export class VoiceChatManager {
 
     async enableVoice() {
         try {
+            // 检查是否有 P2P 连接
+            const connectedPeers = Object.keys(this.roomManager.peerConnections).filter(playerNum => {
+                const pc = this.roomManager.peerConnections[playerNum];
+                return pc && pc.connectionState === 'connected';
+            });
+            
+            if (connectedPeers.length === 0) {
+                console.warn('没有已连接的玩家，无法启用语音');
+                this.showNotification('等待其他玩家连接后再开启语音', 'warning');
+                return;
+            }
+            
             // 请求麦克风权限
             this.localStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
@@ -70,11 +82,8 @@ export class VoiceChatManager {
             this.updateUI();
 
             // 为所有已连接的玩家添加音频轨道
-            for (const playerNum of Object.keys(this.roomManager.peerConnections)) {
-                const pc = this.roomManager.peerConnections[playerNum];
-                if (pc.connectionState === 'connected') {
-                    await this.addAudioTrackToPeer(parseInt(playerNum));
-                }
+            for (const playerNum of connectedPeers) {
+                await this.addAudioTrackToPeer(parseInt(playerNum));
             }
 
             this.showNotification('语音聊天已启用');
