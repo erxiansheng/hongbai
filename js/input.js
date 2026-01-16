@@ -982,14 +982,20 @@ export class InputManager {
             const onPress = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                if (this.isGameRunning) this.processInput(key, true, 1);
+                // 使用 localPlayer 作为玩家编号（联机时P2使用自己的虚拟手柄）
+                const player = this.localPlayer || 1;
+                if (this.isGameRunning) this.processInput(key, true, player);
                 btn.classList.add('active');
+                // 更新对应玩家的手柄UI面板
+                this.updateTestDisplay(key, true, player);
             };
             const onRelease = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                if (this.isGameRunning) this.processInput(key, false, 1);
+                const player = this.localPlayer || 1;
+                if (this.isGameRunning) this.processInput(key, false, player);
                 btn.classList.remove('active');
+                this.updateTestDisplay(key, false, player);
             };
 
             btn.addEventListener('touchstart', onPress, { passive: false });
@@ -1030,12 +1036,16 @@ export class InputManager {
                 RIGHT: normalizedX > threshold
             };
             
+            // 使用 localPlayer 作为玩家编号
+            const player = this.localPlayer || 1;
+            
             // 检测状态变化并发送输入
             for (const dir of ['UP', 'DOWN', 'LEFT', 'RIGHT']) {
                 if (newState[dir] !== dirState[dir]) {
                     dirState[dir] = newState[dir];
                     if (this.isGameRunning) {
-                        this.processInput(dir, newState[dir], 1);
+                        this.processInput(dir, newState[dir], player);
+                        this.updateTestDisplay(dir, newState[dir], player);
                     }
                 }
             }
@@ -1082,12 +1092,16 @@ export class InputManager {
             stick.classList.remove('active');
             stick.style.transform = 'translate(-50%, -50%)';
             
+            // 使用 localPlayer 作为玩家编号
+            const player = this.localPlayer || 1;
+            
             // 释放所有方向
             for (const dir of ['UP', 'DOWN', 'LEFT', 'RIGHT']) {
                 if (dirState[dir]) {
                     dirState[dir] = false;
                     if (this.isGameRunning) {
-                        this.processInput(dir, false, 1);
+                        this.processInput(dir, false, player);
+                        this.updateTestDisplay(dir, false, player);
                     }
                 }
             }

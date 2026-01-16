@@ -3219,7 +3219,7 @@ body {
     width: 380px;
     background: linear-gradient(180deg, #2a2a3a 0%, #1a1a2a 100%);
     border: 4px solid var(--fc-red);
-    z-index: 100;
+    z-index: 150000;
     overflow: hidden;
     display: flex;
     flex-direction: column;

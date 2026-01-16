@@ -452,27 +452,27 @@
                 
                 <!-- 街机模式浮动菜单按钮（手机端） -->
                 <button id="arcade-menu-btn" class="arcade-menu-btn hidden" title="打开菜单">☰</button>
+            </section>
 
-                <!-- 聊天面板 -->
-                <div class="chat-panel" id="chat-panel">
-                    <div class="chat-header">
-                        <span>💬 游戏聊天</span>
-                        <div class="voice-controls">
-                            <button id="toggle-voice-btn" class="voice-btn" title="开启/关闭语音">🔇 开启语音</button>
-                            <button id="mute-voice-btn" class="voice-btn" style="display:none;" title="静音/取消静音">🔊 静音</button>
-                            <span id="voice-status" class="voice-status"></span>
-                        </div>
-                        <button id="toggle-chat-btn" class="toggle-chat-btn">▼</button>
+            <!-- 聊天面板（移到game-screen外面，避免z-index问题） -->
+            <div class="chat-panel hidden" id="chat-panel">
+                <div class="chat-header">
+                    <span>💬 游戏聊天</span>
+                    <div class="voice-controls">
+                        <button id="toggle-voice-btn" class="voice-btn" title="开启/关闭语音">🔇 开启语音</button>
+                        <button id="mute-voice-btn" class="voice-btn" style="display:none;" title="静音/取消静音">🔊 静音</button>
+                        <span id="voice-status" class="voice-status"></span>
                     </div>
-                    <div class="chat-body">
-                        <div class="chat-messages" id="chat-messages"></div>
-                        <div class="chat-input-area">
-                            <input type="text" id="chat-input" placeholder="输入消息..." maxlength="100">
-                            <button id="send-chat-btn" class="nes-btn mini">发送</button>
-                        </div>
+                    <button id="toggle-chat-btn" class="toggle-chat-btn">▼</button>
+                </div>
+                <div class="chat-body">
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="输入消息..." maxlength="100">
+                        <button id="send-chat-btn" class="nes-btn mini">发送</button>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- ========== 按键设置弹窗 ========== -->
             <div id="controls-modal" class="modal hidden">

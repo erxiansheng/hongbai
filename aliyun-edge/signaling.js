@@ -248,9 +248,11 @@ async function getRom(gameName) {
  * 代理获取街机 ROM 文件（从七牛云私密空间）
  * 使用签名认证下载，隐藏真实地址和密钥
  * 
- * 全部使用流式传输，不占用边缘函数内存
+ * 策略：优先流式代理，失败时返回签名URL让前端直接下载
  */
 async function getArcadeRom(gameName) {
+    let signedUrl = null;
+    
     try {
         // 从 KV 获取七牛云配置
         const qiniuConfig = await getQiniuConfig();
@@ -263,7 +265,7 @@ async function getArcadeRom(gameName) {
         const fileKey = `${folder}/${gameName}.zip`;
         
         // 生成带签名的私密下载链接（有效期1小时）
-        const signedUrl = await generateQiniuPrivateUrl(qiniuConfig, fileKey, 3600);
+        signedUrl = await generateQiniuPrivateUrl(qiniuConfig, fileKey, 3600);
         console.log(`代理街机ROM: ${gameName}`);
         
         // 流式代理下载
@@ -278,9 +280,14 @@ async function getArcadeRom(gameName) {
             if (response.status === 401 || response.status === 403) {
                 return jsonResponse({ error: '签名验证失败，请检查 AK/SK 配置', status: response.status }, 403);
             }
-            const errorText = await response.text().catch(() => '');
-            console.error(`七牛云返回错误: ${response.status}, body: ${errorText}`);
-            return jsonResponse({ error: '下载失败', status: response.status, detail: errorText }, response.status);
+            // 其他错误，返回签名URL让前端直接下载
+            console.log(`流式下载失败(${response.status})，返回签名URL`);
+            return jsonResponse({
+                redirect: true,
+                url: signedUrl,
+                game: gameName,
+                reason: `proxy_failed_${response.status}`
+            });
         }
         
         // 流式传输：直接转发 response.body，不读取到内存
@@ -303,6 +310,19 @@ async function getArcadeRom(gameName) {
         
     } catch (error) {
         console.error('代理街机ROM失败:', error);
+        
+        // 流式传输异常（如内存溢出、超时等），返回签名URL让前端直接下载
+        if (signedUrl) {
+            console.log(`流式传输异常，返回签名URL: ${error.message}`);
+            return jsonResponse({
+                redirect: true,
+                url: signedUrl,
+                game: gameName,
+                reason: 'stream_error',
+                error: error.message
+            });
+        }
+        
         return jsonResponse({ error: '代理下载失败', message: error.message, stack: error.stack }, 500);
     }
 }
