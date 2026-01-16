@@ -230,7 +230,7 @@ async function getArcadeRom(gameName) {
 - ✅ **地址隐藏**：正常情况下用户看不到OSS真实地址
 - ✅ **低延迟**：数据边下载边转发，用户更快收到首字节
 
-```
+
 
 **缓存控制头说明**：
 | Header | 值 | 作用 |
@@ -243,7 +243,6 @@ async function getArcadeRom(gameName) {
 
 **流量节省原理**：
 
-```
 首次请求：用户 → ESA边缘 → OSS回源 → 边缘缓存 → 用户
 后续请求：用户 → ESA边缘（缓存命中）→ 用户
 
@@ -277,7 +276,8 @@ async function getArcadeRom(gameName) {
 
 使用浏览器 IndexedDB 实现游戏 ROM 本地持久化缓存：
 
-```javascript
+```
+javascript
 class RomCacheManager {
     constructor() {
         this.db = null;
@@ -360,6 +360,12 @@ class RomCacheManager {
 - **虚拟按键**：触屏虚拟手柄操控
 - **横屏优化**：横屏自动全屏，隐藏UI
 - **PWA 支持**：可添加到主屏幕
+
+### 自定义
+
+- **上传rom** 上传自己的rom游玩
+- **部署后端** 首页支持自定义自己的服务器
+
 
 ### 智能缓存
 
