@@ -249,8 +249,8 @@ async function getRom(gameName) {
  * 使用签名认证下载，隐藏真实地址和密钥
  * 
  * 策略：
- * 1. 小文件（<25MB）：代理下载，边缘缓存
- * 2. 大文件（>=25MB）：返回签名URL，让前端直接下载
+ * 1. 小文件（<15MB）：代理下载，边缘缓存
+ * 2. 大文件（>=15MB）：返回签名URL，让前端直接下载
  */
 async function getArcadeRom(gameName) {
     try {
@@ -295,8 +295,9 @@ async function getArcadeRom(gameName) {
         const fileSizeMB = contentLength / (1024 * 1024);
         console.log(`文件大小: ${fileSizeMB.toFixed(2)} MB`);
         
-        // 大文件（>=25MB）返回签名URL，让前端直接下载
-        if (contentLength > 25 * 1024 * 1024) {
+        // 大文件（>=15MB）返回签名URL，让前端直接下载
+        // 降低阈值避免边缘函数内存溢出
+        if (contentLength > 15 * 1024 * 1024) {
             console.log(`大文件，返回签名URL: ${gameName}`);
             return jsonResponse({
                 redirect: true,
@@ -306,7 +307,7 @@ async function getArcadeRom(gameName) {
             });
         }
         
-        // 小文件：代理下载
+        // 小文件：流式代理下载
         const response = await fetch(signedUrl, {
             headers: { 'User-Agent': 'Mozilla/5.0 EdgeFunction' }
         });
@@ -317,20 +318,23 @@ async function getArcadeRom(gameName) {
             return jsonResponse({ error: '下载失败', status: response.status, detail: errorText }, response.status);
         }
         
-        // 获取文件内容
-        const romData = await response.arrayBuffer();
-        
-        // 返回响应，设置长缓存时间让 ESA 边缘节点缓存
-        return new Response(romData, {
-            headers: {
-                'Content-Type': 'application/zip',
-                'Content-Disposition': `attachment; filename="${encodeURIComponent(gameName)}.zip"`,
-                'Access-Control-Allow-Origin': '*',
-                'Cache-Control': 'public, max-age=86400, s-maxage=604800',
-                'CDN-Cache-Control': 'max-age=604800',
-                'Content-Length': romData.byteLength.toString()
-            }
+        // 流式传输：直接转发 response.body，不读取到内存
+        const headers = new Headers({
+            'Content-Type': 'application/zip',
+            'Content-Disposition': `attachment; filename="${encodeURIComponent(gameName)}.zip"`,
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+            'CDN-Cache-Control': 'max-age=604800'
         });
+        
+        // 如果有 Content-Length，传递给客户端
+        const respContentLength = response.headers.get('content-length');
+        if (respContentLength) {
+            headers.set('Content-Length', respContentLength);
+        }
+        
+        // 直接返回流式响应，不缓冲到内存
+        return new Response(response.body, { headers });
         
     } catch (error) {
         console.error('代理街机ROM失败:', error);
