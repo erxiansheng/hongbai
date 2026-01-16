@@ -41,7 +41,7 @@
                                 │ 4.回源（仅首次/大文件）
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      七牛云 OSS 私密空间                         │
+│                      OSS 私密空间                               │
 │                    （街机ROM源站存储）                           │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -182,46 +182,54 @@ async function loadRom(gameId, platform) {
 }
 ```
 
-### 5. 流式传输 & 大文件处理
+### 5. 流式传输 & 降级策略
 
-**智能分流策略**：根据文件大小选择最优传输方式，使用流式传输避免内存溢出
+**智能分流策略**：优先流式代理，失败时自动降级返回签名URL
 
 ```javascript
 async function getArcadeRom(gameName) {
-    // 获取文件大小
-    const headResponse = await fetch(signedUrl, { method: 'HEAD' });
-    const contentLength = parseInt(headResponse.headers.get('content-length'));
+    let signedUrl = await generateQiniuPrivateUrl(config, fileKey, 3600);
     
-    // 大文件（>=15MB）：返回签名URL，前端直接下载
-    // 避免边缘函数内存限制，减少边缘节点压力
-    if (contentLength > 15 * 1024 * 1024) {
+    try {
+        // 流式代理下载
+        const response = await fetch(signedUrl);
+        
+        if (!response.ok) {
+            // HTTP错误，返回签名URL让前端直接下载
+            return jsonResponse({
+                redirect: true,
+                url: signedUrl,
+                reason: `proxy_failed_${response.status}`
+            });
+        }
+        
+        // 流式传输：直接转发 response.body，不读取到内存
+        return new Response(response.body, {
+            headers: {
+                'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+                'CDN-Cache-Control': 'max-age=604800'
+            }
+        });
+        
+    } catch (error) {
+        // 流式传输异常（内存溢出、超时等），降级返回签名URL
         return jsonResponse({
             redirect: true,
-            url: signedUrl,  // 1小时有效期的签名URL
-            size: contentLength
+            url: signedUrl,
+            reason: 'stream_error'
         });
     }
-    
-    // 小文件：流式代理下载，直接转发响应流
-    const response = await fetch(signedUrl);
-    
-    // 流式传输：直接转发 response.body，不读取到内存
-    // 避免 ArrayBuffer allocation failed 错误
-    return new Response(response.body, {
-        headers: {
-            'Content-Type': 'application/zip',
-            'Cache-Control': 'public, max-age=86400, s-maxage=604800',
-            'CDN-Cache-Control': 'max-age=604800'  // ESA边缘缓存7天
-        }
-    });
 }
+
 ```
 
 **流式传输优势**：
 
 - ✅ **零内存缓冲**：直接转发上游响应流，不占用边缘函数内存
-- ✅ **避免溢出**：解决大文件 `Array buffer allocation failed` 错误
+- ✅ **自动降级**：流式失败时返回签名URL，前端直接下载
+- ✅ **地址隐藏**：正常情况下用户看不到OSS真实地址
 - ✅ **低延迟**：数据边下载边转发，用户更快收到首字节
+
 ```
 
 **缓存控制头说明**：
@@ -255,9 +263,10 @@ async function getArcadeRom(gameName) {
     │      用户A          用户B          用户C       │
     │    (首次回源)     (缓存命中)     (缓存命中)    │
     └────────────────────────────────────────────────┘
-```
+
 
 **成本对比**：
+
 | 场景 | 传统方案 | ESA边缘方案 |
 |------|---------|------------|
 | 100用户下载同一游戏 | 100次OSS回源 | 1次OSS回源 |
