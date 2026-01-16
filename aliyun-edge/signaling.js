@@ -94,12 +94,10 @@ async function generateQiniuPrivateUrl(config, key, expires = 3600) {
     
     // 构建基础 URL（key 不需要额外编码，七牛云会处理）
     // 注意：domain 可能已包含 http:// 或 https://
-    // 强制使用 HTTPS 避免 Mixed Content 错误
+    // 保持原有协议（支持 HTTP 七牛云域名）
     let domain = config.domain;
-    if (domain.startsWith('http://')) {
-        domain = domain.replace('http://', 'https://');
-    } else if (!domain.startsWith('https://')) {
-        domain = `https://${domain}`;
+    if (!domain.startsWith('http://') && !domain.startsWith('https://')) {
+        domain = `http://${domain}`;
     }
     
     // 原始 URL（key 保持原样，不编码）
