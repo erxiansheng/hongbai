@@ -41,11 +41,13 @@ html {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     font-size: 16px;
+    overflow: hidden;
+    height: 100%;
 }
 
 body {
     font-family: 'Press Start 2P', 'Microsoft YaHei', monospace;
-    background: linear-gradient(180deg, #0a0a1a 0%, #101028 50%, #080818 100%);
+    background: #0a0a1a;
     min-height: 100vh;
     height: 100vh;
     color: var(--fc-cream);
@@ -53,6 +55,62 @@ body {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
     line-height: 1.8;
+    position: relative;
+}
+
+/* 滚动背景图片 */
+.scrolling-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200vw;
+    height: 100vh;
+    background-image: url('../page/beijing.png');
+    background-repeat: repeat-x;
+    background-size: auto 100vh;
+    background-position: 0 center;
+    animation: scroll-bg 80s linear infinite;
+    z-index: -2;
+    opacity: 0.35;
+    filter: brightness(0.9) saturate(0.8);
+}
+
+@keyframes scroll-bg {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* 网格蒙层 - 电影网站风格 */
+.grid-overlay {
+    position: fixed;
+    inset: 0;
+    background: 
+        linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 渐变遮罩 - 让背景更柔和 */
+.grid-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(180deg, 
+            rgba(10,10,26,0.75) 0%, 
+            rgba(10,10,26,0.5) 20%,
+            rgba(10,10,26,0.4) 50%,
+            rgba(10,10,26,0.5) 80%,
+            rgba(10,10,26,0.85) 100%
+        ),
+        radial-gradient(ellipse at center, transparent 0%, rgba(10,10,26,0.3) 100%);
+    pointer-events: none;
 }
 
 /* 扫描线效果 */
@@ -88,22 +146,25 @@ body {
 .app-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px 20px;
-    height: 100vh;
+    padding: 2vh 20px;
+    height: 96vh;
+    height: 96dvh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
+    justify-content: center;
+    z-index: 10000;
 }
 
 /* 右上角工具栏 */
 .top-toolbar {
     position: fixed;
     top: 15px;
-    right: 20px;
+    right: 30px;
     display: flex;
     gap: 10px;
-    z-index: 1000;
+    z-index: 200001;
 }
 
 .toolbar-btn {
@@ -176,13 +237,261 @@ body {
     flex-shrink: 0;
 }
 
+/* ========================================
+   新版 Hero 标题区域 - 自适应版
+   ======================================== */
+.hero-header {
+    text-align: center;
+    padding: clamp(15px, 3vh, 50px) 30px clamp(10px, 2vh, 40px);
+    position: relative;
+    flex-shrink: 1;
+}
+
+.hero-header.hidden {
+    display: none;
+}
+
+.hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 250px;
+    background: radial-gradient(ellipse, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    animation: hero-glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes hero-glow-pulse {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.hero-title {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-icon {
+    font-size: clamp(2rem, 5vh, 4rem);
+    display: block;
+    margin-bottom: clamp(8px, 1.5vh, 20px);
+    animation: hero-icon-float 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 25px rgba(255, 215, 0, 0.5));
+}
+
+@keyframes hero-icon-float {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-12px) rotate(5deg); }
+}
+
+.hero-title h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(1.5rem, 4vh, 3.5rem);
+    letter-spacing: clamp(4px, 1vw, 10px);
+    background: linear-gradient(180deg, #fff 0%, #ffd700 50%, #ff8c00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(4px 4px 0 #e60012) drop-shadow(0 0 40px rgba(255, 215, 0, 0.6));
+    margin: 0;
+    line-height: 1.2;
+}
+
+.hero-title h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(1rem, 2.5vh, 2rem);
+    letter-spacing: clamp(6px, 1.5vw, 15px);
+    color: #00e0e0;
+    margin: clamp(5px, 1vh, 15px) 0 0;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.8), 0 0 30px rgba(0, 224, 224, 0.6);
+}
+
+.hero-subtitle {
+    font-size: clamp(0.7rem, 1.5vh, 1.1rem);
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: clamp(8px, 1.5vh, 20px);
+    letter-spacing: clamp(2px, 0.5vw, 5px);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+}
+
+/* ========================================
+   模式选择卡片样式 - 自适应版
+   ======================================== */
+.neon-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(10px, 2vh, 25px);
+    width: 100%;
+    max-width: 1000px;
+    padding: clamp(5px, 1vh, 10px) 30px;
+    margin-bottom: clamp(15px, 3vh, 40px);
+}
+
+/* 菜单行 */
+.neon-menu-row {
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 5vw, 100px);
+    width: 100%;
+}
+
+.neon-menu-row.single-row {
+    margin-bottom: clamp(5px, 1vh, 10px);
+}
+
+.neon-menu-row.online-row .neon-menu-item {
+    flex: 1;
+    max-width: 320px;
+}
+
+.neon-menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 1vh, 12px);
+    padding: clamp(20px, 3vh, 35px) clamp(25px, 3vw, 45px);
+    background: rgba(10, 10, 20, 0.7);
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: clamp(200px, 25vw, 280px);
+    text-align: center;
+}
+
+.neon-menu-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.03), transparent);
+    transform: translateY(-100%);
+    transition: transform 0.5s;
+}
+
+.neon-menu-item:hover::before {
+    transform: translateY(100%);
+}
+
+.neon-menu-item .menu-number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(1.5rem, 3vh, 2.5rem);
+    color: rgba(255, 255, 255, 0.2);
+    line-height: 1;
+}
+
+.neon-menu-item .menu-text {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.8rem, 1.5vh, 1.2rem);
+    letter-spacing: clamp(2px, 0.5vw, 4px);
+    transition: all 0.3s;
+}
+
+.neon-menu-item .menu-desc {
+    font-size: clamp(0.8rem, 1.3vh, 1.1rem);
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: clamp(1px, 0.3vw, 3px);
+}
+
+/* 新增：副标题样式 */
+.neon-menu-item .menu-sub {
+    font-size: clamp(0.6rem, 1vh, 0.85rem);
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: clamp(1px, 0.2vw, 2px);
+    margin-top: clamp(2px, 0.5vh, 5px);
+}
+
+.neon-menu-item .menu-arrow {
+    font-size: clamp(1rem, 1.5vh, 1.5rem);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    position: absolute;
+    bottom: clamp(8px, 1vh, 15px);
+}
+
+/* 单人游戏 - 青色 */
+#single-mode .menu-text { color: #00d4ff; text-shadow: 0 0 15px rgba(0, 212, 255, 0.6); }
+#single-mode .menu-number { color: rgba(0, 212, 255, 0.3); }
+#single-mode .menu-sub { color: rgba(0, 212, 255, 0.6); }
+#single-mode:hover {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.15);
+    box-shadow: 0 0 50px rgba(0, 212, 255, 0.3), inset 0 0 50px rgba(0, 212, 255, 0.08);
+    transform: translateY(-8px);
+}
+#single-mode:hover .menu-text { text-shadow: 0 0 30px rgba(0, 212, 255, 0.9), 0 0 60px rgba(0, 212, 255, 0.5); }
+#single-mode:hover .menu-arrow { opacity: 1; transform: translateY(0); color: #00d4ff; }
+#single-mode:hover .menu-number { color: rgba(0, 212, 255, 0.5); }
+
+/* 创建房间 - 绿色 */
+#create-mode .menu-text { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.6); }
+#create-mode .menu-number { color: rgba(0, 255, 136, 0.3); }
+#create-mode .menu-sub { color: rgba(0, 255, 136, 0.6); }
+#create-mode:hover {
+    border-color: #00ff88;
+    background: rgba(0, 255, 136, 0.15);
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.3), inset 0 0 50px rgba(0, 255, 136, 0.08);
+    transform: translateY(-8px);
+}
+#create-mode:hover .menu-text { text-shadow: 0 0 30px rgba(0, 255, 136, 0.9), 0 0 60px rgba(0, 255, 136, 0.5); }
+#create-mode:hover .menu-arrow { opacity: 1; transform: translateY(0); color: #00ff88; }
+#create-mode:hover .menu-number { color: rgba(0, 255, 136, 0.5); }
+
+/* 加入房间 - 紫色 */
+#join-mode .menu-text { color: #aa55ff; text-shadow: 0 0 15px rgba(170, 85, 255, 0.6); }
+#join-mode .menu-number { color: rgba(170, 85, 255, 0.3); }
+#join-mode .menu-sub { color: rgba(170, 85, 255, 0.6); }
+#join-mode:hover {
+    border-color: #aa55ff;
+    background: rgba(170, 85, 255, 0.15);
+    box-shadow: 0 0 50px rgba(170, 85, 255, 0.3), inset 0 0 50px rgba(170, 85, 255, 0.08);
+    transform: translateY(-8px);
+}
+#join-mode:hover .menu-text { text-shadow: 0 0 30px rgba(170, 85, 255, 0.9), 0 0 60px rgba(170, 85, 255, 0.5); }
+#join-mode:hover .menu-arrow { opacity: 1; transform: translateY(0); color: #aa55ff; }
+#join-mode:hover .menu-number { color: rgba(170, 85, 255, 0.5); }
+
+/* 点击效果 */
+.neon-menu-item:active {
+    transform: scale(0.96) translateY(-4px);
+}
+
+/* 新版联机提示 - 自适应 */
+.online-notice-new {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 1vw, 15px);
+    padding: clamp(10px, 1.5vh, 18px) clamp(20px, 3vw, 35px);
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 30px;
+    margin-bottom: clamp(10px, 2vh, 25px);
+}
+
+.online-notice-new .notice-badge {
+    font-size: clamp(1rem, 1.5vh, 1.3rem);
+}
+
+.online-notice-new .notice-text {
+    font-size: clamp(0.7rem, 1.2vh, 1rem);
+    color: rgba(255, 215, 0, 0.9);
+    letter-spacing: clamp(1px, 0.2vw, 2px);
+}
+
 /* 主内容区域 */
 .main-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .logo-container {
@@ -480,7 +789,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
 }
 
 .promo-image img {
@@ -488,33 +796,10 @@ body {
     max-height: 100%;
     height: auto;
     width: auto;
-    min-width: 300px;
     object-fit: contain;
     border: 4px solid var(--fc-gray-dark);
     box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
     image-rendering: pixelated;
-}
-
-/* 小屏幕优化：让图片更大 */
-@media (max-height: 800px) {
-    .promo-image img {
-        min-width: 400px;
-        min-height: 200px;
-    }
-}
-
-@media (max-height: 700px) {
-    .promo-image img {
-        min-width: 350px;
-        min-height: 180px;
-    }
-}
-
-@media (max-width: 768px) {
-    .promo-image img {
-        min-width: unset;
-        width: 90%;
-    }
 }
 
 /* 设置入口 */
@@ -554,7 +839,6 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-top: 80px;
     margin-bottom: 15px;
     padding: 8px 15px;
     background: linear-gradient(180deg, #2a2a3a 0%, #1a1a2a 100%);
@@ -720,11 +1004,882 @@ body {
     display: none !important;
 }
 
+/* 无头部面板样式 */
+.panel.no-header {
+    border-top: 4px solid var(--fc-red);
+}
+
+.panel.no-header .panel-body {
+    padding-top: 30px;
+}
+
+/* 透明模式选择面板 - 无边框无背景，自适应 */
+.mode-panel-transparent {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    min-height: 0;
+    justify-content: center;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.mode-panel-transparent::before,
+.mode-panel-transparent::after {
+    display: none;
+}
+
 /* ========================================
-   房间场景 - 红白机 + 座位
+   复古大头电视机样式
+   ======================================== */
+.room-panel {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    overflow: visible;
+    height: 90vh; /* 上下各5% */
+    margin: 5vh auto;
+}
+
+.room-panel::before,
+.room-panel::after {
+    display: none;
+}
+
+/* 游戏模式布局：手柄-电视-手柄 */
+.retro-tv {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 15px;
+    /* 宽度自适应内容 */
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10000;
+}
+
+/* 电视机主体容器 */
+.tv-cabinet {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* 宽度比高度多10% */
+    height: 100%;
+    aspect-ratio: 1.1 / 1;
+    z-index: 1;
+    max-width: 90vh;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* 电视机天线 */
+.tv-top-decor {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: -10px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.tv-antenna {
+    width: 5px;
+    height: 50px;
+    background: linear-gradient(180deg, #666 0%, #333 100%);
+    border-radius: 3px;
+    transform-origin: bottom center;
+}
+
+.tv-antenna.left {
+    transform: rotate(-20deg);
+}
+
+.tv-antenna.right {
+    transform: rotate(20deg);
+}
+
+.tv-antenna::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #888 0%, #444 100%);
+    border-radius: 50%;
+}
+
+/* 电视机主体 */
+.tv-body {
+    display: flex;
+    background: linear-gradient(180deg, #8B7355 0%, #6B5344 30%, #5a4636 70%, #4a3828 100%);
+    border-radius: 30px;
+    padding: 25px;
+    box-shadow: 
+        0 12px 50px rgba(0,0,0,0.6),
+        inset 0 3px 0 rgba(255,255,255,0.15),
+        inset 0 -6px 25px rgba(0,0,0,0.3);
+    border: 8px solid #3a2a1a;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* 屏幕区域 */
+.tv-screen-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    width: 0; /* 让flex: 1生效，防止内容撑开 */
+    box-sizing: border-box;
+}
+
+.tv-bezel {
+    background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 
+        inset 0 0 50px rgba(0,0,0,0.8),
+        0 0 0 6px #2a2a2a;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.tv-glass {
+    position: relative;
+    background: #000810;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 
+        inset 0 0 100px rgba(0,50,100,0.3),
+        inset 0 0 50px rgba(0,0,0,0.8);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* CRT 效果 */
+.crt-effect {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 90%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+    z-index: 10;
+    border-radius: inherit;
+}
+
+.crt-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 1px,
+        rgba(0,0,0,0.3) 1px,
+        rgba(0,0,0,0.3) 2px
+    );
+    pointer-events: none;
+    z-index: 11;
+}
+
+.crt-flicker {
+    position: absolute;
+    inset: 0;
+    background: rgba(100, 200, 255, 0.03);
+    pointer-events: none;
+    z-index: 9;
+    animation: crt-flicker 0.1s infinite;
+}
+
+@keyframes crt-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.97; }
+}
+
+/* 屏幕内容 */
+.tv-content {
+    position: relative;
+    z-index: 5;
+    padding: 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    color: #00ff88;
+    font-family: 'Press Start 2P', monospace;
+    text-shadow: 0 0 10px currentColor;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 房间信息头部 */
+.tv-room-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    padding-bottom: 18px;
+    border-bottom: 3px solid rgba(0, 255, 136, 0.3);
+    flex-shrink: 0;
+}
+
+.tv-room-header .room-label {
+    font-size: 1rem;
+    color: #00aaff;
+    text-shadow: 0 0 10px #00aaff;
+}
+
+.tv-room-header .room-code {
+    font-size: 1.5rem;
+    color: #ffff00;
+    text-shadow: 0 0 15px #ffff00;
+    letter-spacing: 6px;
+}
+
+/* 玩家座位 - 屏幕内 */
+.tv-players {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-shrink: 0;
+}
+
+.tv-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.tv-player-slot {
+    width: 70px;
+    height: 70px;
+    border: 3px solid #00ff88;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 136, 0.1);
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.tv-player-slot.empty {
+    border-color: #444;
+    background: rgba(50, 50, 50, 0.3);
+    box-shadow: none;
+}
+
+.tv-player-slot.empty .player-icon {
+    opacity: 0.3;
+    filter: grayscale(1);
+}
+
+.tv-player-slot .player-icon {
+    font-size: 2.2rem;
+}
+
+.tv-player-slot.occupied {
+    border-color: #00ff88;
+    background: rgba(0, 255, 136, 0.2);
+    animation: player-glow 2s ease-in-out infinite;
+}
+
+@keyframes player-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+    50% { box-shadow: 0 0 35px rgba(0, 255, 136, 0.6); }
+}
+
+.tv-player .player-label {
+    font-size: 0.85rem;
+    color: #00aaff;
+    text-shadow: 0 0 10px #00aaff;
+}
+
+/* P1-P4 不同颜色 */
+.tv-player[data-seat="1"] .tv-player-slot.occupied { border-color: #ff4444; background: rgba(255, 68, 68, 0.2); }
+.tv-player[data-seat="1"] .player-label { color: #ff4444; text-shadow: 0 0 10px #ff4444; }
+.tv-player[data-seat="2"] .tv-player-slot.occupied { border-color: #4488ff; background: rgba(68, 136, 255, 0.2); }
+.tv-player[data-seat="2"] .player-label { color: #4488ff; text-shadow: 0 0 10px #4488ff; }
+.tv-player[data-seat="3"] .tv-player-slot.occupied { border-color: #44ff44; background: rgba(68, 255, 68, 0.2); }
+.tv-player[data-seat="3"] .player-label { color: #44ff44; text-shadow: 0 0 10px #44ff44; }
+.tv-player[data-seat="4"] .tv-player-slot.occupied { border-color: #ffff44; background: rgba(255, 255, 68, 0.2); }
+.tv-player[data-seat="4"] .player-label { color: #ffff44; text-shadow: 0 0 10px #ffff44; }
+
+/* 搜索框 - 屏幕内 */
+.tv-search {
+    margin-bottom: 20px;
+    flex-shrink: 0;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.tv-search input {
+    width: 100%;
+    min-width: 0;
+    padding: 15px 20px;
+    background: rgba(0, 50, 30, 0.6);
+    border: 3px solid #00ff88;
+    border-radius: 8px;
+    color: #00ff88;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 25px rgba(0, 0, 0, 0.5);
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tv-search input::placeholder {
+    color: rgba(0, 255, 136, 0.5);
+}
+
+.tv-search input:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+/* 游戏列表 - 屏幕内 */
+.tv-game-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    min-width: 0;
+    max-height: none;
+    scrollbar-width: thin;
+    scrollbar-color: #00ff88 transparent;
+    width: 100%;
+    max-width: 100%;
+}
+
+.tv-game-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tv-game-list::-webkit-scrollbar-thumb {
+    background: #00ff88;
+    border-radius: 4px;
+}
+
+.tv-game-list .game-item {
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background: rgba(0, 50, 30, 0.4);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #00ff88;
+    transition: all 0.2s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.tv-game-list .game-item:hover {
+    background: rgba(0, 100, 60, 0.5);
+    border-color: #00ff88;
+}
+
+.tv-game-list .game-item.selected {
+    background: rgba(0, 255, 136, 0.3);
+    border-color: #00ffff;
+    color: #00ffff;
+}
+
+/* 电视机右侧控制面板 */
+.tv-controls {
+    width: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 14px;
+    background: linear-gradient(180deg, #5a4a3a 0%, #4a3a2a 100%);
+    border-radius: 12px;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+.tv-brand {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem;
+    color: #c0a080;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    letter-spacing: 3px;
+}
+
+.tv-knob {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(145deg, #3a3a3a 0%, #1a1a1a 100%);
+    border-radius: 50%;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.5),
+        inset 0 2px 5px rgba(255,255,255,0.1);
+    position: relative;
+    cursor: pointer;
+}
+
+.tv-knob::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 16px;
+    background: #666;
+    transform: translate(-50%, -80%);
+    border-radius: 2px;
+}
+
+.tv-knob .knob-label {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    color: #a08060;
+}
+
+.tv-power-btn {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    margin-top: auto;
+}
+
+.power-light {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.tv-power-btn.on .power-light {
+    background: #00ff00;
+    box-shadow: 0 0 12px #00ff00;
+}
+
+/* 电视机底部扬声器 */
+.tv-bottom {
+    background: linear-gradient(180deg, #5a4636 0%, #4a3828 100%);
+    padding: 12px 18px;
+    border-radius: 0 0 18px 18px;
+    flex-shrink: 0;
+}
+
+.tv-speaker {
+    height: 30px;
+    background: #2a2a2a;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.speaker-grille {
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        #1a1a1a 0px,
+        #1a1a1a 5px,
+        #2a2a2a 5px,
+        #2a2a2a 10px
+    );
+}
+
+/* 底部操作栏 */
+.tv-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px 20px;
+    background: rgba(60, 50, 40, 0);
+    border-radius: 0 0 15px 15px;
+    flex-shrink: 0;
+}
+
+.tv-select-actions,
+.tv-game-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.tv-select-actions.hidden,
+.tv-game-actions.hidden {
+    display: none;
+}
+
+.tv-action-bar .upload-btn-inline {
+    padding: 14px 24px;
+    background: rgba(100, 100, 100, 0.3);
+    border: 3px solid #666;
+    border-radius: 8px;
+    color: #aaa;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tv-action-bar .upload-btn-inline:hover {
+    border-color: #00aaff;
+    color: #00aaff;
+}
+
+.start-btn {
+    padding: 14px 40px;
+    background: linear-gradient(180deg, #00aa44 0%, #008833 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 170, 68, 0.4);
+    transition: all 0.3s;
+}
+
+.start-btn:hover:not(:disabled) {
+    background: linear-gradient(180deg, #00cc55 0%, #00aa44 100%);
+    box-shadow: 0 4px 20px rgba(0, 200, 80, 0.6);
+    transform: translateY(-2px);
+}
+
+.start-btn:disabled {
+    background: linear-gradient(180deg, #444 0%, #333 100%);
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* 游戏操作按钮 - 像素风格 */
+.tv-action-btn {
+    padding: 10px 16px;
+    background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 50%, #a8a8a8 100%);
+    border: none;
+    border-radius: 0;
+    color: #222;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.1s;
+    box-shadow: 3px 3px 0 #505050;
+    text-transform: uppercase;
+}
+
+.tv-action-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #505050;
+}
+
+.tv-action-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #505050;
+}
+
+.tv-action-btn.danger {
+    background: linear-gradient(180deg, #ff6060 0%, #e04040 50%, #c02020 100%);
+    color: #fff;
+}
+
+.tv-action-btn.danger:hover {
+    box-shadow: 4px 4px 0 #800020;
+}
+
+.tv-action-btn:disabled {
+    background: linear-gradient(180deg, #606060 0%, #505050 100%);
+    color: #888;
+    box-shadow: 2px 2px 0 #303030;
+    cursor: not-allowed;
+}
+
+/* 电视机两侧虚拟手柄 - 仅PC端显示 */
+.tv-controllers {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 120px;
+    padding: 10px;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10000;
+}
+
+.tv-controllers.left-controllers {
+    left: 20px;
+}
+
+.tv-controllers.right-controllers {
+    right: 20px;
+}
+
+/* PC端显示手柄 */
+@media (min-width: 769px) {
+    .tv-controllers.visible {
+        display: flex;
+                margin-right: 6%;
+        margin-left: 6%;
+        margin-top: 20%;
+    }
+}
+
+/* 手机端永远隐藏 */
+@media (max-width: 768px) {
+    .tv-controllers {
+        display: none !important;
+    }
+}
+
+.tv-controllers .player-input-panel {
+    background: rgba(20, 20, 30, 0.95);
+    border: 3px solid #444;
+    border-radius: 12px;
+    padding: 12px;
+    width: auto;
+    position: relative;
+    z-index: 10001;
+}
+
+/* 电视机两侧手柄内的控制器样式 - 横向布局 */
+.tv-controllers .unified-controller {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(145deg, #404040 0%, #252525 100%);
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #505050;
+    flex-wrap: nowrap;
+}
+
+.tv-controllers .mini-dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 20px);
+    grid-template-rows: repeat(3, 20px);
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.tv-controllers .mini-middle {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.tv-controllers .mini-middle .mini-btn {
+    padding: 3px 6px;
+    font-size: 0.25rem;
+}
+
+.tv-controllers .mini-face {
+    display: grid;
+    grid-template-columns: repeat(3, 20px);
+    grid-template-rows: repeat(3, 20px);
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.tv-controllers .mini-face .mini-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 0.3rem;
+}
+
+.tv-controllers .player-input-panel.active {
+    border-color: #00aaff;
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.4);
+}
+
+/* 左侧手柄 P1 */
+.tv-controllers.left-controllers .player-input-panel {
+    border-color: #ff4444;
+}
+
+.tv-controllers.left-controllers .player-input-panel.active {
+    border-color: #ff4444;
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+}
+
+/* 右侧手柄 P2 */
+.tv-controllers.right-controllers .player-input-panel {
+    border-color: #4488ff;
+}
+
+.tv-controllers.right-controllers .player-input-panel.active {
+    border-color: #4488ff;
+    box-shadow: 0 0 20px rgba(68, 136, 255, 0.4);
+}
+
+/* 加载进度 - 屏幕内 */
+.tv-content .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 8, 16, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    border-radius: inherit;
+}
+
+.tv-content .loading-content {
+    text-align: center;
+}
+
+.tv-content .loading-title {
+    font-size: 0.8rem;
+    color: #00ffff;
+    margin-bottom: 20px;
+    animation: blink-text 1s infinite;
+}
+
+@keyframes blink-text {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.tv-content .loading-bar {
+    width: 200px;
+    height: 15px;
+    background: #001a0a;
+    border: 2px solid #00ff88;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.tv-content .loading-progress {
+    height: 100%;
+    background: #00ff88;
+    box-shadow: 0 0 15px #00ff88;
+    transition: width 0.3s;
+}
+
+.tv-content .loading-text {
+    margin-top: 10px;
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+/* 电视机内游戏画面 */
+.tv-game-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    z-index: 15;
+}
+
+.tv-game-screen .tv-game-title {
+    font-size: 0.5rem;
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+    padding: 3px 8px;
+    letter-spacing: 2px;
+    background: rgba(0, 0, 0, 0.171);
+    text-align: center;
+    flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+}
+
+.tv-canvas-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tv-canvas-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    background: #000;
+}
+
+.tv-canvas-wrapper .emulator-container {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.tv-canvas-wrapper .emulator-container:not(.hidden) {
+    display: block;
+}
+
+/* ========================================
+   房间场景 - 红白机 + 座位 (保留兼容)
    ======================================== */
 .room-scene {
-    background: linear-gradient(180deg, #0a0a18 0%, #12122a 50%, #0a0a18 100%);
+    background: transparent;
     border: 4px solid #2a2a4a;
     border-radius: 12px;
     padding: 40px 30px;
@@ -734,6 +1889,29 @@ body {
         inset 0 0 80px rgba(0,0,0,0.6),
         0 8px 30px rgba(0,0,0,0.5);
     overflow: hidden;
+}
+
+/* 房间内滚动背景 */
+.room-scrolling-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-image: url('../page/beijing.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: 0 center;
+    animation: scroll-bg 80s linear infinite;
+    z-index: 0;
+    opacity: 0.25;
+    filter: brightness(0.8) saturate(0.7);
+}
+
+/* 房间内容层 */
+.room-scene > *:not(.room-scrolling-bg) {
+    position: relative;
+    z-index: 1;
 }
 
 /* 背景装饰 - 像素网格 */
@@ -746,6 +1924,30 @@ body {
         linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
     background-size: 20px 20px;
     pointer-events: none;
+    z-index: 1;
+}
+
+/* 渐变遮罩 - 让房间背景边缘更柔和 */
+.room-scene::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(90deg, 
+            rgba(10,10,26,0.7) 0%, 
+            rgba(10,10,26,0.2) 15%,
+            rgba(10,10,26,0.1) 50%,
+            rgba(10,10,26,0.2) 85%,
+            rgba(10,10,26,0.7) 100%
+        ),
+        linear-gradient(180deg, 
+            rgba(10,10,26,0.5) 0%, 
+            rgba(10,10,26,0.1) 20%,
+            rgba(10,10,26,0.1) 80%,
+            rgba(10,10,26,0.5) 100%
+        );
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* 电视机 */
@@ -753,6 +1955,7 @@ body {
     text-align: center;
     margin-bottom: 35px;
     position: relative;
+    z-index: 2;
 }
 
 .tv-screen {
@@ -824,6 +2027,8 @@ body {
     justify-content: center;
     margin-bottom: 40px;
     perspective: 500px;
+    position: relative;
+    z-index: 2;
 }
 
 .arcade-panel {
@@ -1169,6 +2374,8 @@ body {
     gap: 35px;
     flex-wrap: wrap;
     margin-top: -20px;
+    position: relative;
+    z-index: 2;
 }
 
 .player-seat {
@@ -1435,7 +2642,7 @@ body {
 }
 
 .game-result-item .game-name {
-    font-size: 1.2rem;
+    font-size: 0.8rem;
     color: var(--fc-cream);
     flex: 1;
 }
@@ -1487,10 +2694,10 @@ body {
 .game-screen {
     text-align: center;
     position: fixed;
-    top: 0;
+    top: 5vh;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 5vh;
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -1498,6 +2705,7 @@ body {
     align-items: center;
     background: linear-gradient(180deg, #0a0a1a 0%, #101028 50%, #080818 100%);
     overflow: hidden;
+    z-index: 50000;
 }
 
 /* 游戏主布局：画面在上方，手柄在下方 */
@@ -1508,7 +2716,7 @@ body {
     align-items: center;
     gap: 20px;
     flex: 1;
-    max-height: calc(100vh - 80px);
+    max-height: 90vh;
 }
 
 /* 侧边控制器 - 现在放在底部 */
@@ -2043,31 +3251,69 @@ body {
     text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
+.voice-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .voice-btn,
 .toggle-chat-btn {
-    background: none;
-    border: none;
-    font-size: 1.3rem;
+    background: rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.3);
+    padding: 6px 12px;
+    font-size: 0.6rem;
     cursor: pointer;
     color: white;
-    opacity: 0.9;
     transition: all 0.2s;
+    font-family: 'Press Start 2P', monospace;
+    white-space: nowrap;
+}
+
+.toggle-chat-btn {
+    padding: 8px 12px;
+    font-size: 1rem;
+    background: rgba(0,0,0,0.4);
 }
 
 .voice-btn:hover,
 .toggle-chat-btn:hover {
-    opacity: 1;
-    transform: scale(1.1);
+    background: rgba(0,0,0,0.5);
+    border-color: rgba(255,255,255,0.5);
+    transform: scale(1.05);
 }
 
 .voice-btn.active {
-    color: var(--fc-gold);
-    animation: voice-pulse 1s infinite;
+    background: var(--fc-green-dark);
+    border-color: var(--fc-green);
+    color: white;
+    animation: voice-pulse 1.5s infinite;
+}
+
+.voice-btn.muted {
+    background: var(--fc-red-dark);
+    border-color: var(--fc-red);
+}
+
+.voice-status {
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.7);
+    padding: 4px 8px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 2px;
+}
+
+.voice-status.active {
+    color: var(--fc-green);
+}
+
+.voice-status.muted {
+    color: var(--fc-red);
 }
 
 @keyframes voice-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
 }
 
 .chat-body {
@@ -2503,7 +3749,7 @@ body {
 .modal {
     position: fixed;
     inset: 0;
-    z-index: 1000;
+    z-index: 200000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2963,6 +4209,53 @@ body {
         font-size: 1.5rem;
     }
     
+    .hero-header {
+        padding: 30px 20px 25px;
+    }
+    
+    .hero-icon {
+        font-size: 3rem;
+    }
+    
+    .hero-title h1 {
+        font-size: 2.5rem;
+        letter-spacing: 6px;
+    }
+    
+    .hero-title h2 {
+        font-size: 1.5rem;
+        letter-spacing: 8px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 3px;
+        margin-top: 12px;
+    }
+    
+    .neon-menu {
+        max-width: 700px;
+        gap: 20px;
+        flex-direction: row;
+    }
+    
+    .neon-menu-item {
+        padding: 30px 35px;
+        min-width: 200px;
+    }
+    
+    .neon-menu-item .menu-number {
+        font-size: 2rem;
+    }
+    
+    .neon-menu-item .menu-text {
+        font-size: 1rem;
+    }
+    
+    .neon-menu-item .menu-desc {
+        font-size: 0.9rem;
+    }
+    
     .subtitle {
         font-size: 0.7rem;
         letter-spacing: 3px;
@@ -3007,11 +4300,287 @@ body {
         min-width: 300px;
         padding: 15px 25px;
     }
+    
+    /* 复古电视机响应式 - 平板 */
+    .room-panel {
+        height: 85vh;
+        margin: 7.5vh auto;
+    }
+    
+    .retro-tv {
+        width: auto;
+        max-width: 100%;
+        gap: 8px;
+    }
+    
+    .tv-controllers {
+        width: 140px;
+        min-width: 140px;
+    }
+    
+    .tv-controllers .player-input-panel {
+        padding: 10px;
+    }
+    
+    .tv-controllers .mini-dpad {
+        grid-template-columns: repeat(3, 14px);
+        grid-template-rows: repeat(3, 14px);
+    }
+    
+    .tv-controllers .mini-face {
+        grid-template-columns: repeat(3, 14px);
+        grid-template-rows: repeat(3, 14px);
+    }
+    
+    .tv-controllers .mini-face .mini-btn {
+        width: 14px;
+        height: 14px;
+        font-size: 0.25rem;
+    }
+    
+    .tv-body {
+        padding: 12px;
+    }
+    
+    .tv-controls {
+        width: 50px;
+        padding: 8px 6px;
+        gap: 10px;
+    }
+    
+    .tv-knob {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .tv-content {
+        padding: 12px;
+    }
+    
+    .tv-players {
+        gap: 10px;
+    }
+    
+    .tv-player-slot {
+        width: 38px;
+        height: 38px;
+    }
 }
 
 @media (max-width: 600px) {
     .app-container {
         padding: 0 0px 0px;
+    }
+    
+    /* 复古电视机响应式 - 手机 - 选择游戏时向下移动20% */
+    .room-panel {
+        height: auto;
+        margin: 0 auto;
+        margin-top: 15vh;
+        padding: 10px !important;
+    }
+    
+    /* 游戏中时电视机恢复正常位置 */
+    .room-panel.game-playing {
+        margin-top: -15vh;
+    }
+    
+    .retro-tv {
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+    }
+    
+    .tv-cabinet {
+        max-width: 100%;
+        width: 100%;
+        aspect-ratio: auto;
+        height: auto;
+    }
+    
+    /* 手机端隐藏两侧手柄 */
+    .tv-controllers {
+        display: none !important;
+    }
+    
+    .tv-top-decor {
+        display: none;
+    }
+    
+    .tv-body {
+        flex-direction: column;
+        padding: 8px;
+        border-radius: 12px;
+        min-height: 50vh;
+    }
+    
+    .tv-screen-area {
+        width: 100%;
+        flex: 1;
+        min-height: 45vh;
+    }
+    
+    .tv-controls {
+        flex-direction: row;
+        width: 100%;
+        padding: 8px;
+        margin-left: 0;
+        margin-top: 8px;
+        justify-content: space-around;
+    }
+    
+    .tv-knob {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .tv-knob .knob-label {
+        display: none;
+    }
+    
+    .tv-bezel {
+        padding: 10px;
+    }
+    
+    .tv-content {
+        padding: 15px;
+        min-height: 40vh;
+    }
+    
+    .tv-room-header {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+    }
+    
+    .tv-room-header .room-code {
+        font-size: 1rem;
+        letter-spacing: 3px;
+    }
+    
+    .tv-players {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .tv-player-slot {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .tv-player-slot .player-icon {
+        font-size: 1.2rem;
+    }
+    
+    .tv-player .player-label {
+        font-size: 0.5rem;
+    }
+    
+    .tv-search input {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .tv-game-list {
+        max-height: 25vh;
+        flex: 1;
+    }
+    
+    .tv-game-list .game-item {
+        padding: 6px 10px;
+        font-size: 0.5rem;
+    }
+    
+    /* 手机端隐藏电视机底座 */
+    .tv-bottom {
+        display: none;
+    }
+    
+    .tv-legs {
+        display: none;
+    }
+    
+    .tv-leg {
+        display: none;
+    }
+    
+    .tv-action-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .tv-action-bar .upload-btn-inline {
+        font-size: 0.55rem;
+        padding: 8px 15px;
+    }
+    
+    .start-btn {
+        font-size: 0.6rem;
+        padding: 10px 25px;
+        width: 100%;
+    }
+    
+    .hero-header {
+        padding: 25px 15px 20px;
+    }
+    
+    .hero-icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+    
+    .hero-title h1 {
+        font-size: 1.8rem;
+        letter-spacing: 4px;
+    }
+    
+    .hero-title h2 {
+        font-size: 1rem;
+        letter-spacing: 5px;
+        margin-top: 8px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.75rem;
+        margin-top: 12px;
+    }
+    
+    .neon-menu {
+        padding: 0 15px;
+        gap: 15px;
+        flex-direction: column;
+    }
+    
+    .neon-menu-item {
+        padding: 25px 20px;
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .neon-menu-item .menu-number {
+        font-size: 1.8rem;
+    }
+    
+    .neon-menu-item .menu-text {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+    
+    .neon-menu-item .menu-desc {
+        font-size: 0.8rem;
+    }
+    
+    .neon-menu-item .menu-arrow {
+        font-size: 1rem;
+    }
+    
+    .online-notice-new {
+        padding: 12px 20px;
+        margin: 0 15px 20px;
+    }
+    
+    .online-notice-new .notice-text {
+        font-size: 0.8rem;
     }
     
     .nes-header h1 {
@@ -3133,7 +4702,7 @@ body {
     justify-content: space-between;
     align-items: stretch;
     padding: 0;
-    z-index: 1000;
+    z-index: 100001;
     pointer-events: none;
 }
 
@@ -3411,7 +4980,26 @@ body {
 .ios-pwa-title {
     font-size: 1.1rem;
     color: var(--fc-gold);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.ios-pwa-desc {
+    font-size: 0.75rem;
+    color: #ff6b6b;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background: rgba(255, 107, 107, 0.15);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.ios-pwa-tip {
+    font-size: 0.7rem;
+    color: var(--fc-cyan);
+    margin: 15px 0;
+    padding: 6px 10px;
+    background: rgba(0, 224, 224, 0.1);
+    border-radius: 4px;
 }
 
 .ios-pwa-steps {
@@ -3499,6 +5087,9 @@ body {
         flex-direction: column;
         height: 100vh;
         height: 100dvh; /* 动态视口高度，适配移动端 */
+        top: 0;
+        bottom: 0;
+        z-index: 50000;
     }
     
     .game-main-layout {
@@ -3541,22 +5132,75 @@ body {
         object-fit: contain;
     }
     
-    /* 隐藏游戏工具栏，改为浮动按钮 */
+    /* 手机端游戏工具栏 - 左上角小图标 */
     .game-toolbar {
         position: fixed;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.6);
-        padding: 5px 10px;
-        border-radius: 8px;
-        gap: 5px;
-        z-index: 999;
+        top: 8px;
+        left: 8px;
+        transform: none;
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        gap: 4px;
+        z-index: 100000;
+        flex-wrap: wrap;
+        max-width: 150px;
     }
     
     .game-toolbar .nes-btn {
-        padding: 6px 10px;
-        font-size: 0.6rem;
+        padding: 6px 8px;
+        font-size: 0.5rem;
+        min-width: auto;
+        box-shadow: 2px 2px 0 #404040;
+    }
+    
+    .game-toolbar .nes-btn:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 #404040;
+    }
+    
+    /* 隐藏按钮文字，只显示图标 */
+    .game-toolbar .nes-btn .btn-text {
+        display: none;
+    }
+    
+    .game-toolbar .nes-btn .btn-icon {
+        font-size: 0.8rem;
+    }
+    
+    /* 手机端游戏操作按钮 - 左上角像素风小图标 */
+    .tv-game-actions {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 100000;
+        flex-wrap: wrap;
+        gap: 4px;
+        max-width: 180px;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .tv-game-actions .tv-action-btn {
+        padding: 6px 8px;
+        font-size: 0.7rem;
+        background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 50%, #a8a8a8 100%);
+        color: #222;
+        border: none;
+        border-radius: 0;
+        box-shadow: 2px 2px 0 #505050;
+        min-width: 32px;
+        text-align: center;
+    }
+    
+    .tv-game-actions .tv-action-btn:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 #505050;
+    }
+    
+    .tv-game-actions .tv-action-btn.danger {
+        background: linear-gradient(180deg, #ff6060 0%, #e04040 50%, #c02020 100%);
+        color: #fff;
     }
     
     /* 玩家信息栏隐藏 */
@@ -3566,22 +5210,106 @@ body {
     
     /* 横屏时优化 */
     @media (orientation: landscape) {
+        /* 横屏时隐藏电视机外壳，直接显示游戏画面 */
+        .room-panel.game-playing {
+            background: #000 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+        
+        .room-panel.game-playing .retro-tv {
+            background: #000 !important;
+            height: 100vh !important;
+        }
+        
+        .room-panel.game-playing .tv-cabinet {
+            background: #000 !important;
+            border: none !important;
+            padding: 0 !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            height: 100vh !important;
+        }
+        
+        .room-panel.game-playing .tv-body {
+            background: #000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+        }
+        
+        .room-panel.game-playing .tv-bezel {
+            background: #000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+        }
+        
+        .room-panel.game-playing .tv-glass {
+            background: #000 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+        
+        .room-panel.game-playing .tv-content {
+            background: #000 !important;
+            padding: 0 !important;
+        }
+        
+        .room-panel.game-playing .crt-effect,
+        .room-panel.game-playing .crt-scanlines,
+        .room-panel.game-playing .crt-flicker {
+            display: none !important;
+        }
+        
+        .room-panel.game-playing .tv-controls,
+        .room-panel.game-playing .tv-top-decor,
+        .room-panel.game-playing .tv-bottom,
+        .room-panel.game-playing .tv-legs {
+            display: none !important;
+        }
+        
+        /* 横屏时隐藏P1/P2虚拟手柄（电视机两侧的） */
+        .tv-controllers {
+            display: none !important;
+        }
+        
         .game-main-layout {
-            padding-top: 45px;
+            padding-top: 0 !important;
+            margin-top: 0 !important;
             justify-content: center;
+            align-items: center;
+            height: 100vh !important;
+            background: #000 !important;
         }
         
         .screen-wrapper {
             width: auto !important;
             margin: 0 auto !important;
             margin-top: 0 !important;
+            background: #000 !important;
+            box-shadow: none !important;
+        }
+        
+        .screen-bezel {
+            background: #000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
         }
         
         .screen-inner {
-            width: calc(70vh * 1.067) !important; /* 256:240 比例 */
-            height: 70vh !important;
-            max-width: 55vw;
-            max-height: 70vh;
+            width: calc(90vh * 1.067) !important; /* 256:240 比例，更大画面 */
+            height: 90vh !important;
+            max-width: 95vw;
+            max-height: 90vh;
             aspect-ratio: auto;
         }
         
@@ -3665,9 +5393,9 @@ body {
     
     /* 街机模式竖屏：游戏画面在上方，虚拟手柄在下方 */
     .game-screen.arcade-mode .game-main-layout {
-        padding-top: 45px;
-        height: calc(100vh - 45px);
-        height: calc(100dvh - 45px);
+        padding-top: 5vh;
+        height: 95vh;
+        height: 95dvh;
     }
     
     /* 街机模式竖屏：游戏画面铺满宽度，增加高度让画面铺满 */
@@ -3728,6 +5456,7 @@ body {
     }
     
     /* EmulatorJS 虚拟手柄样式覆盖 - 固定在屏幕下方 */
+    .arcade-mode .ejs_virtualGamepad_parent,
     .game-screen.arcade-mode .ejs_virtualGamepad_parent {
         position: fixed !important;
         bottom: 0 !important;
@@ -3735,34 +5464,57 @@ body {
         right: 0 !important;
         width: 100vw !important;
         height: 42vh !important; /* 调整高度适配游戏画面 */
-        z-index: 1000 !important;
+        z-index: 100000 !important;
     }
     
     /* 右侧XYAB按钮 - 更靠右 */
+    .arcade-mode .ejs_virtualGamepad_right,
     .ejs_virtualGamepad_right {
-        width: 150px !important;
-        height: 150px !important;
+        width: 40% !important;
+        height: 45% !important;
         right: 0px !important;
         bottom: 50px !important;
     }
     
+    /* ABXY按钮位置微调 - 向各自方向移动10px */
+    /* Y按钮 - 向上移动 */
+    .ejs_virtualGamepad_right .ejs_virtualGamepad_button:nth-child(1) {
+        transform: translateY(-10px) !important;
+    }
+    /* X按钮 - 向左移动 */
+    .ejs_virtualGamepad_right .ejs_virtualGamepad_button:nth-child(2) {
+        transform: translateX(-10px) !important;
+    }
+    /* B按钮 - 向右移动 */
+    .ejs_virtualGamepad_right .ejs_virtualGamepad_button:nth-child(3) {
+        transform: translateX(10px) !important;
+    }
+    /* A按钮 - 向下移动 */
+    .ejs_virtualGamepad_right .ejs_virtualGamepad_button:nth-child(4) {
+        transform: translateY(10px) !important;
+    }
+    
     /* 左侧方向键 */
+    .arcade-mode .ejs_virtualGamepad_left,
     .ejs_virtualGamepad_left {
-        width: 140px !important;
-        height: 140px !important;
+        width: 40% !important;
+        height: 50% !important;
         left: 10px !important;
         bottom: 60px !important;
     }
     
     /* 单个按钮 */
+    .arcade-mode .ejs_virtualGamepad_button,
     .ejs_virtualGamepad_button {
-        width: 48px !important;
-        height: 48px !important;
-        line-height: 48px !important;
+        width: 60px !important;
+        height: 60px !important;
+        line-height: 60px !important;
         font-size: 16px !important;
+        
     }
     
     /* 底部选择/开始/加速按钮 - 缩小并完整显示 */
+    .arcade-mode .ejs_virtualGamepad_bottom,
     .ejs_virtualGamepad_bottom {
         bottom: 8px !important;
         left: 50% !important;
@@ -3776,6 +5528,7 @@ body {
         flex-wrap: nowrap !important;
     }
     
+    .arcade-mode .ejs_virtualGamepad_bottom .ejs_virtualGamepad_button,
     .ejs_virtualGamepad_bottom .ejs_virtualGamepad_button {
         position: relative !important;
         width: auto !important;
@@ -3793,37 +5546,181 @@ body {
     }
     
     /* 顶部额外按钮（如果有） */
+    .arcade-mode .ejs_virtualGamepad_top,
     .ejs_virtualGamepad_top {
         bottom: auto !important;
         top: 45vh !important;
     }
     
-    /* 街机模式横屏：全屏 */
+    /* 街机模式横屏：全屏，隐藏电视机外壳 */
     @media (orientation: landscape) {
-        .game-screen.arcade-mode .game-main-layout {
-            padding-top: 40px;
-            height: calc(100vh - 40px);
+        /* 街机模式横屏时隐藏电视机外壳 */
+        .room-panel.game-playing.arcade-mode {
+            background: transparent !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
         }
         
+        .room-panel.game-playing.arcade-mode .retro-tv,
+        .room-panel.game-playing.arcade-mode .tv-cabinet,
+        .room-panel.game-playing.arcade-mode .tv-body,
+        .room-panel.game-playing.arcade-mode .tv-bezel,
+        .room-panel.game-playing.arcade-mode .tv-glass {
+            background: #000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+        }
+        
+        .room-panel.game-playing.arcade-mode .tv-content {
+            background: #000 !important;
+            padding: 0 !important;
+        }
+        
+        .room-panel.game-playing.arcade-mode .tv-controls,
+        .room-panel.game-playing.arcade-mode .tv-top-decor,
+        .room-panel.game-playing.arcade-mode .tv-bottom,
+        .room-panel.game-playing.arcade-mode .tv-legs,
+        .room-panel.game-playing.arcade-mode .crt-effect,
+        .room-panel.game-playing.arcade-mode .crt-scanlines,
+        .room-panel.game-playing.arcade-mode .crt-flicker {
+            display: none !important;
+        }
+        
+        /* 横屏时隐藏P1/P2虚拟手柄 */
+        .room-panel.game-playing.arcade-mode .tv-controllers {
+            display: none !important;
+        }
+        
+        .arcade-mode .game-main-layout,
+        .game-screen.arcade-mode .game-main-layout {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+            height: 100vh;
+            background: #000 !important;
+        }
+        
+        .arcade-mode .screen-wrapper,
         .game-screen.arcade-mode .screen-wrapper {
             width: 100vw !important;
             margin: 0 !important;
+            background: #000 !important;
+            box-shadow: none !important;
         }
         
+        .arcade-mode .screen-bezel,
+        .game-screen.arcade-mode .screen-bezel {
+            background: #000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+        
+        .arcade-mode .screen-inner,
         .game-screen.arcade-mode .screen-inner {
             width: 100vw !important;
-            height: calc(100vh - 45px) !important;
+            height: 100vh !important;
             max-width: 100vw !important;
-            max-height: calc(100vh - 45px) !important;
+            max-height: 100vh !important;
         }
         
+        /* 横屏时恢复EmulatorJS虚拟按键默认位置（使用EmulatorJS原始值） */
+        .arcade-mode .ejs_virtualGamepad_parent,
         .game-screen.arcade-mode .ejs_virtualGamepad_parent {
             position: absolute !important;
-            height: auto !important;
+            width: 100% !important;
+            bottom: 50px !important;
+            height: unset !important;
+            left: unset !important;
+            right: unset !important;
+            top: unset !important;
         }
         
-        .ejs_virtualGamepad_bottom {
+        /* 横屏时重置右侧XYAB按钮位置 - 恢复EmulatorJS默认值 */
+        .arcade-mode .ejs_virtualGamepad_right,
+        .game-screen.arcade-mode .ejs_virtualGamepad_right {
+            position: absolute !important;
+            bottom: 50px !important;
+            width: 130px !important;
+            height: 130px !important;
+            right: 5px !important;
+            left: unset !important;
+            top: unset !important;
+        }
+        
+        /* 横屏时重置ABXY按钮的transform */
+        .arcade-mode .ejs_virtualGamepad_right .ejs_virtualGamepad_button,
+        .game-screen.arcade-mode .ejs_virtualGamepad_right .ejs_virtualGamepad_button {
+            transform: none !important;
+        }
+        
+        /* 横屏时重置左侧方向键位置 - 恢复EmulatorJS默认值 */
+        .arcade-mode .ejs_virtualGamepad_left,
+        .game-screen.arcade-mode .ejs_virtualGamepad_left {
+            position: absolute !important;
+            bottom: 50px !important;
+            width: 125px !important;
+            height: 125px !important;
+            left: 10px !important;
+            right: unset !important;
+            top: unset !important;
+        }
+        
+        /* 横屏时重置单个按钮大小 - 恢复EmulatorJS默认值 */
+        .arcade-mode .ejs_virtualGamepad_button,
+        .game-screen.arcade-mode .ejs_virtualGamepad_button {
+            width: 50px !important;
+            height: 50px !important;
+            line-height: 50px !important;
+            font-size: 30px !important;
+        }
+        
+        /* 横屏时重置底部按钮 - 使用flex横向排列 */
+        .arcade-mode .ejs_virtualGamepad_bottom,
+        .game-screen.arcade-mode .ejs_virtualGamepad_bottom {
+            position: absolute !important;
             bottom: 10px !important;
+            height: 40px !important;
+            width: auto !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            margin-left: 0 !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+        }
+        
+        .arcade-mode .ejs_virtualGamepad_bottom .ejs_virtualGamepad_button,
+        .game-screen.arcade-mode .ejs_virtualGamepad_bottom .ejs_virtualGamepad_button {
+            /* 使用相对定位，让flex布局生效 */
+            position: relative !important;
+            width: auto !important;
+            min-width: 50px !important;
+            height: 36px !important;
+            line-height: 36px !important;
+            font-size: 12px !important;
+            padding: 0 12px !important;
+            white-space: nowrap !important;
+            border-radius: 5px !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+        }
+        
+        /* 横屏时重置顶部按钮 - 恢复EmulatorJS默认值 */
+        .arcade-mode .ejs_virtualGamepad_top,
+        .game-screen.arcade-mode .ejs_virtualGamepad_top {
+            position: absolute !important;
+            bottom: 250px !important;
+            width: 100% !important;
+            top: unset !important;
         }
     }
 }
@@ -4115,6 +6012,13 @@ body {
     height: 6px;
     background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
     border-radius: 3px;
+}
+
+.disclaimer {
+    margin-top: 15px;
+    font-size: 0.7rem;
+    color: #666;
+    line-height: 1.5;
 }
 
 /* ========== 服务器设置弹窗 ========== */
@@ -4484,4 +6388,50 @@ body {
     height: 75vh;
     max-width: 65vw;
     max-height: calc(120vw * 0.75);
+}
+
+
+/* ========================================
+   语音聊天移动端优化
+   ======================================== */
+@media (max-width: 768px) {
+    .chat-header {
+        padding: 12px 15px;
+        flex-wrap: wrap;
+    }
+    
+    .voice-controls {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .voice-btn {
+        font-size: 0.5rem;
+        padding: 5px 10px;
+    }
+    
+    .voice-status {
+        font-size: 0.45rem;
+        padding: 3px 6px;
+    }
+    
+    .toggle-chat-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-header span {
+        font-size: 0.7rem;
+    }
+    
+    .voice-btn {
+        font-size: 0.45rem;
+        padding: 4px 8px;
+    }
+    
+    .voice-status {
+        display: none; /* 小屏幕隐藏状态文字 */
+    }
 }

@@ -4,7 +4,9 @@ import { MultiPlatformEmulator, PLATFORMS, detectPlatform } from './emulator-mul
 import { InputManager } from './input.js';
 import { UIManager } from './ui.js';
 import { ChatManager } from './chat.js';
+import { VoiceChatManager } from './voice-chat.js';
 import { ARCADE_GAMES, ARCADE_OSS_BASE, getArcadeRomName, isArcadeGame, getArcadeGameList } from './arcade-games.js';
+import { romCache } from './rom-cache.js';
 
 class GameApp {
     constructor() {
@@ -13,6 +15,7 @@ class GameApp {
         this.inputManager = null;
         this.ui = null;
         this.chatManager = null;
+        this.voiceChatManager = null;
 
         this.mode = null; // 'single', 'host', 'client'
         this.myPlayerNum = 0;
@@ -38,10 +41,14 @@ class GameApp {
 
     async initGame(selectedMode) {
         this.ui = new UIManager();
-        this.emulator = new MultiPlatformEmulator('nes-canvas');
+        this.emulator = new MultiPlatformEmulator('tv-nes-canvas', 'tv-emulator-container');
         this.inputManager = new InputManager(this.emulator);
         this.roomManager = new RoomManager();
         this.chatManager = new ChatManager(this.roomManager);
+        this.voiceChatManager = new VoiceChatManager(this.roomManager);
+
+        // 初始化ROM缓存
+        await romCache.init();
 
         await this.loadGameList();
         this.bindEvents();
@@ -259,7 +266,7 @@ class GameApp {
             // 显示房间号，让用户有时间复制
             document.getElementById('room-code').textContent = roomCode;
             document.getElementById('room-info').classList.remove('hidden');
-            document.querySelector('.mode-cards').classList.add('hidden');
+            document.querySelector('.neon-menu').classList.add('hidden');
             this.ui.setConnectionStatus('connected', 'P2P 就绪');
 
             // 添加"进入房间"按钮，让用户主动进入
@@ -306,13 +313,13 @@ class GameApp {
     }
 
     showJoinForm() {
-        document.querySelector('.mode-cards').classList.add('hidden');
+        document.querySelector('.neon-menu').classList.add('hidden');
         document.getElementById('join-form').classList.remove('hidden');
         document.getElementById('room-input').focus();
     }
 
     backToModeSelect() {
-        document.querySelector('.mode-cards').classList.remove('hidden');
+        document.querySelector('.neon-menu').classList.remove('hidden');
         document.getElementById('join-form').classList.add('hidden');
         document.getElementById('room-info').classList.add('hidden');
         document.getElementById('connection-status').classList.add('hidden');
@@ -502,7 +509,7 @@ class GameApp {
         // 判断是否是街机模式
         const isArcade = this.currentPlatform === 'arcade' || this.emulator.coreType === 'emulatorjs';
         // 客户端是联机模式，显示聊天面板
-        this.ui.showGameScreen(true, isArcade);
+        this.ui.showGameScreen(true, isArcade, this.selectedGameName);
         
         // 所有游戏都使用帧同步模式，客户端只接收画面
         // 确保 canvas 可见用于显示接收到的帧
@@ -537,6 +544,7 @@ class GameApp {
         document.getElementById('reset-btn').disabled = true;
         
         this.chatManager.init();
+        this.voiceChatManager.init();
         this.initPlayerInputPanels();
         
         // 手机端处理：显示提示并设置虚拟手柄
@@ -617,26 +625,35 @@ class GameApp {
 
     onLatencyUpdate(data) {
         const { player, latency } = data;
+        // 更新两个位置的延迟显示
         const el = document.getElementById(`latency-p${player}`);
-        if (el) {
+        const tvEl = document.getElementById(`tv-latency-p${player}`);
+        
+        const updateEl = (element) => {
+            if (!element) return;
             if (latency === null) {
-                el.textContent = '--ms';
-                el.className = 'panel-latency';
+                element.textContent = '--ms';
+                element.className = 'panel-latency';
             } else {
-                el.textContent = `${latency}ms`;
-                el.className = 'panel-latency ' + (latency < 50 ? 'good' : latency < 100 ? 'medium' : 'bad');
+                element.textContent = `${latency}ms`;
+                element.className = 'panel-latency ' + (latency < 50 ? 'good' : latency < 100 ? 'medium' : 'bad');
             }
-        }
+        };
+        
+        updateEl(el);
+        updateEl(tvEl);
     }
 
     onInputStateUpdate(data) {
         const { player, button, pressed } = data;
-        const panel = document.querySelector(`.player-input-panel[data-player="${player}"]`);
-        if (!panel) return;
-        panel.classList.add('active');
-        // 更新所有匹配的按钮（键盘UI和手柄UI中都有）
-        const btns = panel.querySelectorAll(`.mini-btn[data-btn="${button}"]`);
-        btns.forEach(btn => btn.classList.toggle('active', pressed));
+        // 更新所有匹配的手柄面板（包括电视机下方的）
+        const panels = document.querySelectorAll(`.player-input-panel[data-player="${player}"]`);
+        panels.forEach(panel => {
+            panel.classList.add('active');
+            // 更新所有匹配的按钮
+            const btns = panel.querySelectorAll(`.mini-btn[data-btn="${button}"]`);
+            btns.forEach(btn => btn.classList.toggle('active', pressed));
+        });
     }
     
     onInputModeChange(data) {
@@ -651,20 +668,34 @@ class GameApp {
         const connectedCount = Object.values(this.players).filter(p => p?.connected).length;
         const panelsToShow = this.mode === 'single' ? 2 : Math.max(connectedCount, 1);
         
+        // 获取电视机下方的手柄容器
+        const tvControllers = document.getElementById('tv-controllers');
+        
         for (let i = 1; i <= 4; i++) {
-            const panel = document.querySelector(`.player-input-panel[data-player="${i}"]`);
-            if (panel) {
+            // 更新所有手柄面板（包括电视机下方的）
+            const panels = document.querySelectorAll(`.player-input-panel[data-player="${i}"]`);
+            panels.forEach(panel => {
                 // 单人模式显示P1和P2，多人模式根据连接人数显示
                 const shouldShow = this.mode === 'single' 
                     ? (i <= 2)  // 单人模式显示P1、P2
                     : (this.players[i]?.connected || i <= panelsToShow);
                 panel.classList.toggle('active', shouldShow);
                 panel.style.display = shouldShow ? '' : 'none';
-            }
+            });
+            
+            // 更新延迟显示（两个位置都更新）
             const el = document.getElementById(`latency-p${i}`);
+            const tvEl = document.getElementById(`tv-latency-p${i}`);
+            const latencyText = i === this.myPlayerNum ? '本地' : '--ms';
+            const latencyClass = 'panel-latency' + (i === this.myPlayerNum ? ' good' : '');
+            
             if (el) {
-                el.textContent = i === this.myPlayerNum ? '本地' : '--ms';
-                el.className = 'panel-latency' + (i === this.myPlayerNum ? ' good' : '');
+                el.textContent = latencyText;
+                el.className = latencyClass;
+            }
+            if (tvEl) {
+                tvEl.textContent = latencyText;
+                tvEl.className = latencyClass;
             }
         }
     }
@@ -678,16 +709,21 @@ class GameApp {
     updateSeats() {
         for (let i = 1; i <= 4; i++) {
             const seat = document.getElementById(`seat-${i}`);
+            if (!seat) continue;
+            
             const player = this.players[i];
             seat.classList.remove('occupied', 'empty', 'me', 'p1', 'p2', 'p3', 'p4');
 
+            // 查找图标元素（兼容新旧结构）
+            const iconEl = seat.querySelector('.player-avatar') || seat.querySelector('.player-icon');
+            
             if (player?.connected) {
                 seat.classList.add('occupied', `p${i}`);
-                seat.querySelector('.player-avatar').textContent = ['🧑', '👩', '👨', '🧒'][i - 1];
+                if (iconEl) iconEl.textContent = ['🧑', '👩', '👨', '🧒'][i - 1];
                 if (i === this.myPlayerNum) seat.classList.add('me');
             } else {
                 seat.classList.add('empty');
-                seat.querySelector('.player-avatar').textContent = '👤';
+                if (iconEl) iconEl.textContent = '👤';
             }
 
             const inputPanel = document.querySelector(`.player-input-panel[data-player="${i}"]`);
@@ -696,6 +732,7 @@ class GameApp {
 
         for (let i = 1; i <= 4; i++) {
             const nameEl = document.getElementById(`p${i}-name`);
+            if (!nameEl) continue;
             const player = this.players[i];
             nameEl.textContent = player?.connected
                 ? (i === this.myPlayerNum ? `${player.name}(你)` : player.name)
@@ -735,7 +772,49 @@ class GameApp {
         const arcadeGames = getArcadeGameList();
         this.allGames = [...this.allGames, ...arcadeGames];
         
-        this.renderGameResults([]); // 初始不显示游戏列表
+        // 显示默认热门游戏
+        this.showDefaultGames();
+    }
+    
+    // 显示默认热门游戏
+    showDefaultGames() {
+        // 推荐游戏列表（精确匹配）
+        const recommendedNES = [
+            '超级马里奥兄弟', '超级玛莉', '雪人兄弟', '泡泡龙',
+            '魂斗罗经典', '魂斗罗力量', '洛克人', '冒险岛',
+            '热血格斗传说', '激龟格斗', '双截龙'
+        ];
+        const recommendedArcade = [
+            '合金弹头', '拳皇97', '街头霸王', '三国志吞食天地2中文',
+            '雪人兄弟2', '真人快打'
+        ];
+        
+        // 根据当前模式筛选游戏
+        let games;
+        if (this.mode === 'host' || this.mode === 'client') {
+            // 联机模式：只显示NES游戏
+            games = this.allGames.filter(g => g.platform !== 'arcade');
+        } else {
+            // 单人模式：显示所有游戏
+            games = this.allGames;
+        }
+        
+        // 按推荐列表顺序排列游戏
+        const recommendedGames = [];
+        const allRecommended = this.mode === 'host' || this.mode === 'client' 
+            ? recommendedNES 
+            : [...recommendedNES, ...recommendedArcade];
+        
+        // 按推荐顺序查找游戏
+        allRecommended.forEach(keyword => {
+            const found = games.find(g => g.name.includes(keyword) && !recommendedGames.includes(g));
+            if (found) {
+                recommendedGames.push(found);
+            }
+        });
+        
+        // 限制数量为20个
+        this.renderGameResults(recommendedGames.slice(0, 20));
     }
 
     getGameIcon(name) {
@@ -751,9 +830,9 @@ class GameApp {
 
     searchGames(query) {
         const q = query.toLowerCase().trim();
-        // 只有输入搜索词才显示结果，否则清空
+        // 搜索框为空时显示默认游戏
         if (!q) {
-            document.getElementById('game-results').innerHTML = '';
+            this.showDefaultGames();
             return;
         }
         // 联机模式只搜索NES游戏，单人模式搜索所有游戏
@@ -774,14 +853,15 @@ class GameApp {
         const container = document.getElementById('game-results');
         container.innerHTML = '';
         if (games.length === 0) {
-            container.innerHTML = '<div style="padding:20px;text-align:center;color:#666;font-size:0.7rem;">未找到匹配游戏</div>';
+            container.innerHTML = '<div class="game-item" style="text-align:center;color:#00aa88;">未找到匹配游戏</div>';
             return;
         }
         games.forEach(game => {
             const item = document.createElement('div');
-            item.className = 'game-result-item';
-            const platformLabel = game.platform === 'arcade' ? '🕹️街机' : '🎮NES';
-            item.innerHTML = `<span class="game-icon">${game.icon}</span><span class="game-name">${game.name}</span><span class="game-platform">${platformLabel}</span><span class="game-players">${game.players}P</span>`;
+            // 兼容新旧样式
+            item.className = 'game-item game-result-item';
+            const platformLabel = game.platform === 'arcade' ? '街机' : 'FC';
+            item.innerHTML = `<span class="game-icon">${game.icon}</span><span class="game-name">${game.name}</span><span class="game-platform">${platformLabel}</span>`;
             item.addEventListener('click', () => this.selectGame(game, item));
             container.appendChild(item);
         });
@@ -800,9 +880,12 @@ class GameApp {
 
     showCartridge(name) {
         const cartridge = document.getElementById('cartridge');
-        cartridge.classList.remove('hidden', 'inserting');
-        document.getElementById('cart-label').textContent = name.substring(0, 8);
-        setTimeout(() => cartridge.classList.add('inserting'), 50);
+        if (cartridge) {
+            cartridge.classList.remove('hidden', 'inserting');
+            const cartLabel = document.getElementById('cart-label');
+            if (cartLabel) cartLabel.textContent = name.substring(0, 8);
+            setTimeout(() => cartridge.classList.add('inserting'), 50);
+        }
     }
 
     handleRomUpload(event) {
@@ -938,6 +1021,11 @@ class GameApp {
             this.showLoadingProgress(percent, text);
         };
         
+        // 设置游戏启动完成回调（用于隐藏加载进度）
+        this.emulator.onGameStarted = () => {
+            this.hideLoadingProgress();
+        };
+        
         // 提前设置帧同步回调（EmulatorJS 启动时需要）
         this.emulator.onFrameReady = (frameBuffer) => {
             const compressed = this.emulator.compressFrame(frameBuffer);
@@ -1002,7 +1090,7 @@ class GameApp {
         // 判断是否是街机模式
         const isArcade = this.currentPlatform === 'arcade' || this.emulator.coreType === 'emulatorjs';
         // 单人模式不显示聊天面板
-        this.ui.showGameScreen(this.mode !== 'single', isArcade);
+        this.ui.showGameScreen(this.mode !== 'single', isArcade, this.selectedGameName);
         
         // 如果是街机游戏，显示按键提示
         if (isArcade) {
@@ -1031,6 +1119,7 @@ class GameApp {
         // 联机模式才初始化聊天
         if (this.mode !== 'single') {
             this.chatManager.init();
+            this.voiceChatManager.init();
         }
         this.initPlayerInputPanels();
 
@@ -1156,6 +1245,11 @@ class GameApp {
             this.showLoadingProgress(percent, text);
         };
         
+        // 设置游戏启动完成回调（用于隐藏加载进度）
+        this.emulator.onGameStarted = () => {
+            this.hideLoadingProgress();
+        };
+        
         // 提前设置帧同步回调（EmulatorJS 启动时需要）
         if (this.mode === 'host') {
             this.emulator.onFrameReady = (frameBuffer) => {
@@ -1196,7 +1290,7 @@ class GameApp {
         
         console.log('切换到游戏画面');
         // 单人模式不显示聊天面板
-        this.ui.showGameScreen(this.mode !== 'single', isArcade);
+        this.ui.showGameScreen(this.mode !== 'single', isArcade, this.selectedGameName);
         
         // 根据游戏类型显示/隐藏改键按钮
         if (isArcade) {
@@ -1248,7 +1342,7 @@ class GameApp {
         // 判断是否是街机模式
         const isArcade = this.currentPlatform === 'arcade';
         // 客户端是联机模式，显示聊天面板
-        this.ui.showGameScreen(true, isArcade);
+        this.ui.showGameScreen(true, isArcade, this.selectedGameName);
         
         // 根据游戏类型显示/隐藏改键按钮
         if (isArcade) {
@@ -1309,7 +1403,7 @@ class GameApp {
     toggleArcadeMenu() {
         if (this.emulator.coreType !== 'emulatorjs') return;
         
-        const emulatorContainer = document.getElementById('emulator-container');
+        const emulatorContainer = document.getElementById('tv-emulator-container');
         if (!emulatorContainer) return;
         
         // 方法1: 尝试直接调用 EmulatorJS 的菜单 API
@@ -1377,12 +1471,36 @@ class GameApp {
 
     resetGame() {
         if (this.mode === 'client') return;
+        
+        // 暂停输入处理
+        if (this.inputManager) {
+            this.inputManager.stop();
+        }
+        
+        // 重置模拟器
         this.emulator.reset();
+        
+        // 重新启动输入处理
+        setTimeout(() => {
+            if (this.inputManager && this.emulator.isRunning) {
+                this.inputManager.start(
+                    (inputData) => this.roomManager?.send({ type: 'input', ...inputData }),
+                    (button, pressed, player) => this.roomManager?.broadcastInput(button, pressed, player)
+                );
+            }
+        }, 100);
+        
         this.ui.showToast('游戏已重置');
         if (this.mode === 'host') this.roomManager.send({ type: 'reset' });
     }
 
     toggleFullscreen() {
+        // iOS Safari 不支持全屏API，显示PWA提示
+        if (this.isIOSSafari()) {
+            this.showIOSPWAHint();
+            return;
+        }
+        
         const screen = document.querySelector('.screen-wrapper');
         if (!document.fullscreenElement) {
             screen.requestFullscreen().catch(() => this.ui.showToast('无法进入全屏'));
@@ -1392,6 +1510,12 @@ class GameApp {
     }
 
     togglePageFullscreen() {
+        // iOS Safari 不支持全屏API，显示PWA提示
+        if (this.isIOSSafari()) {
+            this.showIOSPWAHint();
+            return;
+        }
+        
         const elem = document.documentElement;
         if (!document.fullscreenElement) {
             if (elem.requestFullscreen) {
@@ -1674,7 +1798,7 @@ class GameApp {
         }
         
         // 清理 EmulatorJS 容器
-        const container = document.getElementById('emulator-container');
+        const container = document.getElementById('tv-emulator-container');
         if (container) {
             // 移除所有子元素（包括 iframe、canvas 等）
             container.innerHTML = '';
@@ -1712,6 +1836,14 @@ class GameApp {
             return await this.loadArcadeRom(gameId);
         }
         
+        // 先检查缓存
+        const cached = await romCache.get(gameId, 'nes');
+        if (cached) {
+            this.showLoadingProgress(100, '从缓存加载');
+            console.log(`从缓存加载NES游戏: ${gameId}`);
+            return cached.data;
+        }
+        
         // NES 游戏：优先从本地 roms/nes 目录读取
         // 统一处理空格问题：将空格替换为下划线
         const sanitizedGameId = gameId.replace(/ /g, '_').replace(/，/g, '_').replace(/,/g, '_');
@@ -1738,11 +1870,17 @@ class GameApp {
                     this.showLoadingProgress(80, '解析ROM...');
                     // 检查是否是 ZIP 文件
                     const header = new Uint8Array(data.slice(0, 4));
+                    let romData;
                     if (header[0] === 0x50 && header[1] === 0x4B) {
-                        return await this.extractRomFromZip(data);
+                        romData = await this.extractRomFromZip(data);
+                    } else {
+                        // 直接是 ROM 文件
+                        romData = new Uint8Array(data);
                     }
-                    // 直接是 ROM 文件
-                    return new Uint8Array(data);
+                    
+                    // 缓存ROM（本地文件也缓存，方便离线使用）
+                    await romCache.set(gameId, 'nes', romData);
+                    return romData;
                 }
             } catch (e) {
                 console.warn(`加载 ${url} 失败:`, e);
@@ -1783,6 +1921,8 @@ class GameApp {
             const contentLength = res.headers.get('content-length');
             const total = contentLength ? parseInt(contentLength, 10) : 0;
             
+            let romData;
+            
             if (total > 0) {
                 // 流式读取显示进度
                 const reader = res.body.getReader();
@@ -1801,7 +1941,7 @@ class GameApp {
                 }
                 
                 // 合并数据
-                const romData = new Uint8Array(received);
+                romData = new Uint8Array(received);
                 let position = 0;
                 for (const chunk of chunks) {
                     romData.set(chunk, position);
@@ -1812,27 +1952,27 @@ class GameApp {
                 
                 // 检查是否是 ZIP 文件
                 if (romData[0] === 0x50 && romData[1] === 0x4B) {
-                    return await this.extractRomFromZip(romData.buffer);
+                    romData = await this.extractRomFromZip(romData.buffer);
                 }
-                
-                console.log(`KV ROM 加载成功: ${romData.length} bytes`);
-                return romData;
             } else {
                 // 无法获取大小，普通方式下载
                 this.showLoadingProgress(50, '下载中...');
                 const data = await res.arrayBuffer();
-                const romData = new Uint8Array(data);
+                romData = new Uint8Array(data);
                 
                 this.showLoadingProgress(85, '解析ROM...');
                 
                 // 检查是否是 ZIP 文件
                 if (romData[0] === 0x50 && romData[1] === 0x4B) {
-                    return await this.extractRomFromZip(data);
+                    romData = await this.extractRomFromZip(data);
                 }
-                
-                console.log(`KV ROM 加载成功: ${romData.length} bytes`);
-                return romData;
             }
+            
+            // 缓存下载的ROM
+            await romCache.set(gameId, 'nes', romData);
+            
+            console.log(`KV ROM 加载成功: ${romData.length} bytes`);
+            return romData;
         } catch (e) {
             console.error('KV 下载失败:', e);
             throw new Error(`无法加载 "${gameId}": ${e.message}`);
@@ -1844,6 +1984,17 @@ class GameApp {
         const englishName = getArcadeRomName(chineseName);
         if (!englishName) {
             throw new Error(`未找到街机游戏: ${chineseName}`);
+        }
+        
+        // 先检查缓存
+        const cached = await romCache.get(chineseName, 'arcade');
+        if (cached) {
+            this.showLoadingProgress(100, '从缓存加载');
+            console.log(`从缓存加载街机游戏: ${chineseName}`);
+            // 恢复街机ROM名
+            this.arcadeRomName = cached.romName || englishName;
+            this.currentPlatform = 'arcade';
+            return cached.data;
         }
         
         // 通过边缘函数代理下载（不需要 .zip 后缀，边缘函数会自动处理）
@@ -1874,7 +2025,7 @@ class GameApp {
                 if (jsonData.redirect && jsonData.url) {
                     console.log(`大文件模式: ${(jsonData.size / 1024 / 1024).toFixed(2)} MB`);
                     console.log(`直接下载URL: ${jsonData.url.substring(0, 80)}...`);
-                    return await this.downloadFromUrl(jsonData.url, jsonData.size, englishName);
+                    return await this.downloadFromUrl(jsonData.url, jsonData.size, englishName, chineseName);
                 }
             }
             
@@ -1883,7 +2034,7 @@ class GameApp {
             }
             
             // 小文件：边缘函数直接返回数据
-            return await this.downloadFromResponse(res, englishName);
+            return await this.downloadFromResponse(res, englishName, 0, chineseName);
             
         } catch (e) {
             console.error('街机ROM加载失败:', e);
@@ -1892,7 +2043,7 @@ class GameApp {
     }
     
     // 从URL直接下载（大文件，绕过边缘函数）
-    async downloadFromUrl(url, expectedSize, englishName) {
+    async downloadFromUrl(url, expectedSize, englishName, chineseName = '') {
         this.showLoadingProgress(5, '连接下载服务器...');
         
         const res = await fetch(url, {
@@ -1904,15 +2055,17 @@ class GameApp {
             throw new Error(`下载失败: ${res.status}`);
         }
         
-        return await this.downloadFromResponse(res, englishName, expectedSize);
+        return await this.downloadFromResponse(res, englishName, expectedSize, chineseName);
     }
     
     // 从 Response 流式下载并显示进度
-    async downloadFromResponse(res, englishName, expectedSize = 0) {
+    async downloadFromResponse(res, englishName, expectedSize = 0, chineseName = '') {
         const contentLength = res.headers.get('content-length');
         const total = expectedSize || (contentLength ? parseInt(contentLength, 10) : 0);
         
         console.log(`文件大小: ${total > 0 ? (total / 1024 / 1024).toFixed(2) + ' MB' : '未知'}`);
+        
+        let romData;
         
         if (total > 0 && res.body) {
             // 使用流式读取显示进度
@@ -1934,31 +2087,30 @@ class GameApp {
             }
             
             // 合并所有块
-            const zipData = new Uint8Array(received);
+            romData = new Uint8Array(received);
             let position = 0;
             for (const chunk of chunks) {
-                zipData.set(chunk, position);
+                romData.set(chunk, position);
                 position += chunk.length;
             }
-            
-            // 保存英文ROM名供模拟器使用
-            this.arcadeRomName = englishName;
-            this.currentPlatform = 'arcade';
-            
-            console.log(`街机ROM加载成功: ${zipData.length} bytes`);
-            return zipData;
         } else {
             // 无法获取大小，使用普通方式
             this.showLoadingProgress(50, '下载中...');
             const zipData = await res.arrayBuffer();
-            const romData = new Uint8Array(zipData);
-            
-            this.arcadeRomName = englishName;
-            this.currentPlatform = 'arcade';
-            
-            console.log(`街机ROM加载成功: ${romData.length} bytes`);
-            return romData;
+            romData = new Uint8Array(zipData);
         }
+        
+        // 保存英文ROM名供模拟器使用
+        this.arcadeRomName = englishName;
+        this.currentPlatform = 'arcade';
+        
+        // 缓存下载的ROM
+        if (chineseName) {
+            await romCache.set(chineseName, 'arcade', romData, englishName);
+        }
+        
+        console.log(`街机ROM加载成功: ${romData.length} bytes`);
+        return romData;
     }
 
     async extractRomFromZip(zipData) {

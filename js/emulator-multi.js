@@ -66,13 +66,14 @@ const PGM_GAMES = [
 ];
 
 export class MultiPlatformEmulator {
-    constructor(canvasId) {
+    constructor(canvasId, containerId = 'emulator-container') {
         this.canvasId = canvasId;
+        this.containerId = containerId;
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas ? this.canvas.getContext('2d', { alpha: false }) : null;
 
         // EmulatorJS 容器
-        this.emulatorContainer = document.getElementById('emulator-container');
+        this.emulatorContainer = document.getElementById(containerId);
 
         // 当前平台和核心
         this.platform = 'nes';
@@ -222,6 +223,9 @@ export class MultiPlatformEmulator {
     // 加载NES ROM (使用jsnes)
     async loadNES(romData) {
         this.coreType = 'jsnes';
+        
+        // 保存 ROM 数据用于重置
+        this.currentRomData = romData;
 
         // 显示 canvas，隐藏 EmulatorJS 容器
         if (this.canvas) this.canvas.style.display = 'block';
@@ -255,21 +259,9 @@ export class MultiPlatformEmulator {
         });
         
         // 添加兼容性方法 - jsnes 内部可能会调用 stop()
-        // jsnes 的 CPU 模块内部通过 this.nes 引用 NES 实例
-        if (this.core) {
-            // 定义 stop 方法（如果不存在）
-            const stopFn = function() {
-                console.log('NES stop() called - ignored');
-            };
-            
-            // 在 NES 实例上添加 stop 方法
-            if (typeof this.core.stop !== 'function') {
-                Object.defineProperty(this.core, 'stop', {
-                    value: stopFn,
-                    writable: true,
-                    configurable: true
-                });
-            }
+        // 定义一个空的 stop 方法防止报错，但不打印日志避免性能问题
+        if (this.core && typeof this.core.stop !== 'function') {
+            this.core.stop = function() {};
         }
 
         // 预处理ROM
@@ -409,6 +401,15 @@ export class MultiPlatformEmulator {
             window.EJS_onGameStart = () => {
                 console.log('EmulatorJS 游戏启动成功');
                 self.isRunning = true;
+                
+                // 游戏启动后隐藏加载进度
+                if (self.onLoadProgress) {
+                    self.onLoadProgress(100, '游戏已启动');
+                }
+                // 触发隐藏加载进度的回调
+                if (self.onGameStarted) {
+                    self.onGameStarted();
+                }
                 
                 // 延迟一点再设置按键和启动帧捕获，确保 EmulatorJS 完全初始化
                 setTimeout(() => {
@@ -851,10 +852,11 @@ export class MultiPlatformEmulator {
         const self = this;
         let progressInterval = null;
         let fakeProgress = 30;
+        let gameStarted = false;
         
         // 模拟进度（因为 EmulatorJS 没有暴露真实进度）
         progressInterval = setInterval(() => {
-            if (fakeProgress < 90) {
+            if (fakeProgress < 90 && !gameStarted) {
                 fakeProgress += 5;
                 if (self.onLoadProgress) {
                     const text = fakeProgress < 50 ? '下载模拟器核心...' : 
@@ -865,11 +867,23 @@ export class MultiPlatformEmulator {
             }
             
             // 检查 EmulatorJS 是否已经准备好
-            if (window.EJS_emulator && window.EJS_emulator.started) {
+            if (window.EJS_emulator && window.EJS_emulator.started && !gameStarted) {
+                gameStarted = true;
                 clearInterval(progressInterval);
+                console.log('monitorEmulatorJSLoading: 检测到游戏已启动');
+                
                 if (self.onLoadProgress) {
-                    self.onLoadProgress(100, '游戏启动中...');
+                    self.onLoadProgress(100, '游戏已启动');
                 }
+                
+                // 直接调用 onGameStarted 隐藏加载进度
+                // 因为 EJS_onGameStart 回调可能不会被触发
+                setTimeout(() => {
+                    if (self.onGameStarted) {
+                        console.log('monitorEmulatorJSLoading: 调用 onGameStarted');
+                        self.onGameStarted();
+                    }
+                }, 300);
             }
         }, 500);
         
@@ -877,6 +891,11 @@ export class MultiPlatformEmulator {
         setTimeout(() => {
             if (progressInterval) {
                 clearInterval(progressInterval);
+                // 如果30秒后游戏还没启动，也尝试隐藏加载进度
+                if (!gameStarted && self.onGameStarted) {
+                    console.log('monitorEmulatorJSLoading: 超时，强制隐藏加载进度');
+                    self.onGameStarted();
+                }
             }
         }, 30000);
     }
@@ -1419,7 +1438,7 @@ export class MultiPlatformEmulator {
                 // 方法1: 直接查找 EmulatorJS 容器内的 canvas
                 const selectors = [
                     '#emulatorjs-game canvas',
-                    '#emulator-container canvas',
+                    '#tv-emulator-container canvas',
                     '.ejs_canvas',
                     'canvas[id*="canvas"]',
                     '#game canvas',
@@ -1431,7 +1450,7 @@ export class MultiPlatformEmulator {
                     const canvases = document.querySelectorAll(selector);
                     for (const canvas of canvases) {
                         // 跳过我们自己的 canvas
-                        if (canvas.id === 'nes-canvas') continue;
+                        if (canvas.id === 'tv-nes-canvas' || canvas.id === 'nes-canvas') continue;
                         
                         const area = canvas.width * canvas.height;
                         if (area > maxArea && canvas.width > 100 && canvas.height > 100) {
@@ -1678,9 +1697,70 @@ export class MultiPlatformEmulator {
     reset() {
         if (this.coreType === 'jsnes') {
             if (this.isHost && this.core) {
-                this.core.reset();
+                // 暂停游戏循环
+                const wasRunning = this.isRunning;
+                this.isRunning = false;
+                
+                // 取消当前帧
+                if (this.frameId) {
+                    cancelAnimationFrame(this.frameId);
+                    this.frameId = null;
+                }
+                
+                // 重置状态
+                this.lastFrameBuffer = null;
+                this.lastFrameTime = 0;
+                this.accumulator = 0;
+                
+                // 使用 setTimeout 确保当前帧完成后再重置
+                setTimeout(() => {
+                    try {
+                        // 保存当前 ROM 数据
+                        const romData = this.currentRomData;
+                        
+                        if (romData) {
+                            // 重新创建 NES 实例
+                            const self = this;
+                            this.core = new jsnes.NES({
+                                onFrame: function (frameBuffer) {
+                                    self.renderNESFrame(frameBuffer);
+                                    if (self.isHost && self.onFrameReady) {
+                                        try {
+                                            self.onFrameReady(frameBuffer);
+                                        } catch (e) {
+                                            console.warn('帧回调错误:', e);
+                                        }
+                                    }
+                                },
+                                onAudioSample: function (left, right) {
+                                    self.handleAudio(left, right);
+                                    if (self.isHost && self.onAudioReady) {
+                                        self.collectAudioSample(left, right);
+                                    }
+                                }
+                            });
+                            
+                            // 添加空的 stop 方法
+                            if (this.core && typeof this.core.stop !== 'function') {
+                                this.core.stop = function() {};
+                            }
+                            
+                            // 重新加载 ROM
+                            const processedRom = this.preprocessNESRom(romData);
+                            this.core.loadROM(this.arrayToString(processedRom));
+                            console.log('NES 游戏已重置');
+                        }
+                    } catch (e) {
+                        console.error('NES 重置失败:', e);
+                    }
+                    
+                    // 恢复游戏循环
+                    if (wasRunning) {
+                        this.isRunning = true;
+                        requestAnimationFrame((time) => this.gameLoop(time));
+                    }
+                }, 100);
             }
-            this.lastFrameBuffer = null;
         } else if (this.coreType === 'emulatorjs') {
             // EmulatorJS 重置
             if (window.EJS_emulator) {

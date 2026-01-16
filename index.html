@@ -7,20 +7,21 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>街机游戏厅</title>
+    <!-- 网站图标 -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- 滚动背景 -->
+    <div class="scrolling-bg"></div>
+    <div class="grid-overlay"></div>
+    
     <div class="scanlines"></div>
     <div class="crt-overlay"></div>
     
     <div class="app-container">
-        <!-- 顶部装饰 - FC 主机风格 -->
-        <div class="console-top">
-            <div class="console-stripe red"></div>
-            <div class="console-stripe gold"></div>
-        </div>
-
         <!-- 右上角工具栏 -->
         <div class="top-toolbar">
             <a href="page/game-guide.html" target="_blank" class="toolbar-btn" title="游戏手册">📖</a>
@@ -28,50 +29,52 @@
             <button id="top-fullscreen-btn" class="toolbar-btn" title="全屏">⛶</button>
         </div>
 
-        <!-- 标题区域 -->
-        <header class="nes-header">
-            <div class="logo-container">
-                <div class="controller-icon left">⭐</div>
-                <h1>Arcade Game Hall</h1>
-                <div class="controller-icon right">⭐</div>
+        <!-- 新版标题区域 -->
+        <header class="hero-header">
+            <div class="hero-glow"></div>
+            <div class="hero-title">
+                <span class="hero-icon">🕹️</span>
+                <h1>ARCADE</h1>
+                <h2>GAME HALL</h2>
+                <p class="hero-subtitle">经典街机 · 红白机 · 多人联机</p>
             </div>
         </header>
 
         <main class="main-content">
             <!-- ========== 模式选择面板 ========== -->
-            <section id="mode-panel" class="panel mode-panel">
-                <div class="panel-header">
-                    <span class="panel-led"></span>
-                    <h2>选 择 模 式</h2>
-                </div>
-                <div class="panel-body">
-                    <div class="mode-cards">
-                        <div class="mode-card" id="single-mode">
-                            <div class="mode-icon">🎮</div>
-                            <div class="mode-title">单人游戏</div>
-                            <div class="mode-desc">NES/街机/多平台</div>
+            <section id="mode-panel" class="mode-panel-transparent">
+                    <!-- 简洁霓虹菜单 -->
+                    <nav class="neon-menu">
+                        <!-- 单人模式在上面 -->
+                        <div class="neon-menu-row single-row">
+                            <div class="neon-menu-item" id="single-mode">
+                                <span class="menu-number">01</span>
+                                <span class="menu-text">SINGLE PLAY</span>
+                                <span class="menu-desc">单人游戏</span>
+                                <span class="menu-sub">NES/街机/多平台</span>
+                            </div>
                         </div>
-                        <div class="mode-card" id="create-mode">
-                            <div class="mode-icon">🏠</div>
-                            <div class="mode-title">创建房间</div>
-                            <div class="mode-desc">仅支持NES联机</div>
+                        <!-- 联机模式在下面 -->
+                        <div class="neon-menu-row online-row">
+                            <div class="neon-menu-item" id="create-mode">
+                                <span class="menu-number">02</span>
+                                <span class="menu-text">CREATE ROOM</span>
+                                <span class="menu-desc">创建房间</span>
+                                <span class="menu-sub">仅支持NES联机</span>
+                            </div>
+                            <div class="neon-menu-item" id="join-mode">
+                                <span class="menu-number">03</span>
+                                <span class="menu-text">JOIN ROOM</span>
+                                <span class="menu-desc">加入房间</span>
+                                <span class="menu-sub">输入房间号</span>
+                            </div>
                         </div>
-                        <div class="mode-card" id="join-mode">
-                            <div class="mode-icon">🚪</div>
-                            <div class="mode-title">加入房间</div>
-                            <div class="mode-desc">输入房间号</div>
-                        </div>
-                    </div>
+                    </nav>
 
                     <!-- 联机提示 -->
                     <div class="online-notice">
-                        <span class="notice-icon">ℹ️</span>
+                        <span class="notice-badge">💡</span>
                         <span class="notice-text">联机对战仅支持NES游戏，街机游戏请选择单人模式</span>
-                    </div>
-
-                    <!-- 宣传图片 -->
-                    <div class="promo-image">
-                        <img src="page/image.png" alt="红白机联机对战">
                     </div>
 
 
@@ -101,118 +104,202 @@
                         <span class="status-indicator"></span>
                         <span id="status-text">未连接</span>
                     </div>
-                </div>
             </section>
 
-            <!-- ========== 房间面板（含座位） ========== -->
+            <!-- ========== 房间面板 - 复古电视机风格 ========== -->
             <section id="room-panel" class="panel room-panel hidden">
-                <div class="panel-header">
-                    <span class="panel-led active"></span>
-                    <h2>游戏房间 <span id="room-code-display"></span></h2>
-                </div>
-                <div class="panel-body">
-                    <!-- 红白机和座位区域 -->
-                    <div class="room-scene">
-                        <!-- 电视机 -->
-                        <div class="tv-unit">
-                            <div class="tv-screen" id="tv-preview">
-                                <div class="tv-static">请选择游戏</div>
-                                <!-- 加载进度条 -->
-                                <div class="loading-overlay hidden" id="loading-overlay">
-                                    <div class="loading-content">
-                                        <div class="loading-title">正在加载游戏...</div>
-                                        <div class="loading-bar">
-                                            <div class="loading-progress" id="loading-progress"></div>
+                <div class="retro-tv">
+                    <!-- 左侧手柄 P1 -->
+                    <div class="tv-controllers left-controllers" id="tv-controllers-left">
+                        <div class="player-input-panel" data-player="1">
+                            <div class="input-panel-header">
+                                <span class="panel-player-label p1">P1</span>
+                                <span class="panel-latency" id="tv-latency-p1">--ms</span>
+                            </div>
+                            <div class="unified-controller">
+                                <div class="mini-dpad">
+                                    <div class="mini-btn up" data-btn="UP"></div>
+                                    <div class="mini-btn left" data-btn="LEFT"></div>
+                                    <div class="mini-btn center"></div>
+                                    <div class="mini-btn right" data-btn="RIGHT"></div>
+                                    <div class="mini-btn down" data-btn="DOWN"></div>
+                                </div>
+                                <div class="mini-middle">
+                                    <div class="mini-btn select" data-btn="SELECT">SE</div>
+                                    <div class="mini-btn start" data-btn="START">ST</div>
+                                </div>
+                                <div class="mini-face">
+                                    <div class="mini-btn y-btn" data-btn="Y">Y</div>
+                                    <div class="mini-btn x-btn" data-btn="X">X</div>
+                                    <div class="mini-btn b-btn" data-btn="B">B</div>
+                                    <div class="mini-btn a-btn" data-btn="A">A</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 电视机外壳 -->
+                    <div class="tv-cabinet">
+                        <!-- 电视机顶部装饰 -->
+                        <div class="tv-top-decor">
+                            <div class="tv-antenna left"></div>
+                            <div class="tv-antenna right"></div>
+                        </div>
+                        
+                        <!-- 电视机主体 -->
+                        <div class="tv-body">
+                            <!-- 屏幕区域 -->
+                            <div class="tv-screen-area">
+                                <div class="tv-bezel">
+                                    <div class="tv-glass">
+                                        <!-- CRT 效果层 -->
+                                        <div class="crt-effect"></div>
+                                        <div class="crt-scanlines"></div>
+                                        <div class="crt-flicker"></div>
+                                        
+                                        <!-- 屏幕内容 -->
+                                        <div class="tv-content" id="tv-preview">
+                                            <!-- 房间信息 -->
+                                            <div class="tv-room-header">
+                                                <span class="room-label">ROOM</span>
+                                                <span class="room-code" id="room-code-display">------</span>
+                                            </div>
+                                            
+                                            <!-- 玩家座位 - 在屏幕内 -->
+                                            <div class="tv-players">
+                                                <div class="tv-player" data-seat="1">
+                                                    <div class="tv-player-slot empty" id="seat-1">
+                                                        <span class="player-icon">👤</span>
+                                                    </div>
+                                                    <span class="player-label">P1</span>
+                                                </div>
+                                                <div class="tv-player" data-seat="2">
+                                                    <div class="tv-player-slot empty" id="seat-2">
+                                                        <span class="player-icon">👤</span>
+                                                    </div>
+                                                    <span class="player-label">P2</span>
+                                                </div>
+                                                <div class="tv-player" data-seat="3">
+                                                    <div class="tv-player-slot empty" id="seat-3">
+                                                        <span class="player-icon">👤</span>
+                                                    </div>
+                                                    <span class="player-label">P3</span>
+                                                </div>
+                                                <div class="tv-player" data-seat="4">
+                                                    <div class="tv-player-slot empty" id="seat-4">
+                                                        <span class="player-icon">👤</span>
+                                                    </div>
+                                                    <span class="player-label">P4</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- 游戏搜索 - 在屏幕内 -->
+                                            <div class="tv-search">
+                                                <input type="text" id="game-search" placeholder="▶ 输入游戏名搜索..." autocomplete="off">
+                                            </div>
+                                            <div class="tv-game-list" id="game-results"></div>
+                                            
+                                            <!-- 加载进度 -->
+                                            <div class="loading-overlay hidden" id="loading-overlay">
+                                                <div class="loading-content">
+                                                    <div class="loading-title">LOADING...</div>
+                                                    <div class="loading-bar">
+                                                        <div class="loading-progress" id="loading-progress"></div>
+                                                    </div>
+                                                    <div class="loading-text" id="loading-text">0%</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- 游戏画面 - 在电视屏幕内 -->
+                                            <div class="tv-game-screen hidden" id="tv-game-screen">
+                                                <div class="tv-game-title" id="tv-game-title">游戏中</div>
+                                                <div class="tv-canvas-wrapper">
+                                                    <canvas id="tv-nes-canvas" width="256" height="240"></canvas>
+                                                    <div id="tv-emulator-container" class="emulator-container hidden"></div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="loading-text" id="loading-text">0%</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tv-stand"></div>
-                        </div>
-
-                        <!-- 街机控制台 -->
-                        <div class="arcade-cabinet" id="arcade-cabinet">
-                            <div class="arcade-panel">
-                                <!-- 摇杆区域 -->
-                                <div class="arcade-joystick-area">
-                                    <div class="arcade-joystick">
-                                        <div class="joystick-base"></div>
-                                        <div class="joystick-stick"></div>
-                                        <div class="joystick-ball"></div>
-                                    </div>
+                            
+                            <!-- 电视机右侧控制面板 -->
+                            <div class="tv-controls">
+                                <div class="tv-brand">RETRO</div>
+                                <div class="tv-knob channel">
+                                    <div class="knob-label">CH</div>
                                 </div>
-                                <!-- 按钮区域 -->
-                                <div class="arcade-buttons">
-                                    <div class="arcade-btn red" id="power-btn">
-                                        <span>START</span>
-                                    </div>
-                                    <div class="arcade-btn blue">
-                                        <span>A</span>
-                                    </div>
-                                    <div class="arcade-btn yellow">
-                                        <span>B</span>
-                                    </div>
+                                <div class="tv-knob volume">
+                                    <div class="knob-label">VOL</div>
                                 </div>
-                                <!-- 投币口 -->
-                                <div class="coin-slot">
-                                    <div class="coin-slot-inner">INSERT COIN</div>
+                                <div class="tv-power-btn" id="power-btn">
+                                    <div class="power-light"></div>
                                 </div>
-                            </div>
-                            <!-- 卡带插槽（隐藏，用于显示选中的游戏） -->
-                            <div class="fc-cartridge hidden" id="cartridge">
-                                <div class="cart-label" id="cart-label">游戏</div>
                             </div>
                         </div>
-
-                        <!-- 玩家座位 -->
-                        <div class="players-area">
-                            <div class="player-seat" data-seat="1">
-                                <div class="seat-player empty" id="seat-1">
-                                    <div class="player-avatar">👤</div>
-                                </div>
-                                <div class="seat-label">P1</div>
+                        
+                        <!-- 电视机底部 -->
+                        <div class="tv-bottom">
+                            <div class="tv-speaker">
+                                <div class="speaker-grille"></div>
                             </div>
-                            <div class="player-seat" data-seat="2">
-                                <div class="seat-player empty" id="seat-2">
-                                    <div class="player-avatar">👤</div>
-                                </div>
-                                <div class="seat-label">P2</div>
+                        </div>
+                        
+                        <!-- 底部操作区 -->
+                        <div class="tv-action-bar">
+                        <!-- 游戏选择模式的操作 -->
+                        <div class="tv-select-actions">
+                            <div class="upload-inline">
+                                <label for="rom-upload" class="upload-btn-inline">
+                                    📁 上传ROM
+                                </label>
+                                <input type="file" id="rom-upload" accept=".nes,.unf,.unif,.fds,.nsf,.jsnes,.sfc,.smc,.md,.bin,.gen,.gba,.zip,.7z,.rar" hidden>
+                                <span id="upload-filename"></span>
                             </div>
-                            <div class="player-seat" data-seat="3">
-                                <div class="seat-player empty" id="seat-3">
-                                    <div class="player-avatar">👤</div>
-                                </div>
-                                <div class="seat-label">P3</div>
+                            <button id="start-game-btn" class="start-btn" disabled>
+                                ▶ START GAME
+                            </button>
+                        </div>
+                        <!-- 游戏中的操作 -->
+                        <div class="tv-game-actions hidden">
+                            <button id="pause-btn" class="tv-action-btn">⏸ 暂停</button>
+                            <button id="reset-btn" class="tv-action-btn">🔄 重置</button>
+                            <button id="save-btn" class="tv-action-btn">💾 存档</button>
+                            <button id="controls-btn" class="tv-action-btn hidden">🎮 改键</button>
+                            <button id="fullscreen-btn" class="tv-action-btn">⛶ 全屏</button>
+                            <button id="exit-btn" class="tv-action-btn danger">✕ 退出</button>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <!-- 右侧手柄 P2 -->
+                    <div class="tv-controllers right-controllers" id="tv-controllers-right">
+                        <div class="player-input-panel" data-player="2">
+                            <div class="input-panel-header">
+                                <span class="panel-player-label p2">P2</span>
+                                <span class="panel-latency" id="tv-latency-p2">--ms</span>
                             </div>
-                            <div class="player-seat" data-seat="4">
-                                <div class="seat-player empty" id="seat-4">
-                                    <div class="player-avatar">👤</div>
+                            <div class="unified-controller">
+                                <div class="mini-dpad">
+                                    <div class="mini-btn up" data-btn="UP"></div>
+                                    <div class="mini-btn left" data-btn="LEFT"></div>
+                                    <div class="mini-btn center"></div>
+                                    <div class="mini-btn right" data-btn="RIGHT"></div>
+                                    <div class="mini-btn down" data-btn="DOWN"></div>
                                 </div>
-                                <div class="seat-label">P4</div>
+                                <div class="mini-middle">
+                                    <div class="mini-btn select" data-btn="SELECT">SE</div>
+                                    <div class="mini-btn start" data-btn="START">ST</div>
+                                </div>
+                                <div class="mini-face">
+                                    <div class="mini-btn y-btn" data-btn="Y">Y</div>
+                                    <div class="mini-btn x-btn" data-btn="X">X</div>
+                                    <div class="mini-btn b-btn" data-btn="B">B</div>
+                                    <div class="mini-btn a-btn" data-btn="A">A</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- 游戏搜索选择 -->
-                    <div class="game-selector">
-                        <div class="search-box">
-                            <input type="text" id="game-search" placeholder="🔍 搜索NES游戏..." autocomplete="off">
-                        </div>
-                        <div class="game-results" id="game-results"></div>
-                        <div class="upload-inline">
-                            <label for="rom-upload" class="upload-btn-inline">
-                                📁 上传ROM文件
-                            </label>
-                            <input type="file" id="rom-upload" accept=".nes,.unf,.unif,.fds,.nsf,.jsnes,.sfc,.smc,.md,.bin,.gen,.gba,.zip,.7z,.rar" hidden>
-                            <span id="upload-filename"></span>
-                        </div>
-                    </div>
-
-                    <!-- 开始按钮 -->
-                    <button id="start-game-btn" class="nes-btn primary large full-width" disabled>
-                        插入卡带并开始游戏
-                    </button>
                 </div>
             </section>
 
@@ -220,23 +307,6 @@
             <section id="game-screen" class="game-screen hidden">
                 <!-- 游戏主区域：画面在上方，手柄在下方 -->
                 <div class="game-main-layout">
-                    <!-- 游戏画面（上方） -->
-                    <div class="screen-wrapper">
-                        <div class="screen-bezel">
-                            <div class="screen-inner">
-                                <canvas id="nes-canvas" width="256" height="240"></canvas>
-                                <!-- EmulatorJS 容器 (用于非NES平台) -->
-                                <div id="emulator-container" class="emulator-container hidden"></div>
-                            </div>
-                            <div class="screen-reflection"></div>
-                        </div>
-                        <!-- 平台标识 -->
-                        <div class="platform-badge" id="platform-badge">
-                            <span class="platform-icon">🎮</span>
-                            <span class="platform-name" id="platform-name">FC/NES</span>
-                        </div>
-                    </div>
-
                     <!-- P1P2 手柄控制器（下方） -->
                     <div class="bottom-controllers">
                         <div class="player-input-panel" data-player="1">
@@ -366,15 +436,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="game-toolbar">
-                    <button id="pause-btn" class="nes-btn">⏸ 暂停</button>
-                    <button id="reset-btn" class="nes-btn">🔄 重置</button>
-                    <button id="save-btn" class="nes-btn">💾 存档</button>
-                    <button id="controls-btn" class="nes-btn hidden">🎮 改键</button>
-                    <button id="fullscreen-btn" class="nes-btn">⛶ 全屏</button>
-                    <button id="exit-btn" class="nes-btn danger">✕ 退出</button>
-                </div>
                 
                 <!-- 街机按键提示 -->
                 <div id="arcade-keys-hint" class="arcade-keys-hint hidden">
@@ -396,7 +457,11 @@
                 <div class="chat-panel" id="chat-panel">
                     <div class="chat-header">
                         <span>💬 游戏聊天</span>
-                        <button id="voice-btn" class="voice-btn">🎤</button>
+                        <div class="voice-controls">
+                            <button id="toggle-voice-btn" class="voice-btn" title="开启/关闭语音">🔇 开启语音</button>
+                            <button id="mute-voice-btn" class="voice-btn" style="display:none;" title="静音/取消静音">🔊 静音</button>
+                            <span id="voice-status" class="voice-status"></span>
+                        </div>
                         <button id="toggle-chat-btn" class="toggle-chat-btn">▼</button>
                     </div>
                     <div class="chat-body">
@@ -739,7 +804,8 @@
         <!-- iOS添加到桌面提示 -->
         <div id="ios-pwa-hint" class="ios-pwa-hint hidden">
             <div class="ios-pwa-content">
-                <div class="ios-pwa-title">🎮 添加到主屏幕</div>
+                <div class="ios-pwa-title">🎮 获得最佳游戏体验</div>
+                <div class="ios-pwa-desc">iPhone/iPad 不支持网页全屏，推荐添加到主屏幕</div>
                 <div class="ios-pwa-steps">
                     <div class="ios-pwa-step">
                         <span class="step-num">1</span>
@@ -754,6 +820,7 @@
                         <span>从主屏幕打开即可全屏游戏</span>
                     </div>
                 </div>
+                <div class="ios-pwa-tip">💡 横屏游戏效果更佳</div>
                 <button class="ios-pwa-close-btn" id="ios-pwa-close-btn">知道了</button>
                 <label class="ios-pwa-noshow">
                     <input type="checkbox" id="ios-pwa-noshow-check"> 不再提示
@@ -842,6 +909,7 @@
             <div class="footer-vents">
                 <span></span><span></span><span></span><span></span><span></span>
             </div>
+            <p class="disclaimer">游戏ROM均来自网络，仅供参赛测试使用。如有侵权请联系删除，后期将自行下架。</p>
         </footer>
     </div>
 
