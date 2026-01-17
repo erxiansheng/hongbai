@@ -727,27 +727,31 @@ export class InputManager {
 
     assignGamepad(gamepad) {
         console.log(`检测到手柄: ${gamepad.id}, 索引: ${gamepad.index}, 按钮数: ${gamepad.buttons.length}, 轴数: ${gamepad.axes.length}`);
+        console.log(`当前手柄分配状态: P1=${this.gamepads[1]}, P2=${this.gamepads[2]}`);
         
         // 单人模式：第一个手柄始终分配给P1，第二个手柄分配给P2
         // 如果P1没有手柄，分配给P1
         if (this.gamepads[1] === null) {
             this.gamepads[1] = gamepad.index;
             this.initPlayerGamepadState(1);
-            console.log('手柄分配给 P1');
+            console.log(`手柄 ${gamepad.index} 分配给 P1`);
         } 
         // 如果P1已有手柄且P2没有手柄，且这是不同的手柄，分配给P2
         else if (this.gamepads[2] === null && gamepad.index !== this.gamepads[1]) {
             this.gamepads[2] = gamepad.index;
             this.hasLocalP2 = true;
             this.initPlayerGamepadState(2);
-            console.log('手柄分配给 P2，启用本地双人');
+            console.log(`手柄 ${gamepad.index} 分配给 P2，启用本地双人`);
             console.log('P2 按键映射:', JSON.stringify(this.keyMaps[2], null, 2));
             
             // 显示P2标签
             const p2Tab = document.querySelector('.player-tab[data-player="2"]');
             if (p2Tab) p2Tab.classList.add('has-gamepad');
+        } else {
+            console.log(`手柄 ${gamepad.index} 已分配或重复，忽略`);
         }
         
+        console.log(`更新后手柄分配状态: P1=${this.gamepads[1]}, P2=${this.gamepads[2]}`);
         this.updateGamepadStatus();
     }
     
@@ -767,8 +771,9 @@ export class InputManager {
         if (!statusEl || !textEl) return;
         
         const gamepads = navigator.getGamepads();
-        const p1Gp = this.gamepads[1] !== null ? gamepads[this.gamepads[1]] : null;
-        const p2Gp = this.gamepads[2] !== null ? gamepads[this.gamepads[2]] : null;
+        // 修复：只有当 gamepads[x] 有效且已连接时才认为手柄存在
+        const p1Gp = (this.gamepads[1] !== null && gamepads[this.gamepads[1]]?.connected) ? gamepads[this.gamepads[1]] : null;
+        const p2Gp = (this.gamepads[2] !== null && gamepads[this.gamepads[2]]?.connected) ? gamepads[this.gamepads[2]] : null;
         
         let statusText = '';
         if (p1Gp && p2Gp) {
@@ -776,6 +781,11 @@ export class InputManager {
             statusEl.classList.add('connected', 'dual');
         } else if (p1Gp) {
             statusText = `P1: ${p1Gp.id.substring(0, 25)}`;
+            statusEl.classList.add('connected');
+            statusEl.classList.remove('dual');
+        } else if (p2Gp) {
+            // 如果只有 P2 手柄（不应该发生，但作为保护）
+            statusText = `P2: ${p2Gp.id.substring(0, 25)}`;
             statusEl.classList.add('connected');
             statusEl.classList.remove('dual');
         } else {
@@ -788,7 +798,7 @@ export class InputManager {
 
     checkExistingGamepads() {
         const gamepads = navigator.getGamepads();
-        console.log('检查已连接的手柄...');
+        console.log('检查已连接的手柄...', `总数: ${gamepads.length}`);
         
         // 重置分配和状态
         this.gamepads = { 1: null, 2: null };
@@ -801,13 +811,17 @@ export class InputManager {
             }
         }
         
+        let connectedCount = 0;
         for (let i = 0; i < gamepads.length; i++) {
             const gp = gamepads[i];
             if (gp && gp.connected) {
+                connectedCount++;
+                console.log(`发现手柄 ${i}: ${gp.id}, 已连接: ${gp.connected}`);
                 this.assignGamepad(gp);
             }
         }
         
+        console.log(`共发现 ${connectedCount} 个已连接的手柄`);
         this.updateGamepadStatus();
     }
 
