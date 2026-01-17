@@ -20,9 +20,10 @@ export class ChatManager {
         const chatInput = document.getElementById('chat-input');
 
         // 折叠/展开聊天
-        toggleBtn?.addEventListener('click', () => {
+        toggleBtn?.addEventListener('click', (e) => {
+            e.stopPropagation(); // 防止事件冒泡
             chatPanel.classList.toggle('collapsed');
-            toggleBtn.textContent = chatPanel.classList.contains('collapsed') ? '▲' : '▼';
+            toggleBtn.textContent = chatPanel.classList.contains('collapsed') ? '💬' : '▼';
         });
 
         // 发送消息

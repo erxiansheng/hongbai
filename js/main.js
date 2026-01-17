@@ -125,6 +125,9 @@ class GameApp {
             this.ui.showToast('房间号已复制');
         });
 
+        // 返回首页按钮
+        document.getElementById('tv-back-btn')?.addEventListener('click', () => this.backToHome());
+
         // 游戏搜索
         document.getElementById('game-search').addEventListener('input', (e) => this.searchGames(e.target.value));
         document.getElementById('rom-upload').addEventListener('change', (e) => this.handleRomUpload(e));
@@ -327,6 +330,37 @@ class GameApp {
         document.getElementById('join-form').classList.add('hidden');
         document.getElementById('room-info').classList.add('hidden');
         document.getElementById('connection-status').classList.add('hidden');
+    }
+
+    backToHome() {
+        // 如果正在游戏中，先停止游戏
+        if (this.emulator && this.emulator.isRunning) {
+            this.emulator.stop();
+        }
+
+        // 如果在联机模式，断开连接
+        if (this.roomManager && (this.mode === 'host' || this.mode === 'client')) {
+            this.roomManager.disconnect();
+        }
+
+        // 重置状态
+        this.mode = null;
+        this.selectedGame = null;
+        this.selectedGameName = '';
+        this.customRom = null;
+        this.players = {};
+        this.myPlayerNum = 0;
+
+        // 清空游戏搜索
+        const searchInput = document.getElementById('game-search');
+        if (searchInput) searchInput.value = '';
+
+        // 隐藏房间面板，显示模式选择
+        this.ui.hideRoomPanel();
+        this.backToModeSelect();
+
+        // 显示提示
+        this.ui.showToast('已返回首页');
     }
 
     async joinRoom(roomCode) {
