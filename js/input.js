@@ -728,13 +728,14 @@ export class InputManager {
     assignGamepad(gamepad) {
         console.log(`检测到手柄: ${gamepad.id}, 索引: ${gamepad.index}, 按钮数: ${gamepad.buttons.length}, 轴数: ${gamepad.axes.length}`);
         
+        // 单人模式：第一个手柄始终分配给P1，第二个手柄分配给P2
         // 如果P1没有手柄，分配给P1
         if (this.gamepads[1] === null) {
             this.gamepads[1] = gamepad.index;
             this.initPlayerGamepadState(1);
             console.log('手柄分配给 P1');
         } 
-        // 如果P1有手柄但P2没有，分配给P2
+        // 如果P1已有手柄且P2没有手柄，且这是不同的手柄，分配给P2
         else if (this.gamepads[2] === null && gamepad.index !== this.gamepads[1]) {
             this.gamepads[2] = gamepad.index;
             this.hasLocalP2 = true;
@@ -916,12 +917,13 @@ export class InputManager {
             
             // 只有状态变化时才更新（使用严格布尔比较）
             if (!!pressed !== !!prevPressed) {
-                // 确定UI显示的玩家编号
-                // 如果是远程玩家（非房主），使用 localPlayer 作为显示编号
+                // 单人模式：直接使用手柄分配的玩家编号
+                // 多人模式（联机）：如果是远程玩家（非房主），使用 localPlayer 作为显示编号
                 const displayPlayer = (this.emulator && !this.emulator.isHost) ? this.localPlayer : player;
                 
                 this.updateTestDisplay(action, pressed, displayPlayer);
                 if (this.isGameRunning) {
+                    // 单人模式和多人模式都使用实际的玩家编号处理输入
                     this.processInput(action, pressed, player);
                     
                     // 广播输入时使用显示玩家编号

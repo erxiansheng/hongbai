@@ -933,7 +933,25 @@ export class MultiPlatformEmulator {
 
     // 通用帧渲染
     renderFrame(frameBuffer) {
-        if (!this.canvas || !this.ctx) return;
+        // 如果 canvas 或 ctx 不存在，尝试重新获取
+        if (!this.canvas || !this.ctx) {
+            if (!this.canvas && this.canvasId) {
+                this.canvas = document.getElementById(this.canvasId);
+                if (this.canvas) {
+                    this.ctx = this.canvas.getContext('2d', { alpha: false });
+                    if (this.ctx) {
+                        this.ctx.imageSmoothingEnabled = false;
+                        console.log('Canvas 重新初始化成功');
+                    }
+                }
+            }
+            
+            // 如果仍然没有 canvas 或 ctx，返回
+            if (!this.canvas || !this.ctx) {
+                console.warn('Canvas 或 Context 未初始化，无法渲染帧');
+                return;
+            }
+        }
         
         // 确保 imageData 与当前分辨率匹配
         if (!this.imageData || this.imageData.width !== this.width || this.imageData.height !== this.height) {
@@ -999,6 +1017,8 @@ export class MultiPlatformEmulator {
                 // 立即渲染收到的帧，不做缓冲
                 // 这样可以保证画面与房主同步，避免重影
                 this.renderFrame(frameBuffer);
+            } else {
+                console.warn('帧解压后为空或无效');
             }
         } catch (e) {
             console.warn('帧解压失败:', e);

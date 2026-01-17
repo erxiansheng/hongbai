@@ -1367,6 +1367,9 @@ class GameApp {
         // 确保 canvas 可见用于显示接收到的帧
         if (this.emulator.canvas) {
             this.emulator.canvas.style.display = 'block';
+            console.log('客户端 Canvas 已设置为可见');
+        } else {
+            console.warn('客户端 Canvas 未找到！');
         }
         // 隐藏 EmulatorJS 容器（客户端不需要）
         if (this.emulator.emulatorContainer) {
@@ -1376,6 +1379,15 @@ class GameApp {
         // 设置为客户端模式
         this.emulator.setHost(false);
         this.emulator.isRunning = true;
+        
+        // 确保 canvas 和 context 已初始化
+        if (!this.emulator.ctx && this.emulator.canvas) {
+            this.emulator.ctx = this.emulator.canvas.getContext('2d', { alpha: false });
+            if (this.emulator.ctx) {
+                this.emulator.ctx.imageSmoothingEnabled = false;
+                console.log('客户端 Canvas Context 已初始化');
+            }
+        }
 
         this.inputManager.setLocalPlayer(this.myPlayerNum);
         this.inputManager.start(
