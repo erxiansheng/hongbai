@@ -3293,11 +3293,12 @@ body {
 }
 
 .chat-panel.collapsed .chat-header span,
-.chat-panel.collapsed .voice-controls {
+.chat-panel.collapsed .toggle-chat-btn {
     display: none;
 }
 
 .chat-panel.collapsed .toggle-chat-btn {
+    display: block !important;
     padding: 0;
     width: 100%;
     height: 100%;
@@ -3323,10 +3324,15 @@ body {
     text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
-.voice-controls {
+/* 语音控制面板 - 移到消息区域上方 */
+.voice-controls-panel {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 10px 15px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    flex-wrap: wrap;
 }
 
 .voice-btn,
@@ -3499,6 +3505,104 @@ body {
 #send-chat-btn:active {
     transform: translate(2px, 2px);
     box-shadow: 1px 1px 0 var(--fc-red-dark);
+}
+
+/* 语音呼叫通知 */
+.voice-call-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(180deg, #2a2a3a 0%, #1a1a2a 100%);
+    border: 4px solid var(--fc-cyan);
+    border-radius: 12px;
+    padding: 30px;
+    z-index: 200000;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.5), 8px 8px 0 rgba(0,0,0,0.5);
+    animation: callPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes callPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.5), 8px 8px 0 rgba(0,0,0,0.5); }
+    50% { box-shadow: 0 0 60px rgba(0, 255, 255, 0.8), 8px 8px 0 rgba(0,0,0,0.5); }
+}
+
+.call-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    min-width: 300px;
+}
+
+.call-icon {
+    font-size: 4rem;
+    animation: callRing 1s ease-in-out infinite;
+}
+
+@keyframes callRing {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+}
+
+.call-text {
+    text-align: center;
+}
+
+.call-title {
+    font-size: 1.2rem;
+    color: var(--fc-cyan);
+    font-family: 'Press Start 2P', monospace;
+    margin-bottom: 10px;
+}
+
+.call-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Press Start 2P', monospace;
+}
+
+.call-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.call-btn {
+    padding: 12px 24px;
+    border: 3px solid;
+    border-radius: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+}
+
+.call-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+.call-btn.accept {
+    background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+    border-color: #00ff88;
+    color: #000;
+}
+
+.call-btn.accept:hover {
+    background: linear-gradient(135deg, #00ffaa 0%, #00dd77 100%);
+}
+
+.call-btn.reject,
+.call-btn.hangup {
+    background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+    border-color: #ff6666;
+    color: white;
+}
+
+.call-btn.reject:hover,
+.call-btn.hangup:hover {
+    background: linear-gradient(135deg, #ff6666 0%, #ff0000 100%);
 }
 
 /* ========================================

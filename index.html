@@ -462,18 +462,35 @@
             <div class="chat-panel hidden" id="chat-panel">
                 <div class="chat-header">
                     <span>💬 游戏聊天</span>
-                    <div class="voice-controls">
+                    <button id="toggle-chat-btn" class="toggle-chat-btn">▼</button>
+                </div>
+                <div class="chat-body">
+                    <!-- 语音控制移到消息区域上方 -->
+                    <div class="voice-controls-panel">
                         <button id="toggle-voice-btn" class="voice-btn" title="开启/关闭语音">🔇 开启语音</button>
                         <button id="mute-voice-btn" class="voice-btn" style="display:none;" title="静音/取消静音">🔊 静音</button>
                         <span id="voice-status" class="voice-status"></span>
                     </div>
-                    <button id="toggle-chat-btn" class="toggle-chat-btn">▼</button>
-                </div>
-                <div class="chat-body">
                     <div class="chat-messages" id="chat-messages"></div>
                     <div class="chat-input-area">
                         <input type="text" id="chat-input" placeholder="输入消息..." maxlength="100">
                         <button id="send-chat-btn" class="nes-btn mini">发送</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 语音呼叫通知 -->
+            <div class="voice-call-notification hidden" id="voice-call-notification">
+                <div class="call-content">
+                    <div class="call-icon">📞</div>
+                    <div class="call-text">
+                        <div class="call-title" id="call-title">语音呼叫</div>
+                        <div class="call-subtitle" id="call-subtitle">正在呼叫...</div>
+                    </div>
+                    <div class="call-actions">
+                        <button id="accept-call-btn" class="call-btn accept">接听</button>
+                        <button id="reject-call-btn" class="call-btn reject">拒绝</button>
+                        <button id="hangup-call-btn" class="call-btn hangup" style="display:none;">挂断</button>
                     </div>
                 </div>
             </div>

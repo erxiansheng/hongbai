@@ -650,6 +650,18 @@ export class RoomManager {
             case 'chat':
                 this.emit('chat', data);
                 break;
+            case 'voice-call':
+                this.emit('voice-call', data);
+                break;
+            case 'voice-accept':
+                this.emit('voice-accept', data);
+                break;
+            case 'voice-reject':
+                this.emit('voice-reject', data);
+                break;
+            case 'voice-hangup':
+                this.emit('voice-hangup', data);
+                break;
             case 'ping':
                 this.handlePing(data.fromPlayer, data.timestamp);
                 break;
@@ -665,7 +677,7 @@ export class RoomManager {
                 break;
         }
 
-        // 房主转发消息给其他玩家
+        // 房主转发消息给其他玩家（包括语音消息）
         if (this.isHost && !['frame', 'audio', 'ping', 'pong'].includes(data.type)) {
             this.broadcast(data, data.fromPlayer);
         }
