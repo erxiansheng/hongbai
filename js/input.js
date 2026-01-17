@@ -771,19 +771,30 @@ export class InputManager {
         if (!statusEl || !textEl) return;
         
         const gamepads = navigator.getGamepads();
-        // 修复：只有当 gamepads[x] 有效且已连接时才认为手柄存在
-        const p1Gp = (this.gamepads[1] !== null && gamepads[this.gamepads[1]]?.connected) ? gamepads[this.gamepads[1]] : null;
-        const p2Gp = (this.gamepads[2] !== null && gamepads[this.gamepads[2]]?.connected) ? gamepads[this.gamepads[2]] : null;
+        
+        // 修复：使用严格的 null 检查，因为手柄索引可能是 0
+        // this.gamepads[1] 和 this.gamepads[2] 的值可能是 0（有效的手柄索引）
+        const hasP1 = this.gamepads[1] !== null && this.gamepads[1] !== undefined;
+        const hasP2 = this.gamepads[2] !== null && this.gamepads[2] !== undefined;
+        
+        const p1Gp = hasP1 ? gamepads[this.gamepads[1]] : null;
+        const p2Gp = hasP2 ? gamepads[this.gamepads[2]] : null;
+        
+        // 再次验证手柄是否真的连接
+        const p1Connected = p1Gp && p1Gp.connected;
+        const p2Connected = p2Gp && p2Gp.connected;
+        
+        console.log(`手柄状态检查: P1=${this.gamepads[1]} (${p1Connected ? '已连接' : '未连接'}), P2=${this.gamepads[2]} (${p2Connected ? '已连接' : '未连接'})`);
         
         let statusText = '';
-        if (p1Gp && p2Gp) {
+        if (p1Connected && p2Connected) {
             statusText = 'P1 + P2 手柄已连接';
             statusEl.classList.add('connected', 'dual');
-        } else if (p1Gp) {
+        } else if (p1Connected) {
             statusText = `P1: ${p1Gp.id.substring(0, 25)}`;
             statusEl.classList.add('connected');
             statusEl.classList.remove('dual');
-        } else if (p2Gp) {
+        } else if (p2Connected) {
             // 如果只有 P2 手柄（不应该发生，但作为保护）
             statusText = `P2: ${p2Gp.id.substring(0, 25)}`;
             statusEl.classList.add('connected');
@@ -800,6 +811,16 @@ export class InputManager {
         const gamepads = navigator.getGamepads();
         console.log('检查已连接的手柄...', `总数: ${gamepads.length}`);
         
+        // 打印所有槽位的详细信息
+        for (let i = 0; i < gamepads.length; i++) {
+            const gp = gamepads[i];
+            if (gp) {
+                console.log(`槽位 ${i}:`, `${gp.id} (index=${gp.index}, connected=${gp.connected}, buttons=${gp.buttons.length}, axes=${gp.axes.length})`);
+            } else {
+                console.log(`槽位 ${i}: null`);
+            }
+        }
+        
         // 重置分配和状态
         this.gamepads = { 1: null, 2: null };
         this.hasLocalP2 = false;
@@ -811,17 +832,66 @@ export class InputManager {
             }
         }
         
-        let connectedCount = 0;
+        // 收集所有已连接的手柄
+        const connectedGamepads = [];
         for (let i = 0; i < gamepads.length; i++) {
             const gp = gamepads[i];
             if (gp && gp.connected) {
-                connectedCount++;
-                console.log(`发现手柄 ${i}: ${gp.id}, 已连接: ${gp.connected}`);
-                this.assignGamepad(gp);
+                connectedGamepads.push({ gamepad: gp, slot: i });
             }
         }
         
-        console.log(`共发现 ${connectedCount} 个已连接的手柄`);
+        // 新的去重逻辑：
+        // 对于相同 ID 的手柄，检查按钮数和轴数是否相同
+        // 如果完全相同，则认为是同一个物理手柄的重复（只保留第一个）
+        // 如果不同，或者槽位不连续，则认为是不同的物理手柄
+        const uniqueGamepads = [];
+        const seenGamepads = new Map(); // ID -> { slot, buttons, axes }
+        
+        for (const { gamepad: gp, slot } of connectedGamepads) {
+            const key = gp.id;
+            const seen = seenGamepads.get(key);
+            
+            if (!seen) {
+                // 第一次遇到这个 ID
+                uniqueGamepads.push(gp);
+                seenGamepads.set(key, {
+                    slot: slot,
+                    buttons: gp.buttons.length,
+                    axes: gp.axes.length,
+                    index: gp.index
+                });
+                console.log(`添加手柄: ${gp.id} (槽位=${slot}, index=${gp.index}, 按钮=${gp.buttons.length}, 轴=${gp.axes.length})`);
+            } else {
+                // 已经遇到过这个 ID，判断是否是重复
+                const slotDiff = Math.abs(slot - seen.slot);
+                const sameSpec = (gp.buttons.length === seen.buttons.length && gp.axes.length === seen.axes.length);
+                
+                // 如果槽位连续（差值为1）且规格相同，认为是重复
+                if (slotDiff === 1 && sameSpec) {
+                    console.log(`跳过重复手柄: ${gp.id} (槽位=${slot}, index=${gp.index}，与槽位=${seen.slot} 连续且规格相同)`);
+                } else {
+                    // 否则认为是不同的物理手柄
+                    uniqueGamepads.push(gp);
+                    // 更新最后看到的槽位
+                    seenGamepads.set(key, {
+                        slot: slot,
+                        buttons: gp.buttons.length,
+                        axes: gp.axes.length,
+                        index: gp.index
+                    });
+                    console.log(`添加手柄: ${gp.id} (槽位=${slot}, index=${gp.index}，与槽位=${seen.slot} 不连续或规格不同，认为是不同手柄)`);
+                }
+            }
+        }
+        
+        console.log(`共发现 ${uniqueGamepads.length} 个独立的手柄`);
+        
+        // 分配手柄
+        for (const gp of uniqueGamepads) {
+            this.assignGamepad(gp);
+        }
+        
         this.updateGamepadStatus();
     }
 
