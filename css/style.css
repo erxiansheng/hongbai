@@ -1342,6 +1342,50 @@ body {
 .tv-player[data-seat="4"] .tv-player-slot.occupied { border-color: #ffff44; background: rgba(255, 255, 68, 0.2); }
 .tv-player[data-seat="4"] .player-label { color: #ffff44; text-shadow: 0 0 10px #ffff44; }
 
+/* 返回按钮 */
+.tv-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+    border: 3px solid #ff6666;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 0 #990000, 0 0 20px rgba(255, 68, 68, 0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tv-back-btn:hover {
+    background: linear-gradient(135deg, #ff6666 0%, #ff0000 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #990000, 0 0 30px rgba(255, 68, 68, 0.5);
+}
+
+.tv-back-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #990000, 0 0 15px rgba(255, 68, 68, 0.3);
+}
+
+.back-arrow {
+    font-size: 1rem;
+    animation: arrowBounce 1s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-3px); }
+}
+
+.back-text {
+    font-size: 0.75rem;
+}
+
 /* 搜索框 - 屏幕内 */
 .tv-search {
     margin-bottom: 20px;
@@ -3225,14 +3269,41 @@ body {
     flex-direction: column;
     max-height: 480px;
     box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
 }
 
 .chat-panel.collapsed {
     max-height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    bottom: 20px;
+    right: 20px;
 }
 
 .chat-panel.collapsed .chat-body {
     display: none;
+}
+
+.chat-panel.collapsed .chat-header {
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+}
+
+.chat-panel.collapsed .chat-header span,
+.chat-panel.collapsed .voice-controls {
+    display: none;
+}
+
+.chat-panel.collapsed .toggle-chat-btn {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
 }
 
 .chat-header {
@@ -3242,6 +3313,7 @@ body {
     padding: 15px 20px;
     background: linear-gradient(90deg, var(--fc-red-dark) 0%, var(--fc-red) 100%);
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .chat-header span {
@@ -4286,6 +4358,22 @@ body {
         bottom: 15px;
     }
     
+    .chat-panel.collapsed {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .chat-panel.collapsed .chat-header {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .chat-panel.collapsed .toggle-chat-btn {
+        font-size: 1.2rem;
+    }
+    
     .intro-choices {
         flex-direction: column;
         gap: 15px;
@@ -4684,6 +4772,13 @@ body {
     .chat-panel {
         width: calc(100% - 30px);
         max-width: 350px;
+    }
+    
+    .chat-panel.collapsed {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
     }
 }
 
@@ -6433,5 +6528,19 @@ body {
     
     .voice-status {
         display: none; /* 小屏幕隐藏状态文字 */
+    }
+    
+    /* 返回按钮在小屏幕上的优化 */
+    .tv-back-btn {
+        padding: 10px 12px;
+        font-size: 0.65rem;
+    }
+    
+    .back-text {
+        display: none; /* 小屏幕只显示箭头 */
+    }
+    
+    .back-arrow {
+        font-size: 1.2rem;
     }
 }
