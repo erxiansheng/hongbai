@@ -99,7 +99,7 @@ async function generateQiniuPrivateUrl(config, key, expires = 3600) {
     if (domain.startsWith('http://')) {
         domain = domain.replace('http://', 'https://');
     } else if (!domain.startsWith('https://')) {
-        domain = `https://${domain}`;
+        domain = `http://${domain}`;
     }
     
     // 原始 URL（key 保持原样，不编码）
